@@ -173,8 +173,47 @@ export default function DemoForm() {
     });
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prepare complete data payload
+    const completeData = {
+      // Question responses
+      industry: responses.industry,
+      challenge: responses.challenge,
+      channels: responses.channels,
+      volume: responses.volume,
+      goal: responses.goal,
+      crm: responses.crm,
+      // Contact information
+      fullName: contactData.fullName,
+      companyName: contactData.companyName,
+      email: contactData.email,
+      phone: contactData.phone,
+      additionalNotes: contactData.additionalNotes,
+      // Metadata
+      timestamp: new Date().toISOString(),
+      source: 'AIVI Staging - Interactive Bot'
+    };
+    
+    // Send to webhook
+    try {
+      const response = await fetch('https://stage.aivi.io/webhook/prospects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(completeData),
+      });
+
+      if (response.ok) {
+        console.log('Data sent successfully to webhook');
+      } else {
+        console.error('Webhook request failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error sending data to webhook:', error);
+    }
     
     // Merge contact data into responses
     setResponses({
@@ -189,12 +228,6 @@ export default function DemoForm() {
     // Show results
     setShowContactForm(false);
     setShowResults(true);
-    
-    // Optional: Send data to backend/webhook here
-    console.log('Complete submission:', {
-      ...responses,
-      ...contactData
-    });
   };
 
   const resetBot = () => {
