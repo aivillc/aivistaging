@@ -19,6 +19,11 @@ interface BotResponses {
   volume?: string;
   goal?: string;
   crm?: string;
+  fullName?: string;
+  companyName?: string;
+  email?: string;
+  phone?: string;
+  additionalNotes?: string;
   [key: string]: string | string[] | undefined;
 }
 
@@ -108,7 +113,15 @@ export default function DemoForm() {
   const [responses, setResponses] = useState<BotResponses>({});
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [contactData, setContactData] = useState({
+    fullName: '',
+    companyName: '',
+    email: '',
+    phone: '',
+    additionalNotes: ''
+  });
 
   const handleAnswer = (answer: string | string[]) => {
     const question = questions[currentQuestion];
@@ -125,7 +138,8 @@ export default function DemoForm() {
         setCurrentQuestion(currentQuestion + 1);
         setSelectedOptions([]);
       } else {
-        setShowResults(true);
+        // After last question, show contact form
+        setShowContactForm(true);
       }
       
       setIsAnimating(false);
@@ -152,12 +166,188 @@ export default function DemoForm() {
     }
   };
 
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setContactData({
+      ...contactData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Merge contact data into responses
+    setResponses({
+      ...responses,
+      fullName: contactData.fullName,
+      companyName: contactData.companyName,
+      email: contactData.email,
+      phone: contactData.phone,
+      additionalNotes: contactData.additionalNotes
+    });
+    
+    // Show results
+    setShowContactForm(false);
+    setShowResults(true);
+    
+    // Optional: Send data to backend/webhook here
+    console.log('Complete submission:', {
+      ...responses,
+      ...contactData
+    });
+  };
+
   const resetBot = () => {
     setCurrentQuestion(0);
     setResponses({});
     setSelectedOptions([]);
+    setShowContactForm(false);
     setShowResults(false);
+    setContactData({
+      fullName: '',
+      companyName: '',
+      email: '',
+      phone: '',
+      additionalNotes: ''
+    });
   };
+
+  // Contact Form View
+  if (showContactForm) {
+    return (
+      <div className="w-full max-w-2xl mx-auto">
+        <div className="bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-2xl p-8 shadow-2xl hover:border-purple-500/30 transition-all">
+          {/* Bot Avatar */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full flex items-center justify-center">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <div>
+              <div className="text-xs text-purple-400 font-bold uppercase tracking-wider">AIVI Assistant</div>
+              <div className="text-xs text-white/40">Almost done!</div>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h3 className="text-2xl font-black text-white mb-2">
+              Perfect! Let's get you started
+            </h3>
+            <p className="text-white/70">
+              Please share your contact information so we can create your custom AI solution and get in touch.
+            </p>
+          </div>
+
+          <form onSubmit={handleContactSubmit} className="space-y-5">
+            {/* Full Name */}
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-bold text-white/80 mb-2">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+                value={contactData.fullName}
+                onChange={handleContactChange}
+                className="w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="John Doe"
+              />
+            </div>
+
+            {/* Company Name */}
+            <div>
+              <label htmlFor="companyName" className="block text-sm font-bold text-white/80 mb-2">
+                Company Name *
+              </label>
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                required
+                value={contactData.companyName}
+                onChange={handleContactChange}
+                className="w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="Acme Corporation"
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-white/80 mb-2">
+                Email Address *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                value={contactData.email}
+                onChange={handleContactChange}
+                className="w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="john@acmecorp.com"
+              />
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-bold text-white/80 mb-2">
+                Phone Number *
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                value={contactData.phone}
+                onChange={handleContactChange}
+                className="w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+
+            {/* Additional Notes */}
+            <div>
+              <label htmlFor="additionalNotes" className="block text-sm font-bold text-white/80 mb-2">
+                Additional Notes (Optional)
+              </label>
+              <textarea
+                id="additionalNotes"
+                name="additionalNotes"
+                rows={3}
+                value={contactData.additionalNotes}
+                onChange={handleContactChange}
+                className="w-full px-4 py-3 bg-white/5 border-2 border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
+                placeholder="Any specific requirements or questions you'd like us to know about..."
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-lg shadow-lg transition-all transform hover:scale-[1.02] uppercase tracking-wider"
+            >
+              See My Custom Solution →
+            </button>
+
+            {/* Back Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setShowContactForm(false);
+                setCurrentQuestion(questions.length - 1);
+              }}
+              className="w-full py-3 px-6 bg-white/5 border-2 border-white/10 text-white/70 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all font-medium"
+            >
+              ← Back to Questions
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (showResults) {
     return (
