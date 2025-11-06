@@ -115,6 +115,7 @@ export default function DemoForm() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [showThankYouPopup, setShowThankYouPopup] = useState(false);
   const [contactData, setContactData] = useState({
     fullName: '',
     companyName: '',
@@ -228,6 +229,11 @@ export default function DemoForm() {
     // Show results
     setShowContactForm(false);
     setShowResults(true);
+    
+    // Show thank you popup after a brief delay
+    setTimeout(() => {
+      setShowThankYouPopup(true);
+    }, 500);
   };
 
   const resetBot = () => {
@@ -236,6 +242,7 @@ export default function DemoForm() {
     setSelectedOptions([]);
     setShowContactForm(false);
     setShowResults(false);
+    setShowThankYouPopup(false);
     setContactData({
       fullName: '',
       companyName: '',
@@ -460,25 +467,50 @@ export default function DemoForm() {
               </li>
             </ul>
           </div>
-
-          <div className="flex gap-4">
-            <button
-              onClick={resetBot}
-              className="flex-1 py-4 px-6 bg-white/5 border-2 border-white/10 text-white rounded-lg hover:bg-white/10 hover:border-purple-500/50 transition-all font-bold"
-            >
-              Start Over
-            </button>
-            <button
-              onClick={() => {
-                // In production, this would trigger the actual demo or sales contact
-                alert('Demo request sent! Our team will contact you shortly.');
-              }}
-              className="flex-1 py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-lg transition-all transform hover:scale-[1.02] shadow-lg uppercase tracking-wider"
-            >
-              Get Started →
-            </button>
-          </div>
         </div>
+
+        {/* Thank You Popup Modal */}
+        {showThankYouPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+            <div className="relative max-w-md w-full bg-gradient-to-br from-purple-900/90 to-black/90 backdrop-blur-md border-2 border-purple-500/50 rounded-2xl p-8 shadow-2xl animate-scaleIn">
+              {/* Close button */}
+              <button
+                onClick={() => setShowThankYouPopup(false)}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Success Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full flex items-center justify-center animate-pulse">
+                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Message */}
+              <h3 className="text-2xl font-black text-white text-center mb-3">
+                Thank You!
+              </h3>
+              <p className="text-white/80 text-center leading-relaxed mb-6">
+                Your information has been submitted successfully. The AIVI team will reach out to you shortly to schedule a personalized demo.
+              </p>
+
+              {/* Close button */}
+              <button
+                onClick={() => setShowThankYouPopup(false)}
+                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold rounded-lg transition-all transform hover:scale-[1.02]"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
