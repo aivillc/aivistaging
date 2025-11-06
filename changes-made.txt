@@ -155,6 +155,26 @@ FIELDS ADDED:
   - Additional Notes (optional textarea)
 FLOW: Questions → Contact Form → Custom Solution Results
 
+PROMPT 16: "Add webhook integration to prospects endpoint"
+------------------------------------------------------------
+ACTION: Integrated webhook to send all form data to custom endpoint
+CHANGES:
+  - Modified: components/DemoForm.tsx
+    * Changed handleContactSubmit to async function
+    * Added fetch call to https://stage.aivi.io/webhook/prospects
+    * Sends complete data payload including:
+      - All 6 question responses
+      - All contact information fields
+      - Timestamp
+      - Source identifier
+    * Maintains user experience (shows results regardless of webhook status)
+    * Error handling and logging included
+  - Committed: Git commit (auto-committed with previous changes)
+DATA SENT TO WEBHOOK:
+  - industry, challenge, channels, volume, goal, crm
+  - fullName, companyName, email, phone, additionalNotes
+  - timestamp, source
+
 ================================================================================
 SUMMARY OF ALL FILES MODIFIED
 ================================================================================
