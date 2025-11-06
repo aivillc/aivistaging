@@ -1,0 +1,108 @@
+AIVI STAGING - CHANGELOG
+========================
+
+Date: November 6, 2025
+
+================================================================================
+SESSION 1 - Project Setup and Configuration
+================================================================================
+
+PROMPT 1: "Summarize this site"
+---------------------------------
+ACTION: Analyzed the AIVI website structure and provided comprehensive summary
+CHANGES: None (informational only)
+
+PROMPT 2: "This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found"
+---------------------------------------------------------------------------------------------------------
+ACTION: Fixed TypeScript configuration for Next.js compatibility
+CHANGES:
+  - Modified: tsconfig.json
+    * Changed "jsx": "react-jsx" to "jsx": "preserve"
+    * Reason: Next.js uses its own JSX transform and requires "preserve" mode
+
+PROMPT 3: "fix all of the issues of the code"
+----------------------------------------------
+ACTION: Removed unnecessary React import from Dashboard.tsx
+CHANGES:
+  - Modified: components/Dashboard.tsx
+    * Removed: import React from 'react';
+    * Reason: Not needed in Next.js 13+ with App Router
+
+PROMPT 4: "can you install npm/node_modules"
+---------------------------------------------
+ACTION: Attempted to install dependencies but npm was not accessible
+CHANGES: None
+NOTES: Discovered Node.js was not installed on the system
+
+PROMPT 5: "node --version"
+--------------------------
+ACTION: Verified Node.js installation
+CHANGES: None
+RESULT: Node.js v24.11.0 confirmed installed
+
+PROMPT 6: "yes" (to run npm install)
+------------------------------------
+ACTION: Fixed PowerShell execution policy and installed all dependencies
+CHANGES:
+  - System: Set PowerShell execution policy to RemoteSigned
+  - Installed: 426 npm packages including React, Next.js, TypeScript types
+  - Created: node_modules directory with all dependencies
+RESULT: All TypeScript errors resolved
+
+PROMPT 7: "I installed the live server but its just showing a listing directory instead of the preview of the site"
+--------------------------------------------------------------------------------------------------------------------
+ACTION: Started Next.js development server
+CHANGES:
+  - Started: npm run dev (Next.js development server)
+  - Opened: http://localhost:3000 in Simple Browser
+NOTES: 
+  - Explained that Live Server is for static HTML, not Next.js applications
+  - Next.js auto-updated tsconfig.json to set jsx back to "react-jsx"
+
+PROMPT 8: "How do i save the changes made to the live server preview"
+----------------------------------------------------------------------
+ACTION: Explained how Next.js hot reload works
+CHANGES: None (informational only)
+NOTES: Clarified that file edits are automatically reflected in preview
+
+PROMPT 9: "There's a horizontal scroll bar that keeps appearing and disappearing, can you fix that?"
+----------------------------------------------------------------------------------------------------
+ACTION: Fixed horizontal scrollbar issue
+CHANGES:
+  - Modified: app/globals.css
+    * Added: html { overflow-x: hidden; }
+    * Modified body: Added overflow-x: hidden;
+    * Reason: Prevents horizontal scrolling from viewport-overflowing elements
+
+PROMPT 10: "Can you create a file named 'changes-made.txt'..."
+---------------------------------------------------------------
+ACTION: Created this changelog file
+CHANGES:
+  - Created: changes-made.txt
+    * Documents all prompts and changes made to the project
+    * Will be updated automatically for all future changes
+
+================================================================================
+SUMMARY OF ALL FILES MODIFIED
+================================================================================
+
+1. tsconfig.json
+   - Changed jsx setting from "react-jsx" to "preserve" (later auto-reverted by Next.js)
+
+2. components/Dashboard.tsx
+   - Removed unnecessary React import
+
+3. app/globals.css
+   - Added overflow-x: hidden to html and body elements
+
+4. System Configuration
+   - PowerShell execution policy set to RemoteSigned
+   - Installed 426 npm packages
+
+5. changes-made.txt (this file)
+   - Created to track all project changes
+
+================================================================================
+END OF CHANGELOG
+================================================================================
+Last updated: November 6, 2025
