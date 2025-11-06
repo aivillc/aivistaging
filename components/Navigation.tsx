@@ -17,10 +17,10 @@ export default function Navigation() {
 
   return (
     <nav
-      className={`fixed top-2 left-0 right-0 z-40 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         isScrolled
-          ? 'bg-black/80 backdrop-blur-xl border-b border-purple-500/20 shadow-2xl'
-          : 'bg-transparent'
+          ? 'bg-black/95 backdrop-blur-xl border-b border-purple-500/20 shadow-2xl'
+          : 'bg-black/80 backdrop-blur-md'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
