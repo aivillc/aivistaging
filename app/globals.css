@@ -142,6 +142,15 @@ body {
   }
 }
 
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
@@ -164,4 +173,8 @@ body {
 
 .animate-scroll-reverse:hover {
   animation-play-state: paused;
+}
+
+.animate-gradient-move {
+  animation: gradient-move 3s linear infinite;
 }
