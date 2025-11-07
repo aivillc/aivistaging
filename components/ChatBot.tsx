@@ -1,8 +1,11 @@
 ﻿'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { CHAT_CONFIG, generateMessageId, generateSessionId } from '@/lib/chatConfig';
 
-console.log('🤖 [ChatBot] Module loaded');
+if (process.env.NODE_ENV === 'development') {
+  console.log('🤖 [ChatBot] Module loaded');
+}
 
 interface Message {
   id: number;
@@ -24,66 +27,77 @@ interface ChatState {
 }
 
 export default function ChatBot() {
-  // Check if cache is expired (30 minutes)
-  const checkAndClearExpiredCache = () => {
+  // Helper to get cached state (parse once, reuse)
+  const getCachedState = (): ChatState | null => {
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem('aivi_chat_state');
       if (cached) {
-        const state: ChatState = JSON.parse(cached);
-        const lastActivity = new Date(state.lastActivity);
-        const now = new Date();
-        const minutesSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60);
-        
-        if (minutesSinceActivity >= 30) {
-          console.log('🤖 [ChatBot] Cache expired after 30 minutes, clearing...');
+        try {
+          return JSON.parse(cached);
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('🤖 [ChatBot] Failed to parse cached state:', error);
+          }
           localStorage.removeItem('aivi_chat_state');
-          return true; // Cache was cleared
         }
       }
     }
-    return false; // Cache is still valid
+    return null;
+  };
+
+  // Check if cache is expired (30 minutes)
+  const checkAndClearExpiredCache = (): boolean => {
+    const state = getCachedState();
+    if (state) {
+      const lastActivity = new Date(state.lastActivity);
+      const now = new Date();
+      const minutesSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60);
+      
+      if (minutesSinceActivity >= CHAT_CONFIG.CACHE_EXPIRY_MINUTES) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🤖 [ChatBot] Cache expired after 30 minutes, clearing...');
+        }
+        localStorage.removeItem('aivi_chat_state');
+        return true;
+      }
+    }
+    return false;
   };
 
   // Initialize state from localStorage or create new
   const [isOpen, setIsOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
-      if (checkAndClearExpiredCache()) {
-        return false; // Cache expired, start fresh
-      }
-      const cached = localStorage.getItem('aivi_chat_state');
-      if (cached) {
-        const state: ChatState = JSON.parse(cached);
-        return state.isOpen;
-      }
+    if (checkAndClearExpiredCache()) {
+      return false;
     }
-    return false;
+    const state = getCachedState();
+    return state?.isOpen || false;
   });
 
   const [sessionId, setSessionId] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const cached = localStorage.getItem('aivi_chat_state');
-      if (cached) {
-        const state: ChatState = JSON.parse(cached);
+    const state = getCachedState();
+    if (state?.sessionId) {
+      if (process.env.NODE_ENV === 'development') {
         console.log('🤖 [ChatBot] Restored sessionId from cache:', state.sessionId);
-        return state.sessionId;
       }
+      return state.sessionId;
     }
-    const id = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    console.log('🤖 [ChatBot] Created new sessionId:', id);
+    const id = generateSessionId();
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🤖 [ChatBot] Created new sessionId:', id);
+    }
     return id;
   });
 
   const [messages, setMessages] = useState<Message[]>(() => {
-    if (typeof window !== 'undefined') {
-      const cached = localStorage.getItem('aivi_chat_state');
-      if (cached) {
-        const state: ChatState = JSON.parse(cached);
+    const state = getCachedState();
+    if (state?.messages) {
+      if (process.env.NODE_ENV === 'development') {
         console.log('🤖 [ChatBot] Restored', state.messages.length, 'messages from cache');
-        return state.messages.map(msg => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp),
-        }));
       }
+      return state.messages.map(msg => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp),
+      }));
     }
     return [
       {
@@ -116,14 +130,18 @@ export default function ChatBot() {
         lastActivity: new Date().toISOString(),
       };
       localStorage.setItem('aivi_chat_state', JSON.stringify(state));
-      console.log('🤖 [ChatBot] State saved to cache with timestamp');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🤖 [ChatBot] State saved to cache with timestamp');
+      }
     }
   }, [sessionId, messages, isOpen]);
 
   // Log on mount
   useEffect(() => {
-    console.log('🤖 [ChatBot] Component mounted and ready');
-    console.log('🤖 [ChatBot] SessionId:', sessionId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🤖 [ChatBot] Component mounted and ready');
+      console.log('🤖 [ChatBot] SessionId:', sessionId);
+    }
   }, [sessionId]);
 
   // Check for expired cache every minute
@@ -131,7 +149,7 @@ export default function ChatBot() {
     const checkInterval = setInterval(() => {
       if (checkAndClearExpiredCache()) {
         // Cache expired, reset everything
-        const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const newSessionId = generateSessionId();
         setSessionId(newSessionId);
         setMessages([
           {
@@ -143,9 +161,11 @@ export default function ChatBot() {
         ]);
         setIsOpen(false);
         setIsTyping(false);
-        console.log('🤖 [ChatBot] Session expired after 30 minutes of inactivity. New sessionId:', newSessionId);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🤖 [ChatBot] Session expired after 30 minutes of inactivity. New sessionId:', newSessionId);
+        }
       }
-    }, 60000); // Check every minute
+    }, CHAT_CONFIG.CACHE_CHECK_INTERVAL_MS);
 
     return () => clearInterval(checkInterval);
   }, []);
@@ -167,21 +187,31 @@ export default function ChatBot() {
       return;
     }
 
-    console.log('[ChatBot] Starting polling for sessionId:', sessionId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ChatBot] Starting polling for sessionId:', sessionId);
+    }
 
     const pollMessages = async () => {
       try {
         const url = `/api/chat/messages?sessionId=${sessionId}`;
-        console.log('[ChatBot] Polling:', url);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[ChatBot] Polling:', url);
+        }
         const response = await fetch(url);
-        console.log('[ChatBot] Poll response status:', response.status);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[ChatBot] Poll response status:', response.status);
+        }
         
         if (response.ok) {
           const data = await response.json();
-          console.log('[ChatBot] Poll data:', data);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[ChatBot] Poll data:', data);
+          }
           
           if (data.messages && data.messages.length > 0) {
-            console.log('[ChatBot] Received', data.messages.length, 'new messages');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[ChatBot] Received', data.messages.length, 'new messages');
+            }
             
             // Show typing indicator before adding messages
             setIsTyping(true);
@@ -189,7 +219,7 @@ export default function ChatBot() {
             // Add messages after a brief delay to show typing animation
             setTimeout(() => {
               const newMessages = data.messages.map((msg: any) => ({
-                id: msg.id || Date.now() + Math.random(),
+                id: msg.id || generateMessageId(),
                 text: msg.text,
                 sender: msg.sender,
                 timestamp: new Date(msg.timestamp),
@@ -199,33 +229,43 @@ export default function ChatBot() {
                 const existingIds = new Set(prev.map(m => m.id));
                 const uniqueNewMessages = newMessages.filter((m: Message) => !existingIds.has(m.id));
                 if (uniqueNewMessages.length > 0) {
-                  console.log('[ChatBot] Adding', uniqueNewMessages.length, 'unique messages to state');
+                  if (process.env.NODE_ENV === 'development') {
+                    console.log('[ChatBot] Adding', uniqueNewMessages.length, 'unique messages to state');
+                  }
                   return [...prev, ...uniqueNewMessages];
                 }
                 return prev;
               });
               setIsTyping(false);
               setIsConnected(true);
-            }, 800);
+            }, CHAT_CONFIG.TYPING_ANIMATION_DELAY_MS);
           } else {
-            console.log('[ChatBot] No new messages in queue');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[ChatBot] No new messages in queue');
+            }
           }
         } else {
-          console.error('[ChatBot] Poll failed with status:', response.status);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('[ChatBot] Poll failed with status:', response.status);
+          }
         }
       } catch (error) {
-        console.error('[ChatBot] Error polling messages:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[ChatBot] Error polling messages:', error);
+        }
         setIsConnected(false);
       }
     };
 
     // Poll immediately, then every 2 seconds
     pollMessages();
-    pollingIntervalRef.current = setInterval(pollMessages, 2000);
+    pollingIntervalRef.current = setInterval(pollMessages, CHAT_CONFIG.POLLING_INTERVAL_MS);
 
     return () => {
       if (pollingIntervalRef.current) {
-        console.log('[ChatBot] Stopping polling');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[ChatBot] Stopping polling');
+        }
         clearInterval(pollingIntervalRef.current);
       }
     };
@@ -236,7 +276,7 @@ export default function ChatBot() {
     if (!inputValue.trim()) return;
 
     const userMessage: Message = {
-      id: Date.now(),
+      id: generateMessageId(),
       text: inputValue,
       sender: 'user',
       timestamp: new Date(),
@@ -256,9 +296,11 @@ export default function ChatBot() {
     // Set a timeout to hide typing indicator if no response comes
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
-    }, 30000); // 30 seconds max
+    }, CHAT_CONFIG.TYPING_MAX_WAIT_MS);
 
-    console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
+    }
     
     // Send to prospects webhook
     try {
@@ -279,13 +321,19 @@ export default function ChatBot() {
         body: JSON.stringify(webhookPayload),
       });
       
-      console.log('[ChatBot] Webhook response status:', response.status);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[ChatBot] Webhook response status:', response.status);
+      }
       
       if (!response.ok) {
-        console.error('[ChatBot] Webhook failed:', await response.text());
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[ChatBot] Webhook failed:', await response.text());
+        }
       }
     } catch (error) {
-      console.error('[ChatBot] Error sending to prospects:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[ChatBot] Error sending to prospects:', error);
+      }
     }
   };
 
@@ -295,7 +343,7 @@ export default function ChatBot() {
       localStorage.removeItem('aivi_chat_state');
       
       // Generate new session ID for fresh start
-      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const newSessionId = generateSessionId();
       setSessionId(newSessionId);
       
       // Reset to initial state
@@ -310,7 +358,9 @@ export default function ChatBot() {
       setIsOpen(false);
       setIsTyping(false);
       
-      console.log('🤖 [ChatBot] Chat cleared and closed. New sessionId:', newSessionId);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🤖 [ChatBot] Chat cleared and closed. New sessionId:', newSessionId);
+      }
     }
   };
 
@@ -326,7 +376,9 @@ export default function ChatBot() {
       {/* Floating Chat Button */}
       <button
         onClick={() => {
-          console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
+          }
           setIsOpen(!isOpen);
         }}
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"

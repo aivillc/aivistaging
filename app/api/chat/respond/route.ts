@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addMessage } from '@/lib/messageStore';
+import { generateMessageId } from '@/lib/chatConfig';
 
-console.log('[Respond API] Route loaded');
+if (process.env.NODE_ENV === 'development') {
+  console.log('[Respond API] Route loaded');
+}
 
 /**
  * POST endpoint for AI agent to send responses to the chatbot
@@ -42,13 +45,15 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    console.log(`✅ [Respond API] Received message`);
-    console.log(`   SessionId: ${sessionId}`);
-    console.log(`   Message: "${message}"`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ [Respond API] Received message`);
+      console.log(`   SessionId: ${sessionId}`);
+      console.log(`   Message: "${message}"`);
+    }
 
-    // Add message to file storage
+    // Add message to storage
     const messageData = {
-      id: Date.now() + Math.random(),
+      id: generateMessageId(),
       text: message,
       sender: sender || 'bot',
       timestamp: new Date().toISOString(),
@@ -56,8 +61,10 @@ export async function POST(request: NextRequest) {
     
     addMessage(sessionId, messageData);
 
-    console.log(`✅ [Respond API] Message saved to file storage!`);
-    console.log(`   Message ID: ${messageData.id}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ [Respond API] Message saved!`);
+      console.log(`   Message ID: ${messageData.id}`);
+    }
 
     return NextResponse.json({ 
       success: true,
@@ -67,7 +74,9 @@ export async function POST(request: NextRequest) {
       note: 'Message saved to persistent storage'
     });
   } catch (error) {
-    console.error('[ChatBot Response API] Error processing response:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[ChatBot Response API] Error processing response:', error);
+    }
     return NextResponse.json({ 
       error: 'Internal server error',
       details: error instanceof Error ? error.message : 'Unknown error'
