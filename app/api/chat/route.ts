@@ -19,6 +19,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { sessionId, message, sender = 'bot' } = body;
 
+    console.log('POST /api/chat received:', { sessionId, message, sender });
+
     if (!sessionId || !message) {
       return NextResponse.json(
         { error: 'sessionId and message are required' },
@@ -38,6 +40,9 @@ export async function POST(request: NextRequest) {
       sender,
       timestamp: new Date().toISOString(),
     });
+
+    console.log('Message stored. Total messages for session:', sessionMessages.length);
+    console.log('Active sessions:', Array.from(activeSessions.keys()));
 
     return NextResponse.json({
       success: true,
@@ -62,6 +67,9 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const sessionId = searchParams.get('sessionId');
 
+    console.log('GET /api/chat polling for sessionId:', sessionId);
+    console.log('Active sessions:', Array.from(activeSessions.keys()));
+
     if (!sessionId) {
       return NextResponse.json(
         { error: 'sessionId is required' },
@@ -70,6 +78,8 @@ export async function GET(request: NextRequest) {
     }
 
     const messages = activeSessions.get(sessionId) || [];
+    
+    console.log('Found messages for session:', messages.length);
     
     // Clear messages after retrieval (or implement read tracking)
     activeSessions.set(sessionId, []);
