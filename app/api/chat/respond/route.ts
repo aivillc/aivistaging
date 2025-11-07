@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { messageQueues } from '../messageQueue';
+import { addMessage } from '@/lib/messageStore';
 
 console.log('[Respond API] Route loaded');
 
@@ -46,13 +46,7 @@ export async function POST(request: NextRequest) {
     console.log(`   SessionId: ${sessionId}`);
     console.log(`   Message: "${message}"`);
 
-    // Add message directly to queue
-    if (!messageQueues.has(sessionId)) {
-      messageQueues.set(sessionId, []);
-      console.log(`[Respond API] Created new queue for session`);
-    }
-
-    const queue = messageQueues.get(sessionId)!;
+    // Add message to file storage
     const messageData = {
       id: Date.now() + Math.random(),
       text: message,
@@ -60,19 +54,17 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
     
-    queue.push(messageData);
+    addMessage(sessionId, messageData);
 
-    console.log(`✅ [Respond API] Message queued!`);
-    console.log(`   Queue size: ${queue.length}`);
+    console.log(`✅ [Respond API] Message saved to file storage!`);
     console.log(`   Message ID: ${messageData.id}`);
-    console.log(`   All sessions:`, Array.from(messageQueues.keys()));
 
     return NextResponse.json({ 
       success: true,
       queued: true,
       sessionId,
-      queueSize: queue.length,
-      note: 'Due to Vercel serverless architecture, responses may not persist. Use /api/chat/messages POST directly for better reliability.'
+      messageId: messageData.id,
+      note: 'Message saved to persistent storage'
     });
   } catch (error) {
     console.error('[ChatBot Response API] Error processing response:', error);

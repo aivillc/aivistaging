@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { messageQueues } from '../messageQueue';
+import { getMessages, clearMessages } from '@/lib/messageStore';
 
 console.log('[Messages API] Route loaded');
 
@@ -14,17 +14,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
   }
 
-  // Get messages for this session
-  const messages = messageQueues.get(sessionId) || [];
+  // Get messages for this session from file storage
+  const messages = getMessages(sessionId);
   
   console.log('[Messages API GET] Found', messages.length, 'messages for session:', sessionId);
-  console.log('[Messages API GET] Queue contents:', messages);
-  console.log('[Messages API GET] All sessions in queue:', Array.from(messageQueues.keys()));
+  console.log('[Messages API GET] Messages:', messages);
   
-  // Clear the queue after retrieval
+  // Clear the messages after retrieval
   if (messages.length > 0) {
-    messageQueues.delete(sessionId);
-    console.log('[Messages API GET] Cleared queue for session:', sessionId);
+    clearMessages(sessionId);
+    console.log('[Messages API GET] Cleared messages for session:', sessionId);
   }
 
   return NextResponse.json({ messages });
@@ -45,30 +44,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Session ID and message required' }, { status: 400 });
     }
 
-    // Add message to queue
-    if (!messageQueues.has(sessionId)) {
-      messageQueues.set(sessionId, []);
-      console.log('[Messages API POST] Created new queue for session:', sessionId);
-    }
-
-    const queue = messageQueues.get(sessionId)!;
+    // Add message to file storage
     const messageData = {
-      id: Date.now(),
+      id: Date.now() + Math.random(),
       text: message,
       sender: sender || 'bot',
       timestamp: new Date().toISOString(),
     };
     
-    queue.push(messageData);
+    const { addMessage } = await import('@/lib/messageStore');
+    addMessage(sessionId, messageData);
 
-    console.log('[Messages API POST] ✅ Message queued successfully!');
-    console.log('[Messages API POST] Queue size:', queue.length);
+    console.log('[Messages API POST] ✅ Message saved to file storage!');
     console.log('[Messages API POST] Message data:', messageData);
-    console.log('[Messages API POST] All active sessions:', Array.from(messageQueues.keys()));
 
     return NextResponse.json({ 
       success: true,
-      queueSize: queue.length,
       messageId: messageData.id
     });
   } catch (error) {
