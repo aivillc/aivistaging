@@ -5,10 +5,20 @@ import Image from 'next/image';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrollY = window.scrollY;
+      
+      // Show nav after scrolling down 100px
+      if (scrollY > 100) {
+        setIsVisible(true);
+        setIsScrolled(scrollY > 150);
+      } else {
+        setIsVisible(false);
+        setIsScrolled(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -18,6 +28,8 @@ export default function Navigation() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+      } ${
         isScrolled
           ? 'bg-black/95 backdrop-blur-xl border-b border-purple-500/20 shadow-2xl'
           : 'bg-black/80 backdrop-blur-md'
