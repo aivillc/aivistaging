@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 
+console.log('🤖 [ChatBot] Module loaded');
+
 interface Message {
   id: number;
   text: string;
@@ -11,7 +13,11 @@ interface Message {
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [sessionId] = useState(() => {
+    const id = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    console.log('🤖 [ChatBot] Component mounted with sessionId:', id);
+    return id;
+  });
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -24,6 +30,12 @@ export default function ChatBot() {
   const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Log on mount
+  useEffect(() => {
+    console.log('🤖 [ChatBot] Component mounted and ready');
+    console.log('🤖 [ChatBot] SessionId:', sessionId);
+  }, [sessionId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -161,7 +173,10 @@ export default function ChatBot() {
     <>
       {/* Floating Chat Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
+          setIsOpen(!isOpen);
+        }}
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
         aria-label="Open chat"
       >
