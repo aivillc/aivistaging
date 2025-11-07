@@ -20,12 +20,36 @@ interface ChatState {
     timestamp: string;
   }>;
   isOpen: boolean;
+  lastActivity: string;
 }
 
 export default function ChatBot() {
+  // Check if cache is expired (30 minutes)
+  const checkAndClearExpiredCache = () => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem('aivi_chat_state');
+      if (cached) {
+        const state: ChatState = JSON.parse(cached);
+        const lastActivity = new Date(state.lastActivity);
+        const now = new Date();
+        const minutesSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60);
+        
+        if (minutesSinceActivity >= 30) {
+          console.log('🤖 [ChatBot] Cache expired after 30 minutes, clearing...');
+          localStorage.removeItem('aivi_chat_state');
+          return true; // Cache was cleared
+        }
+      }
+    }
+    return false; // Cache is still valid
+  };
+
   // Initialize state from localStorage or create new
   const [isOpen, setIsOpen] = useState(() => {
     if (typeof window !== 'undefined') {
+      if (checkAndClearExpiredCache()) {
+        return false; // Cache expired, start fresh
+      }
       const cached = localStorage.getItem('aivi_chat_state');
       if (cached) {
         const state: ChatState = JSON.parse(cached);
@@ -35,7 +59,7 @@ export default function ChatBot() {
     return false;
   });
 
-  const [sessionId] = useState(() => {
+  const [sessionId, setSessionId] = useState(() => {
     if (typeof window !== 'undefined') {
       const cached = localStorage.getItem('aivi_chat_state');
       if (cached) {
@@ -89,9 +113,10 @@ export default function ChatBot() {
           timestamp: msg.timestamp.toISOString(),
         })),
         isOpen,
+        lastActivity: new Date().toISOString(),
       };
       localStorage.setItem('aivi_chat_state', JSON.stringify(state));
-      console.log('🤖 [ChatBot] State saved to cache');
+      console.log('🤖 [ChatBot] State saved to cache with timestamp');
     }
   }, [sessionId, messages, isOpen]);
 
@@ -100,6 +125,30 @@ export default function ChatBot() {
     console.log('🤖 [ChatBot] Component mounted and ready');
     console.log('🤖 [ChatBot] SessionId:', sessionId);
   }, [sessionId]);
+
+  // Check for expired cache every minute
+  useEffect(() => {
+    const checkInterval = setInterval(() => {
+      if (checkAndClearExpiredCache()) {
+        // Cache expired, reset everything
+        const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        setSessionId(newSessionId);
+        setMessages([
+          {
+            id: 1,
+            text: "Hi! I'm AIVI, your AI assistant. How can I help you today?",
+            sender: 'bot',
+            timestamp: new Date(),
+          },
+        ]);
+        setIsOpen(false);
+        setIsTyping(false);
+        console.log('🤖 [ChatBot] Session expired after 30 minutes of inactivity. New sessionId:', newSessionId);
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(checkInterval);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -242,8 +291,12 @@ export default function ChatBot() {
 
   const handleCloseChat = () => {
     if (confirm('Are you sure you want to close the chat? This will clear your conversation history.')) {
-      // Clear localStorage
+      // Clear localStorage and generate new session ID
       localStorage.removeItem('aivi_chat_state');
+      
+      // Generate new session ID for fresh start
+      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      setSessionId(newSessionId);
       
       // Reset to initial state
       setMessages([
@@ -257,7 +310,7 @@ export default function ChatBot() {
       setIsOpen(false);
       setIsTyping(false);
       
-      console.log('🤖 [ChatBot] Chat cleared and closed');
+      console.log('🤖 [ChatBot] Chat cleared and closed. New sessionId:', newSessionId);
     }
   };
 
