@@ -37,10 +37,15 @@ const industryHeadlines = [
 
 export default function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % industryHeadlines.length);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % industryHeadlines.length);
+        setIsTransitioning(false);
+      }, 500); // Half second fade out, then change content
     }, 5000); // Rotate every 5 seconds
 
     return () => clearInterval(interval);
@@ -83,24 +88,26 @@ export default function Hero() {
             <div className="h-px w-48 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
           </div>
 
-          {/* Main Headline - ROTATING */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-8 tracking-tight transition-opacity duration-500">
-            {current.title}{' '}
-            <span className="inline-block bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 text-transparent bg-clip-text animate-gradient-x">
-              Revenue
-            </span>
-            <br />
-            <span className="text-4xl md:text-6xl lg:text-7xl text-white/60">
-              {current.subtitle}
-            </span>
-          </h1>
+          {/* Main Headline - ROTATING with smooth transition */}
+          <div className={`transition-all duration-500 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-8 tracking-tight">
+              {current.title}{' '}
+              <span className="inline-block bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 text-transparent bg-clip-text animate-gradient-x">
+                Revenue
+              </span>
+              <br />
+              <span className="text-4xl md:text-6xl lg:text-7xl text-white/60">
+                {current.subtitle}
+              </span>
+            </h1>
 
-          {/* Sub-headline - ROTATING */}
-          <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-10 leading-relaxed font-light transition-opacity duration-500">
-            {current.description}
-            <br className="hidden md:block" />
-            <span className="text-orange-500 font-bold">{current.stat}</span>
-          </p>
+            {/* Sub-headline - ROTATING with smooth transition */}
+            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-10 leading-relaxed font-light">
+              {current.description}
+              <br className="hidden md:block" />
+              <span className="text-orange-500 font-bold">{current.stat}</span>
+            </p>
+          </div>
 
           {/* Industry Indicator Pills */}
           <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -124,40 +131,6 @@ export default function Hero() {
             <StatCard number="391%" label="Conversion Increase" color="purple" />
             <StatCard number="50%" label="Dead Leads Revived" color="orange" />
             <StatCard number="13s" label="Response Time" color="purple" />
-          </div>
-
-          {/* Industry-Specific Tiles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
-            <IndustryTile
-              icon={
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              }
-              title="Healthcare"
-              description="Automated patient follow-ups, appointment reminders, and insurance verification"
-              gradient="from-blue-500 to-cyan-500"
-            />
-            <IndustryTile
-              icon={
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-                </svg>
-              }
-              title="Law Firms"
-              description="Client intake automation, case updates, and consultation scheduling"
-              gradient="from-purple-500 to-pink-500"
-            />
-            <IndustryTile
-              icon={
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              }
-              title="Real Estate"
-              description="Property showing automation, buyer qualification, and listing notifications"
-              gradient="from-orange-500 to-red-500"
-            />
           </div>
 
           {/* Key Features - NO EMOJIS, sleek icons */}
@@ -323,40 +296,5 @@ function TrustBadge({ text }: { text: string }) {
     <span className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-purple-500/30 transition-colors">
       {text}
     </span>
-  );
-}
-
-interface IndustryTileProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  gradient: string;
-}
-
-function IndustryTile({ icon, title, description, gradient }: IndustryTileProps) {
-  return (
-    <div className="group relative p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-white/30 transition-all duration-300 hover:scale-105">
-      {/* Glow effect on hover */}
-      <div className={`absolute -inset-1 bg-gradient-to-br ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500`} />
-      
-      <div className="relative">
-        {/* Icon */}
-        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-          {icon}
-        </div>
-        
-        {/* Title */}
-        <h3 className="text-xl font-black text-white mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text" style={{
-          backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
-        }}>
-          {title}
-        </h3>
-        
-        {/* Description */}
-        <p className="text-sm text-white/60 group-hover:text-white/80 leading-relaxed transition-colors">
-          {description}
-        </p>
-      </div>
-    </div>
   );
 }
