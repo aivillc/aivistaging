@@ -30,10 +30,10 @@ export default function Navigation() {
             <Image
               src="/AIVI-LOGO-W.png"
               alt="AIVI"
-              width={140}
-              height={60}
+              width={154}
+              height={66}
               priority
-              className="h-10 w-auto transition-all duration-300 hover:scale-105"
+              className="h-11 w-auto transition-all duration-300 hover:scale-105"
             />
           </div>
 
