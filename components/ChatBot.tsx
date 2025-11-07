@@ -11,25 +11,87 @@ interface Message {
   timestamp: Date;
 }
 
+interface ChatState {
+  sessionId: string;
+  messages: Array<{
+    id: number;
+    text: string;
+    sender: 'user' | 'bot';
+    timestamp: string;
+  }>;
+  isOpen: boolean;
+}
+
 export default function ChatBot() {
-  const [isOpen, setIsOpen] = useState(false);
+  // Initialize state from localStorage or create new
+  const [isOpen, setIsOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem('aivi_chat_state');
+      if (cached) {
+        const state: ChatState = JSON.parse(cached);
+        return state.isOpen;
+      }
+    }
+    return false;
+  });
+
   const [sessionId] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem('aivi_chat_state');
+      if (cached) {
+        const state: ChatState = JSON.parse(cached);
+        console.log('🤖 [ChatBot] Restored sessionId from cache:', state.sessionId);
+        return state.sessionId;
+      }
+    }
     const id = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    console.log('🤖 [ChatBot] Component mounted with sessionId:', id);
+    console.log('🤖 [ChatBot] Created new sessionId:', id);
     return id;
   });
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hi! I'm AIVI, your AI assistant. How can I help you today?",
-      sender: 'bot',
-      timestamp: new Date(),
-    },
-  ]);
+
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem('aivi_chat_state');
+      if (cached) {
+        const state: ChatState = JSON.parse(cached);
+        console.log('🤖 [ChatBot] Restored', state.messages.length, 'messages from cache');
+        return state.messages.map(msg => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp),
+        }));
+      }
+    }
+    return [
+      {
+        id: 1,
+        text: "Hi! I'm AIVI, your AI assistant. How can I help you today?",
+        sender: 'bot',
+        timestamp: new Date(),
+      },
+    ];
+  });
   const [inputValue, setInputValue] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const state: ChatState = {
+        sessionId,
+        messages: messages.map(msg => ({
+          id: msg.id,
+          text: msg.text,
+          sender: msg.sender,
+          timestamp: msg.timestamp.toISOString(),
+        })),
+        isOpen,
+      };
+      localStorage.setItem('aivi_chat_state', JSON.stringify(state));
+      console.log('🤖 [ChatBot] State saved to cache');
+    }
+  }, [sessionId, messages, isOpen]);
 
   // Log on mount
   useEffect(() => {
@@ -76,8 +138,14 @@ export default function ChatBot() {
               timestamp: new Date(msg.timestamp),
             }));
             setMessages((prev: Message[]) => {
-              console.log('[ChatBot] Adding messages to state. Current:', prev.length, 'New:', newMessages.length);
-              return [...prev, ...newMessages];
+              // Avoid duplicates by checking message IDs
+              const existingIds = new Set(prev.map(m => m.id));
+              const uniqueNewMessages = newMessages.filter((m: Message) => !existingIds.has(m.id));
+              if (uniqueNewMessages.length > 0) {
+                console.log('[ChatBot] Adding', uniqueNewMessages.length, 'unique messages to state');
+                return [...prev, ...uniqueNewMessages];
+              }
+              return prev;
             });
             setIsConnected(true);
           } else {
