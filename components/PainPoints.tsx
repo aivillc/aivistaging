@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function PainPoints() {
   return (
     <section className="relative py-24 px-6 bg-white border-y border-gray-200">
@@ -61,23 +65,72 @@ interface PainPointCardProps {
 }
 
 function PainPointCard({ title, stat, solution, color }: PainPointCardProps) {
-  const borderColor = color === 'purple' ? 'border-purple-500' : 'border-orange-500';
-  const gradientBg = color === 'purple'
-    ? 'from-purple-50 to-white'
-    : 'from-orange-50 to-white';
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const gradient = color === 'purple'
+    ? 'from-purple-500 to-purple-700'
+    : 'from-orange-500 to-orange-700';
 
   return (
-    <div className={`group relative p-8 bg-gradient-to-br ${gradientBg} border-2 ${borderColor} rounded-2xl hover:shadow-2xl transition-all duration-300`}>
-      <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${color === 'purple' ? 'from-purple-500 to-purple-700' : 'from-orange-500 to-orange-700'} rounded-l-2xl`} />
+    <div 
+      className="group relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Glow effect */}
+      <div className={`absolute -inset-1 bg-gradient-to-br ${gradient} rounded-2xl blur-xl transition-all duration-500 ${
+        isHovered ? 'opacity-30' : 'opacity-0'
+      }`} />
+      
+      <div className="relative h-full p-8 bg-white border-2 border-gray-200 hover:border-gray-300 rounded-2xl transition-all duration-500 overflow-hidden shadow-lg hover:shadow-2xl">
+        {/* Animated top border */}
+        <div className={`absolute top-0 left-0 h-1 bg-gradient-to-r ${gradient} transition-all duration-500 ${
+          isHovered ? 'w-full' : 'w-0'
+        }`} />
+        
+        {/* Animated side accent bar */}
+        <div className={`absolute top-0 left-0 w-1 bg-gradient-to-b ${gradient} transition-all duration-500 ${
+          isHovered ? 'h-full' : 'h-16'
+        }`} />
+        
+        {/* Content */}
+        <div className={`transition-all duration-300 ${isHovered ? '-translate-y-1' : 'translate-y-0'}`}>
+          <h3 className={`text-2xl font-black mb-3 pl-4 transition-all duration-300 ${
+            isHovered 
+              ? 'text-transparent bg-gradient-to-r bg-clip-text ' + gradient 
+              : 'text-black'
+          }`}>
+            {title}
+          </h3>
+          
+          <div className={`mb-4 pl-4 transition-all duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}>
+            <p className="text-red-600 font-bold text-lg">{stat}</p>
+          </div>
 
-      <h3 className="text-2xl font-black text-black mb-3 pl-4">{title}</h3>
-      <p className="text-red-600 font-bold text-lg mb-4 pl-4">{stat}</p>
+          <div className={`h-px bg-gradient-to-r from-gray-300 to-transparent mb-4 transition-all duration-500 ${
+            isHovered ? 'opacity-100 scale-x-100' : 'opacity-50 scale-x-75'
+          } origin-left`} />
 
-      <div className="h-px bg-gradient-to-r from-gray-300 to-transparent mb-4" />
-
-      <div className="flex items-start gap-2 pl-4">
-        <span className="text-green-600 font-black text-xl">✓</span>
-        <p className="text-gray-700 font-medium">{solution}</p>
+          <div className="flex items-start gap-2 pl-4">
+            <span className={`font-black text-xl transition-all duration-300 ${
+              isHovered 
+                ? `text-transparent bg-gradient-to-r bg-clip-text ${gradient} scale-125` 
+                : 'text-green-600 scale-100'
+            }`}>
+              ✓
+            </span>
+            <p className={`font-medium transition-colors duration-300 ${
+              isHovered ? 'text-gray-900' : 'text-gray-700'
+            }`}>
+              {solution}
+            </p>
+          </div>
+        </div>
+        
+        {/* Background gradient overlay on hover */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${
+          color === 'purple' ? 'from-purple-50 to-transparent' : 'from-orange-50 to-transparent'
+        } opacity-0 group-hover:opacity-50 transition-opacity duration-500 rounded-2xl pointer-events-none`} />
       </div>
     </div>
   );
