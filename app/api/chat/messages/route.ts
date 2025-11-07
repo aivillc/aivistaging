@@ -11,15 +11,25 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const sessionId = searchParams.get('sessionId');
 
+  console.log('[Messages API GET] Request received. SessionId:', sessionId);
+
   if (!sessionId) {
+    console.log('[Messages API GET] No sessionId provided');
     return NextResponse.json({ error: 'Session ID required' }, { status: 400 });
   }
 
   // Get messages for this session
   const messages = messageQueues.get(sessionId) || [];
   
+  console.log('[Messages API GET] Found', messages.length, 'messages for session:', sessionId);
+  console.log('[Messages API GET] Queue contents:', messages);
+  console.log('[Messages API GET] All sessions in queue:', Array.from(messageQueues.keys()));
+  
   // Clear the queue after retrieval
-  messageQueues.delete(sessionId);
+  if (messages.length > 0) {
+    messageQueues.delete(sessionId);
+    console.log('[Messages API GET] Cleared queue for session:', sessionId);
+  }
 
   return NextResponse.json({ messages });
 }
