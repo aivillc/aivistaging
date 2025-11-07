@@ -147,19 +147,6 @@ export default function ChatBot() {
     } catch (error) {
       console.error('[ChatBot] Error sending to prospects:', error);
     }
-
-    // Demo bot response if no real-time connection
-    if (!isConnected) {
-      setTimeout(() => {
-        const botMessage: Message = {
-          id: Date.now() + 1,
-          text: "Thanks for your message! AIVI can help transform your customer engagement with AI-powered automation. Our team will reach out shortly to discuss your specific needs.",
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages((prev: Message[]) => [...prev, botMessage]);
-      }, 1000);
-    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
