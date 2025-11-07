@@ -56,6 +56,28 @@ export default function ChatBot() {
               timestamp: new Date(msg.timestamp),
             }));
             setMessages((prev) => [...prev, ...newMessages]);
+            
+            // Send bot messages to prospects API immediately
+            try {
+              console.log('Sending bot messages to prospects API');
+              await fetch('/api/chat/submit', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  sessionId,
+                  messages: newMessages.map((msg: Message) => ({
+                    text: msg.text,
+                    sender: msg.sender,
+                    timestamp: msg.timestamp.toISOString(),
+                  })),
+                }),
+              });
+              console.log('Bot messages sent to prospects API');
+            } catch (error) {
+              console.error('Error sending bot messages to prospects API:', error);
+            }
           }
         }
       } catch (error) {
@@ -75,13 +97,17 @@ export default function ChatBot() {
 
   // Submit conversation when chat is closed
   const handleCloseChat = async () => {
-    setIsOpen(false);
+    console.log('Closing chat, preparing to submit...');
+    console.log('Current messages:', messages);
     
     // Only submit if there are user messages
     const hasUserMessages = messages.some(msg => msg.sender === 'user');
+    console.log('Has user messages:', hasUserMessages, 'Total messages:', messages.length);
+    
     if (hasUserMessages && messages.length > 1) {
       try {
-        await fetch('/api/chat/submit', {
+        console.log('Submitting to /api/chat/submit with sessionId:', sessionId);
+        const response = await fetch('/api/chat/submit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -95,14 +121,19 @@ export default function ChatBot() {
             })),
           }),
         });
-        console.log('Chat conversation submitted to prospects endpoint');
+        const result = await response.json();
+        console.log('Chat submission response:', result);
       } catch (error) {
         console.error('Error submitting chat:', error);
       }
+    } else {
+      console.log('Skipping submission - no user messages or only welcome message');
     }
+    
+    setIsOpen(false);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
@@ -115,6 +146,28 @@ export default function ChatBot() {
 
     setMessages([...messages, userMessage]);
     setInputValue('');
+
+    // Send user message to prospects API immediately
+    try {
+      console.log('Sending user message to prospects API:', userMessage);
+      await fetch('/api/chat/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          messages: [{
+            text: userMessage.text,
+            sender: userMessage.sender,
+            timestamp: userMessage.timestamp.toISOString(),
+          }],
+        }),
+      });
+      console.log('User message sent to prospects API');
+    } catch (error) {
+      console.error('Error sending message to prospects API:', error);
+    }
 
     // Simulate bot response (in production, backend will push real responses)
     setTimeout(() => {

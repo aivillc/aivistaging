@@ -16,15 +16,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { sessionId, messages, userInfo } = body;
 
+    console.log('Submit API called with:', { sessionId, messageCount: messages?.length });
+
     if (!sessionId || !messages || !Array.isArray(messages)) {
+      console.error('Invalid request:', { sessionId, messages });
       return NextResponse.json(
         { error: 'sessionId and messages array are required' },
         { status: 400 }
       );
     }
 
+    console.log(`Sending ${messages.length} messages to prospects webhook...`);
+
     // Send each message individually to the prospects webhook
-    const webhookPromises = messages.map(async (msg: any) => {
+    const webhookPromises = messages.map(async (msg: any, index: number) => {
       const messageData = {
         source: 'Website Chat',
         sessionId,
@@ -34,13 +39,18 @@ export async function POST(request: NextRequest) {
         ...userInfo, // Include any user info if provided
       };
 
-      return fetch('https://stage.aivi.io/webhook/prospects', {
+      console.log(`Sending message ${index + 1}/${messages.length}:`, messageData);
+
+      const response = await fetch('https://stage.aivi.io/webhook/prospects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(messageData),
       });
+
+      console.log(`Message ${index + 1} response status:`, response.status);
+      return response;
     });
 
     // Wait for all webhook calls to complete
