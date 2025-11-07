@@ -118,38 +118,34 @@ export default function ChatBot() {
     setMessages([...messages, userMessage]);
     setInputValue('');
 
-    console.log('[ChatBot] Sending message via submit API. SessionId:', sessionId);
+    console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
     
-    // Send to submit API (which handles prospects webhook and threadId tracking)
+    // Send to prospects webhook
     try {
-      const payload = {
+      const webhookPayload = {
+        source: 'Website Chat',
         sessionId,
         message: userMessage.text,
         sender: 'user',
+        timestamp: userMessage.timestamp.toISOString(),
       };
-      console.log('[ChatBot] Submit API payload:', payload);
+      console.log('[ChatBot] Webhook payload:', webhookPayload);
       
-      const response = await fetch('/api/chat/submit', {
+      const response = await fetch('https://stage.aivi.io/webhook/prospects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(webhookPayload),
       });
       
-      console.log('[ChatBot] Submit API response status:', response.status);
+      console.log('[ChatBot] Webhook response status:', response.status);
       
-      if (response.ok) {
-        const data = await response.json();
-        console.log('[ChatBot] Submit API response:', data);
-        if (data.threadId) {
-          console.log('[ChatBot] ThreadId for this session:', data.threadId);
-        }
-      } else {
-        console.error('[ChatBot] Submit API failed:', await response.text());
+      if (!response.ok) {
+        console.error('[ChatBot] Webhook failed:', await response.text());
       }
     } catch (error) {
-      console.error('[ChatBot] Error sending to submit API:', error);
+      console.error('[ChatBot] Error sending to prospects:', error);
     }
 
     // Demo bot response if no real-time connection
