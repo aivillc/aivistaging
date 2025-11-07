@@ -72,8 +72,10 @@ export default function ChatBot() {
   });
   const [inputValue, setInputValue] = useState('');
   const [isConnected, setIsConnected] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
@@ -131,23 +133,31 @@ export default function ChatBot() {
           
           if (data.messages && data.messages.length > 0) {
             console.log('[ChatBot] Received', data.messages.length, 'new messages');
-            const newMessages = data.messages.map((msg: any) => ({
-              id: msg.id || Date.now() + Math.random(),
-              text: msg.text,
-              sender: msg.sender,
-              timestamp: new Date(msg.timestamp),
-            }));
-            setMessages((prev: Message[]) => {
-              // Avoid duplicates by checking message IDs
-              const existingIds = new Set(prev.map(m => m.id));
-              const uniqueNewMessages = newMessages.filter((m: Message) => !existingIds.has(m.id));
-              if (uniqueNewMessages.length > 0) {
-                console.log('[ChatBot] Adding', uniqueNewMessages.length, 'unique messages to state');
-                return [...prev, ...uniqueNewMessages];
-              }
-              return prev;
-            });
-            setIsConnected(true);
+            
+            // Show typing indicator before adding messages
+            setIsTyping(true);
+            
+            // Add messages after a brief delay to show typing animation
+            setTimeout(() => {
+              const newMessages = data.messages.map((msg: any) => ({
+                id: msg.id || Date.now() + Math.random(),
+                text: msg.text,
+                sender: msg.sender,
+                timestamp: new Date(msg.timestamp),
+              }));
+              setMessages((prev: Message[]) => {
+                // Avoid duplicates by checking message IDs
+                const existingIds = new Set(prev.map(m => m.id));
+                const uniqueNewMessages = newMessages.filter((m: Message) => !existingIds.has(m.id));
+                if (uniqueNewMessages.length > 0) {
+                  console.log('[ChatBot] Adding', uniqueNewMessages.length, 'unique messages to state');
+                  return [...prev, ...uniqueNewMessages];
+                }
+                return prev;
+              });
+              setIsTyping(false);
+              setIsConnected(true);
+            }, 800);
           } else {
             console.log('[ChatBot] No new messages in queue');
           }
@@ -186,6 +196,19 @@ export default function ChatBot() {
     setMessages([...messages, userMessage]);
     setInputValue('');
 
+    // Show typing indicator immediately after user sends message
+    setIsTyping(true);
+    
+    // Clear any existing typing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Set a timeout to hide typing indicator if no response comes
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 30000); // 30 seconds max
+
     console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
     
     // Send to prospects webhook
@@ -214,6 +237,27 @@ export default function ChatBot() {
       }
     } catch (error) {
       console.error('[ChatBot] Error sending to prospects:', error);
+    }
+  };
+
+  const handleCloseChat = () => {
+    if (confirm('Are you sure you want to close the chat? This will clear your conversation history.')) {
+      // Clear localStorage
+      localStorage.removeItem('aivi_chat_state');
+      
+      // Reset to initial state
+      setMessages([
+        {
+          id: 1,
+          text: "Hi! I'm AIVI, your AI assistant. How can I help you today?",
+          sender: 'bot',
+          timestamp: new Date(),
+        },
+      ]);
+      setIsOpen(false);
+      setIsTyping(false);
+      
+      console.log('🤖 [ChatBot] Chat cleared and closed');
     }
   };
 
@@ -287,7 +331,7 @@ export default function ChatBot() {
                 </div>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleCloseChat}
                 className="hover:bg-white/10 p-2 rounded-lg transition-colors"
                 aria-label="Close chat"
               >
@@ -338,6 +382,17 @@ export default function ChatBot() {
                 </div>
               </div>
             ))}
+            {isTyping && (
+              <div className="flex justify-start animate-fadeIn">
+                <div className="bg-white/5 border border-purple-500/30 text-white backdrop-blur-sm p-3 rounded-2xl">
+                  <div className="flex gap-1 items-center">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
