@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * POST /api/chat/submit
- * Submit final chat conversation to prospects endpoint
+ * Submit each chat message individually to prospects endpoint
  * 
  * Body:
  * {
@@ -23,40 +23,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Format the conversation for the prospects API
-    const conversationText = messages
-      .map((msg: any) => `${msg.sender.toUpperCase()}: ${msg.text}`)
-      .join('\n');
+    // Send each message individually to the prospects webhook
+    const webhookPromises = messages.map(async (msg: any) => {
+      const messageData = {
+        source: 'Website Chat',
+        sessionId,
+        message: msg.text,
+        sender: msg.sender,
+        timestamp: msg.timestamp,
+        ...userInfo, // Include any user info if provided
+      };
 
-    const prospectData = {
-      source: 'Website Chat',
-      sessionId,
-      conversation: conversationText,
-      messageCount: messages.length,
-      timestamp: new Date().toISOString(),
-      ...userInfo, // Include any user info if provided
-    };
-
-    // Send to prospects webhook
-    const webhookResponse = await fetch('https://stage.aivi.io/webhook/prospects', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(prospectData),
+      return fetch('https://stage.aivi.io/webhook/prospects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData),
+      });
     });
 
-    if (!webhookResponse.ok) {
-      console.error('Webhook error:', await webhookResponse.text());
+    // Wait for all webhook calls to complete
+    const results = await Promise.allSettled(webhookPromises);
+
+    // Check if any failed
+    const failedCount = results.filter(r => r.status === 'rejected').length;
+    if (failedCount > 0) {
+      console.error(`${failedCount} messages failed to send to webhook`);
       return NextResponse.json(
-        { error: 'Failed to submit to prospects endpoint', success: false },
+        { 
+          error: `${failedCount} messages failed to send`, 
+          success: false,
+          failedCount,
+          totalCount: messages.length
+        },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Chat conversation submitted successfully',
+      message: `${messages.length} messages submitted successfully`,
+      messageCount: messages.length,
     });
   } catch (error) {
     console.error('Error submitting chat:', error);

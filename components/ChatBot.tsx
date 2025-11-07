@@ -11,7 +11,11 @@ interface Message {
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [sessionId] = useState(() => {
+    const id = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    console.log('ChatBot Session ID:', id);
+    return id;
+  });
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -38,10 +42,13 @@ export default function ChatBot() {
 
     const pollMessages = async () => {
       try {
+        console.log('Polling for messages with sessionId:', sessionId);
         const response = await fetch(`/api/chat?sessionId=${sessionId}`);
         if (response.ok) {
           const data = await response.json();
+          console.log('Poll response:', data);
           if (data.messages && data.messages.length > 0) {
+            console.log('Received messages:', data.messages);
             const newMessages = data.messages.map((msg: any) => ({
               id: msg.id,
               text: msg.text,
