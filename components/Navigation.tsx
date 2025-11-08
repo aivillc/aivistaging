@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [useCasesOpen, setUseCasesOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +41,66 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
+            {/* Use Cases Dropdown */}
+            <div 
+              className="relative group"
+              onMouseEnter={() => setUseCasesOpen(true)}
+              onMouseLeave={() => setUseCasesOpen(false)}
+            >
+              <button className="text-white/80 hover:text-purple-400 transition-all duration-300 text-sm font-medium tracking-wide relative flex items-center gap-1">
+                Use Cases
+                <svg 
+                  className={`w-4 h-4 transition-transform duration-200 ${useCasesOpen ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-600 to-orange-500 group-hover:w-full transition-all duration-300" />
+              </button>
+              
+              {/* Dropdown Menu */}
+              <div className={`absolute top-full left-0 mt-2 w-48 bg-black/95 backdrop-blur-xl border border-purple-600/20 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ${useCasesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <Link
+                  href="/"
+                  className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-orange-500">💰</span>
+                    Financial
+                  </span>
+                </Link>
+                <Link
+                  href="/healthcare"
+                  className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-purple-400">🏥</span>
+                    Healthcare
+                  </span>
+                </Link>
+                <Link
+                  href="/logistics"
+                  className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-orange-400">🚚</span>
+                    Logistics
+                  </span>
+                </Link>
+                <Link
+                  href="/real-estate"
+                  className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-purple-500">🏠</span>
+                    Real Estate
+                  </span>
+                </Link>
+              </div>
+            </div>
+
             <a
               href="#features"
               className="text-white/80 hover:text-purple-400 transition-all duration-300 text-sm font-medium tracking-wide relative group"

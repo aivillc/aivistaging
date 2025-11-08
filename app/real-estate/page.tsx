@@ -1,0 +1,197 @@
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
+import ChatBot from '@/components/ChatBot';
+
+export const metadata = {
+  title: 'Real Estate AI Solutions | AIVI',
+  description: 'Transform property leads into showings with AI-powered follow-ups, scheduling, and automated real estate communication.',
+};
+
+export default function RealEstatePage() {
+  return (
+    <main className="min-h-screen bg-black">
+      <Navigation />
+      
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden bg-black">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-black" />
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-purple-600/20 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-orange-500/20 rounded-full blur-3xl animate-pulse-slower" />
+        
+        {/* Grid overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          <div className="text-center mb-16">
+            {/* Icon */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-5xl shadow-2xl shadow-purple-500/50">
+                🏠
+              </div>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-8 tracking-tight">
+              Turn Property Leads Into{' '}
+              <span className="inline-block bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 text-transparent bg-clip-text animate-gradient-x">
+                Showings
+              </span>
+              <br />
+              <span className="text-4xl md:text-6xl lg:text-7xl text-white/60">
+                In 13 Seconds
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto leading-relaxed mb-12">
+              AI-powered showing requests and buyer engagement that closes deals{' '}
+              <span className="text-orange-500 font-bold">3x Faster</span>
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="#contact"
+                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-500 hover:to-orange-400 text-white text-lg font-bold rounded-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50 uppercase tracking-wider"
+              >
+                Get Started
+              </a>
+              <a
+                href="#features"
+                className="px-8 py-4 bg-white/5 border-2 border-purple-600/50 hover:bg-white/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm uppercase tracking-wider"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Real Estate Features */}
+      <section id="features" className="relative py-20 px-6 bg-gradient-to-b from-black to-purple-950/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
+              Real Estate-Specific{' '}
+              <span className="bg-gradient-to-r from-purple-500 to-orange-500 text-transparent bg-clip-text">
+                Solutions
+              </span>
+            </h2>
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              Purpose-built AI automation for realtors, brokerages, and property management companies
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="text-4xl mb-4">🔑</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Instant Lead Response</h3>
+              <p className="text-white/70">
+                Respond to property inquiries within seconds via SMS, email, or voice. Never miss a hot lead again.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
+              <div className="text-4xl mb-4">📅</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Automated Showing Scheduling</h3>
+              <p className="text-white/70">
+                Let buyers schedule property viewings via SMS or voice. Automated calendar integration and reminders included.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="text-4xl mb-4">🏡</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Property Alerts</h3>
+              <p className="text-white/70">
+                Notify interested buyers instantly when matching properties hit the market. First to know, first to show.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
+              <div className="text-4xl mb-4">💼</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Open House Management</h3>
+              <p className="text-white/70">
+                Automated open house invitations, reminders, and follow-ups. Collect feedback and schedule private showings.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
+              <div className="text-4xl mb-4">📝</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Offer Status Updates</h3>
+              <p className="text-white/70">
+                Keep buyers and sellers informed throughout the offer process. Automated updates for counteroffers and acceptance.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
+              <div className="text-4xl mb-4">🔔</div>
+              <h3 className="text-2xl font-bold text-white mb-4">Closing Coordination</h3>
+              <p className="text-white/70">
+                Automated reminders for inspections, appraisals, and closing dates. Keep all parties on track and informed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="relative py-20 px-6 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="p-8">
+              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-500 to-orange-500 text-transparent bg-clip-text mb-4">
+                3x
+              </div>
+              <p className="text-xl text-white/80">Faster Deal Closing</p>
+            </div>
+            <div className="p-8">
+              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-orange-500 to-purple-500 text-transparent bg-clip-text mb-4">
+                85%
+              </div>
+              <p className="text-xl text-white/80">Lead Response Rate</p>
+            </div>
+            <div className="p-8">
+              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-500 to-orange-500 text-transparent bg-clip-text mb-4">
+                42%
+              </div>
+              <p className="text-xl text-white/80">More Showings Booked</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section id="contact" className="relative py-20 px-6 bg-gradient-to-b from-purple-950/20 to-black">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
+            Ready to Close More{' '}
+            <span className="bg-gradient-to-r from-purple-500 to-orange-500 text-transparent bg-clip-text">
+              Deals?
+            </span>
+          </h2>
+          <p className="text-xl text-white/70 mb-12">
+            Join top-performing real estate agents using AIVI to automate lead response and accelerate deal closings.
+          </p>
+          <a
+            href="/#contact"
+            className="inline-block px-12 py-5 bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-500 hover:to-orange-400 text-white text-xl font-bold rounded-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50 uppercase tracking-wider"
+          >
+            Schedule a Demo
+          </a>
+        </div>
+      </section>
+
+      <Footer />
+      <ScrollToTop />
+      <ChatBot />
+    </main>
+  );
+}
