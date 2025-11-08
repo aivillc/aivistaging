@@ -129,8 +129,70 @@ export async function POST(request: NextRequest) {
             const sessionId = sessionIdMatch[1];
             console.log('🔑 Extracted sessionId:', sessionId);
             
-            // Check if agent is requesting to restore AI assistant
+            // Check if agent is requesting to delete the channel
             const messageText = event.text.toLowerCase();
+            if (messageText.includes('aivi delete this channel')) {
+              console.log('🗑️ Agent requested channel deletion');
+              
+              const botToken = process.env.SLACK_BOT_TOKEN;
+              
+              // Delete the channel
+              const deleteResponse = await fetch('https://slack.com/api/conversations.archive', {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${botToken}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  channel: event.channel,
+                }),
+              });
+
+              const deleteData = await deleteResponse.json();
+              
+              if (deleteData.ok) {
+                console.log('✅ Channel archived successfully');
+                
+                // Send a final message to the user
+                const baseUrl = process.env.VERCEL_URL 
+                  ? `https://${process.env.VERCEL_URL}`
+                  : 'http://localhost:3000';
+
+                const closedMessagePayload = {
+                  sessionId,
+                  message: '👋 The live agent has closed this conversation. Thank you for chatting with us!',
+                  sender: 'bot',
+                  timestamp: Date.now(),
+                };
+
+                await fetch(`${baseUrl}/api/chat/messages`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(closedMessagePayload),
+                });
+
+                // Disconnect the agent
+                const disconnectPayload = {
+                  sessionId,
+                  action: 'disconnect_agent',
+                  channelId: event.channel,
+                };
+
+                await fetch(`${baseUrl}/api/slack/disconnect-agent`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(disconnectPayload),
+                });
+
+                console.log('✅ Channel deleted and agent disconnected');
+              } else {
+                console.error('❌ Failed to archive channel:', deleteData.error);
+              }
+              
+              return NextResponse.json({ ok: true });
+            }
+            
+            // Check if agent is requesting to restore AI assistant
             if (messageText.includes('assistant')) {
               console.log('🤖 Agent requested AI assistant restoration');
               
