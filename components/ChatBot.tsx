@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { CHAT_CONFIG, generateMessageId, generateSessionId } from '@/lib/chatConfig';
-import { getSessionData, updateSessionData, clearSessionData, extractInfoFromMessage } from '@/lib/sessionData';
+import { getSessionData, updateSessionData, clearSessionData, extractInfoFromMessage, type SessionData } from '@/lib/sessionData';
 
 if (process.env.NODE_ENV === 'development') {
   console.log('🤖 [ChatBot] Module loaded');
@@ -340,13 +340,24 @@ export default function ChatBot() {
     setInputValue('');
 
     // Extract and update session data from user message
+    // Only update fields that are NOT already populated (from form or previous chat)
     try {
       const currentData = getSessionData(sessionId);
       if (currentData) {
         const extractedInfo = extractInfoFromMessage(userMessage.text, currentData);
-        if (Object.keys(extractedInfo).length > 0) {
-          updateSessionData(sessionId, extractedInfo);
-          console.log('📊 [ChatBot] Extracted info from message:', extractedInfo);
+        
+        // Filter out any fields that already have values (preserve form data)
+        const filteredUpdates: Record<string, any> = {};
+        Object.entries(extractedInfo).forEach(([key, value]) => {
+          // Only add the extracted value if the current data doesn't have it
+          if (!currentData[key as keyof SessionData]) {
+            filteredUpdates[key] = value;
+          }
+        });
+        
+        if (Object.keys(filteredUpdates).length > 0) {
+          updateSessionData(sessionId, filteredUpdates);
+          console.log('📊 [ChatBot] Added new info from message (preserving existing):', filteredUpdates);
         }
       }
     } catch (error) {
