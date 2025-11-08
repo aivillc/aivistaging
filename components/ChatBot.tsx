@@ -299,9 +299,23 @@ export default function ChatBot() {
       console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
     }
     
-    // Check if message contains "Agent" keyword (case-insensitive)
+    // Check if message contains any agent-related keywords (case-insensitive)
     const messageText = userMessage.text.toLowerCase();
-    const containsAgentKeyword = messageText.includes('agent');
+    const agentKeywords = [
+      'agent',
+      'human agent',
+      'human representative',
+      'live agent',
+      'real person',
+      'customer service',
+      'someone else',
+      'live person',
+      'human please',
+      'representative',
+      'operator',
+      'supervisor',
+    ];
+    const containsAgentKeyword = agentKeywords.some(keyword => messageText.includes(keyword));
     
     if (containsAgentKeyword && !slackChannelId) {
       // Create Slack channel for live agent support
