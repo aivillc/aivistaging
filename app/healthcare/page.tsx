@@ -143,6 +143,58 @@ export default function HealthcarePage() {
         </div>
       </section>
 
+      {/* How It Works - WHITE BACKGROUND */}
+      <section className="relative py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+              How It{' '}
+              <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-transparent bg-clip-text">
+                Works
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Get up and running in minutes with our simple 3-step process
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                1
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Connect Your Systems</h3>
+              <p className="text-gray-600">
+                Integrate AIVI with your existing EHR, practice management software, or calendar system. Works with Epic, Cerner, athenahealth, and more.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                2
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Customize Your Workflows</h3>
+              <p className="text-gray-600">
+                Set up automated reminders, follow-ups, and communication preferences. Configure timing, messaging, and escalation rules.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                3
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Launch & Monitor</h3>
+              <p className="text-gray-600">
+                Activate your automation and watch patient engagement soar. Track performance with real-time analytics and insights.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="relative py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
@@ -164,6 +216,117 @@ export default function HealthcarePage() {
                 15hrs
               </div>
               <p className="text-xl text-white/80">Staff Time Saved Per Week</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases - WHITE BACKGROUND */}
+      <section className="relative py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+              Perfect For{' '}
+              <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-transparent bg-clip-text">
+                Every Practice
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              From small clinics to large hospital systems, AIVI scales to meet your needs
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Use Case 1 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🏥</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Primary Care Practices</h3>
+              <p className="text-gray-600 mb-4">
+                Reduce administrative burden with automated appointment reminders, prescription refill requests, and post-visit follow-ups.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Automated wellness visit reminders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Chronic care management outreach</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Annual physical scheduling</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 2 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🦷</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Dental Offices</h3>
+              <p className="text-gray-600 mb-4">
+                Keep chairs filled with proactive recall campaigns, appointment confirmations, and payment reminders.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>6-month cleaning reminders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Treatment plan follow-ups</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Insurance verification automation</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 3 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🏃</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Physical Therapy & Rehab</h3>
+              <p className="text-gray-600 mb-4">
+                Improve patient compliance with exercise reminders, session scheduling, and progress check-ins.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Home exercise reminders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Session confirmations</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Progress milestone celebrations</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 4 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">💉</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Specialty Practices</h3>
+              <p className="text-gray-600 mb-4">
+                Coordinate complex care with automated pre-procedure instructions, lab work reminders, and post-op check-ins.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Pre-surgical prep instructions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Lab result follow-ups</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Referral coordination</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

@@ -143,6 +143,58 @@ export default function LogisticsPage() {
         </div>
       </section>
 
+      {/* How It Works - WHITE BACKGROUND */}
+      <section className="relative py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+              How It{' '}
+              <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+                Works
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Seamless integration with your existing logistics infrastructure
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                1
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Connect Your TMS</h3>
+              <p className="text-gray-600">
+                Integrate AIVI with your transportation management system, warehouse software, or tracking platform. Works with all major carriers.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                2
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Set Communication Rules</h3>
+              <p className="text-gray-600">
+                Configure automated notifications for tracking updates, delivery windows, exceptions, and confirmations based on your workflow.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg">
+                3
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Go Live & Scale</h3>
+              <p className="text-gray-600">
+                Launch your automation and handle thousands of shipments daily. Monitor performance and optimize with real-time analytics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="relative py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
@@ -164,6 +216,117 @@ export default function LogisticsPage() {
                 2.5x
               </div>
               <p className="text-xl text-white/80">Faster Customer Response Time</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases - WHITE BACKGROUND */}
+      <section className="relative py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+              Built For{' '}
+              <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
+                Your Industry
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Tailored solutions for every logistics segment
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Use Case 1 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🚛</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Last-Mile Delivery</h3>
+              <p className="text-gray-600 mb-4">
+                Keep customers informed with real-time tracking, ETA updates, and delivery confirmations. Reduce missed deliveries and improve satisfaction.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>30-minute arrival window notifications</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Rescheduling via SMS</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Automated delivery instructions</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 2 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🌍</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Freight Forwarding</h3>
+              <p className="text-gray-600 mb-4">
+                Streamline international shipping with automated customs updates, port arrival notifications, and cargo milestone tracking.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Container tracking updates</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Customs clearance notifications</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Port congestion alerts</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 3 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">📦</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">E-Commerce Fulfillment</h3>
+              <p className="text-gray-600 mb-4">
+                Scale your operations with automated order confirmations, shipping notifications, and proactive exception handling.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Order shipped confirmations</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Delivery delay proactive alerts</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500 mt-1">✓</span>
+                  <span>Return pickup scheduling</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Use Case 4 */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
+              <div className="text-4xl mb-4">🏭</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">B2B Logistics</h3>
+              <p className="text-gray-600 mb-4">
+                Coordinate complex supply chains with automated receiving notifications, dock scheduling, and inventory updates.
+              </p>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Dock appointment confirmations</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>BOL and POD automation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-600 mt-1">✓</span>
+                  <span>Pallet tracking updates</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
