@@ -111,6 +111,8 @@ export default function ChatBot() {
   const [inputValue, setInputValue] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [slackChannelId, setSlackChannelId] = useState<string | null>(null);
+  const [agentConnected, setAgentConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -302,6 +304,83 @@ export default function ChatBot() {
       console.log('[ChatBot] Sending message to prospects webhook. SessionId:', sessionId);
     }
     
+    // Check if message contains "Agent" keyword (case-insensitive)
+    const messageText = userMessage.text.toLowerCase();
+    const containsAgentKeyword = messageText.includes('agent');
+    
+    if (containsAgentKeyword && !slackChannelId) {
+      // Create Slack channel for live agent support
+      try {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🔔 [ChatBot] Agent keyword detected, creating Slack channel...');
+        }
+        
+        const response = await fetch('/api/slack/create-channel', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            initialMessage: userMessage.text,
+            conversationHistory: messages,
+          }),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setSlackChannelId(data.channelId);
+          setAgentConnected(true);
+          
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ [ChatBot] Slack channel created:', data.channelName);
+          }
+          
+          // Add system message
+          const systemMessage: Message = {
+            id: generateMessageId(),
+            text: "🎯 Connecting you with a live agent... They'll be with you shortly!",
+            sender: 'bot',
+            timestamp: new Date(),
+          };
+          setMessages(prev => [...prev, systemMessage]);
+        } else {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('❌ [ChatBot] Failed to create Slack channel:', await response.text());
+          }
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ [ChatBot] Error creating Slack channel:', error);
+        }
+      }
+    }
+    
+    // If Slack channel exists, send message to Slack
+    if (slackChannelId) {
+      try {
+        await fetch('/api/slack/post-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            channelId: slackChannelId,
+            message: userMessage.text,
+            sessionId,
+          }),
+        });
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log('📤 [ChatBot] Message sent to Slack channel');
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ [ChatBot] Error sending to Slack:', error);
+        }
+      }
+    }
+    
     // Send to prospects webhook
     try {
       const webhookPayload = {
@@ -310,6 +389,7 @@ export default function ChatBot() {
         message: userMessage.text,
         sender: 'user',
         timestamp: userMessage.timestamp.toISOString(),
+        agentConnected,
       };
       console.log('[ChatBot] Webhook payload:', webhookPayload);
       
@@ -357,6 +437,8 @@ export default function ChatBot() {
       ]);
       setIsOpen(false);
       setIsTyping(false);
+      setSlackChannelId(null);
+      setAgentConnected(false);
       
       if (process.env.NODE_ENV === 'development') {
         console.log('🤖 [ChatBot] Chat cleared and closed. New sessionId:', newSessionId);
@@ -433,6 +515,17 @@ export default function ChatBot() {
                 <div className="flex items-center gap-1">
                   <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-500'} animate-pulse`} />
                   <p className="text-white/50 text-xs">{isConnected ? 'Connected' : 'Demo Mode'}</p>
+                  {agentConnected && (
+                    <>
+                      <span className="text-white/30 mx-1">•</span>
+                      <span className="text-green-400 text-xs flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                        </svg>
+                        Agent
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
               <button
