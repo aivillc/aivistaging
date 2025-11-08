@@ -136,7 +136,8 @@ export async function POST(request: NextRequest) {
       contextMessage += `*Recent Conversation:*\n`;
       conversationHistory.slice(-5).forEach((msg: any) => {
         const sender = msg.sender === 'user' ? '👤 User' : '🤖 Bot';
-        contextMessage += `\n${sender}: ${msg.message}`;
+        const messageText = msg.text || msg.message || 'No message';
+        contextMessage += `\n${sender}: ${messageText}`;
       });
     }
 
