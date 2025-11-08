@@ -74,9 +74,7 @@ export async function POST(request: NextRequest) {
     // Invite team members to the channel
     if (teamMemberIds.length > 0) {
       try {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('👥 Inviting team members:', teamMemberIds);
-        }
+        console.log('👥 Inviting team members:', teamMemberIds);
 
         const inviteResponse = await fetch('https://slack.com/api/conversations.invite', {
           method: 'POST',
@@ -94,6 +92,28 @@ export async function POST(request: NextRequest) {
         
         if (inviteData.ok) {
           console.log('✅ Team members invited to channel');
+          
+          // Send a friendly join notification to the user via messages API
+          // Map Nick's User ID to his name
+          if (teamMemberIds.includes('U09Q7M0AETV')) {
+            const baseUrl = process.env.VERCEL_URL 
+              ? `https://${process.env.VERCEL_URL}`
+              : 'http://localhost:3000';
+
+            const joinMessagePayload = {
+              sessionId,
+              message: '👋 Nick has joined the chat',
+              sender: 'bot',
+              timestamp: Date.now(),
+            };
+
+            // Send join notification to chatbot
+            await fetch(`${baseUrl}/api/chat/messages`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(joinMessagePayload),
+            });
+          }
         } else {
           console.error('⚠️ Failed to invite some team members:', inviteData.error);
         }

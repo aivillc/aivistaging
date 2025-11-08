@@ -69,13 +69,28 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ ok: true });
       }
 
+      // Ignore channel join/leave messages (subtype: channel_join, channel_leave)
+      if (event.subtype === 'channel_join' || event.subtype === 'channel_leave') {
+        console.log('🚫 Ignoring channel join/leave message');
+        return NextResponse.json({ ok: true });
+      }
+
       // Handle channel messages
       if (event.type === 'message' && event.channel && event.text) {
         console.log('💬 Message from Slack:', {
           channel: event.channel,
           user: event.user,
           text: event.text,
+          subtype: event.subtype,
         });
+
+        // Filter out Slack system messages like "<@U09Q7M0AETV> has joined the channel"
+        if (event.text.includes('has joined the channel') || 
+            event.text.includes('has left the channel') ||
+            event.text.startsWith('<@') && event.text.includes('> has')) {
+          console.log('🚫 Ignoring Slack system message');
+          return NextResponse.json({ ok: true });
+        }
 
         // Get channel info to extract the channel name
         const botToken = process.env.SLACK_BOT_TOKEN;
@@ -119,6 +134,26 @@ export async function POST(request: NextRequest) {
             if (messageText.includes('assistant')) {
               console.log('🤖 Agent requested AI assistant restoration');
               
+              // First, send the agent's message (with "assistant" keyword) to chatbot
+              const agentMessagePayload = {
+                sessionId,
+                message: event.text,
+                sender: 'agent',
+                slackUserId: event.user,
+                timestamp: Date.now(),
+              };
+
+              const baseUrl = process.env.VERCEL_URL 
+                ? `https://${process.env.VERCEL_URL}`
+                : 'http://localhost:3000';
+
+              // Send the agent's message first
+              await fetch(`${baseUrl}/api/chat/messages`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(agentMessagePayload),
+              });
+              
               // Send system message to chatbot
               const systemMessagePayload = {
                 sessionId,
@@ -127,17 +162,6 @@ export async function POST(request: NextRequest) {
                 timestamp: Date.now(),
               };
               
-              // Send disconnect signal
-              const disconnectPayload = {
-                sessionId,
-                action: 'disconnect_agent',
-                channelId: event.channel,
-              };
-
-              const baseUrl = process.env.VERCEL_URL 
-                ? `https://${process.env.VERCEL_URL}`
-                : 'http://localhost:3000';
-
               // Send system message
               await fetch(`${baseUrl}/api/chat/messages`, {
                 method: 'POST',
@@ -145,7 +169,13 @@ export async function POST(request: NextRequest) {
                 body: JSON.stringify(systemMessagePayload),
               });
 
-              // Send disconnect signal to a new endpoint we'll create
+              // Send disconnect signal
+              const disconnectPayload = {
+                sessionId,
+                action: 'disconnect_agent',
+                channelId: event.channel,
+              };
+
               await fetch(`${baseUrl}/api/slack/disconnect-agent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
