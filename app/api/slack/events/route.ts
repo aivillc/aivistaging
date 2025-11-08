@@ -71,36 +71,65 @@ export async function POST(request: NextRequest) {
 
       // Handle channel messages
       if (event.type === 'message' && event.channel && event.text) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('💬 Message from Slack:', {
-            channel: event.channel,
-            user: event.user,
-            text: event.text,
-          });
+        console.log('💬 Message from Slack:', {
+          channel: event.channel,
+          user: event.user,
+          text: event.text,
+        });
+
+        // Get channel info to extract the channel name
+        const botToken = process.env.SLACK_BOT_TOKEN;
+        
+        if (!botToken) {
+          console.error('❌ SLACK_BOT_TOKEN not configured');
+          return NextResponse.json({ ok: true });
         }
 
-        // Extract sessionId from channel name (format: aivi-session-{sessionId})
-        const channelName = event.channel_name || '';
-        const sessionIdMatch = channelName.match(/aivi-session-(.+)/);
-        
-        if (sessionIdMatch) {
-          const sessionId = sessionIdMatch[1];
+        try {
+          // Fetch channel info from Slack API
+          const channelInfoResponse = await fetch(
+            `https://slack.com/api/conversations.info?channel=${event.channel}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${botToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          const channelInfo = await channelInfoResponse.json();
           
-          // Post message to chatbot via messages API
-          const messagePayload = {
-            sessionId,
-            message: event.text,
-            sender: 'agent',
-            slackUserId: event.user,
-            timestamp: Date.now(),
-          };
+          if (!channelInfo.ok) {
+            console.error('❌ Failed to get channel info:', channelInfo.error);
+            return NextResponse.json({ ok: true });
+          }
 
-          // Send to messages endpoint
-          const baseUrl = process.env.VERCEL_URL 
-            ? `https://${process.env.VERCEL_URL}`
-            : 'http://localhost:3000';
+          const channelName = channelInfo.channel.name;
+          console.log('📝 Channel name:', channelName);
 
-          try {
+          // Extract sessionId from channel name (format: aivi-session-{sessionId})
+          const sessionIdMatch = channelName.match(/aivi-session-(.+)/);
+          
+          if (sessionIdMatch) {
+            const sessionId = sessionIdMatch[1];
+            console.log('🔑 Extracted sessionId:', sessionId);
+            
+            // Post message to chatbot via messages API
+            const messagePayload = {
+              sessionId,
+              message: event.text,
+              sender: 'agent',
+              slackUserId: event.user,
+              timestamp: Date.now(),
+            };
+
+            // Send to messages endpoint
+            const baseUrl = process.env.VERCEL_URL 
+              ? `https://${process.env.VERCEL_URL}`
+              : 'http://localhost:3000';
+
+            console.log('📤 Forwarding to messages API:', baseUrl);
+
             const response = await fetch(`${baseUrl}/api/chat/messages`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -108,13 +137,16 @@ export async function POST(request: NextRequest) {
             });
 
             if (response.ok) {
-              console.log('✅ Message forwarded to chatbot:', sessionId);
+              console.log('✅ Message forwarded to chatbot for session:', sessionId);
             } else {
-              console.error('❌ Failed to forward message:', await response.text());
+              const errorText = await response.text();
+              console.error('❌ Failed to forward message. Status:', response.status, 'Error:', errorText);
             }
-          } catch (error) {
-            console.error('❌ Error forwarding message to chatbot:', error);
+          } else {
+            console.log('⚠️ Channel name does not match expected pattern:', channelName);
           }
+        } catch (error) {
+          console.error('❌ Error processing Slack message:', error);
         }
       }
     }
