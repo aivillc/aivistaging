@@ -1,8 +1,63 @@
 AIVI STAGING - CHANGELOG
 ========================
 
-Current Version: v1.0.8
+Current Version: v1.0.9
 Date: November 8, 2025
+
+================================================================================
+VERSION 1.0.9 - Global Session ID System (November 8, 2025)
+================================================================================
+
+PROMPT: "Always use a single global sessionID until its cleared, so form session ID and chat sessionID should always be the same"
+
+CHANGES MADE:
+1. Created Global Session Management System
+   - Created: lib/globalSession.ts
+   - Provides single source of truth for session ID
+   - Functions: getGlobalSessionId(), clearGlobalSession()
+   - Uses 'aivi_global_session_id' localStorage key
+   - Ensures form and chat always share the same session ID
+
+2. Updated ChatBot to Use Global Session
+   - Modified: components/ChatBot.tsx
+   - Removed generateSessionId import
+   - Imports getGlobalSessionId and clearGlobalSession
+   - useState initialization: getGlobalSessionId()
+   - Cache expiration: clearGlobalSession() then getGlobalSessionId()
+   - Close chat: clearGlobalSession() then getGlobalSessionId()
+   - Removed obsolete form session ID check logic
+
+3. Updated DemoForm to Use Global Session
+   - Modified: components/DemoForm.tsx
+   - Removed generateSessionId import
+   - Imports getGlobalSessionId
+   - Uses getGlobalSessionId() in handleContactSubmit
+   - Removed obsolete 'aivi_form_session_id' localStorage logic
+   - Console log updated: "Form data saved to global session"
+
+PROBLEM SOLVED:
+❌ BEFORE: Form created session_ABC, Chat created session_XYZ (different IDs)
+✅ AFTER: Both form and chat use same session_ABC from global manager
+
+FEATURES IMPLEMENTED:
+✅ Single global session ID shared across entire site
+✅ Form data immediately available in chat
+✅ Chat data immediately available in form
+✅ Session data flows correctly to Slack channels
+✅ Clean session lifecycle (clear → create new)
+✅ Works regardless of which component user interacts with first
+
+TESTING WORKFLOW:
+1. User fills form → Global session ID created: session_XYZ
+2. All form data saved under session_XYZ
+3. User opens chat → Uses same session_XYZ
+4. Chat has immediate access to form data
+5. User requests agent → Slack channel shows complete user information
+6. Reverse order (chat first, form second) works identically
+
+DEPLOYMENT:
+- Commit: 219336c
+- Production: https://aivistagingsite-l0rq4v9hg-giorgio-mihailas-projects.vercel.app
 
 ================================================================================
 VERSION 1.0.8 - Auto-Invite Team Members to Slack Channels (November 8, 2025)
