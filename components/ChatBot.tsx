@@ -311,9 +311,7 @@ export default function ChatBot() {
     if (containsAgentKeyword && !slackChannelId) {
       // Create Slack channel for live agent support
       try {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🔔 [ChatBot] Agent keyword detected, creating Slack channel...');
-        }
+        console.log('🔔 [ChatBot] Agent keyword detected, creating Slack channel...');
         
         const response = await fetch('/api/slack/create-channel', {
           method: 'POST',
@@ -327,14 +325,14 @@ export default function ChatBot() {
           }),
         });
         
+        console.log('📡 [ChatBot] Create channel response status:', response.status);
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('✅ [ChatBot] Slack channel created:', data);
+          
           setSlackChannelId(data.channelId);
           setAgentConnected(true);
-          
-          if (process.env.NODE_ENV === 'development') {
-            console.log('✅ [ChatBot] Slack channel created:', data.channelName);
-          }
           
           // Add system message
           const systemMessage: Message = {
@@ -345,14 +343,29 @@ export default function ChatBot() {
           };
           setMessages(prev => [...prev, systemMessage]);
         } else {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('❌ [ChatBot] Failed to create Slack channel:', await response.text());
-          }
+          const errorText = await response.text();
+          console.error('❌ [ChatBot] Failed to create Slack channel. Status:', response.status, 'Error:', errorText);
+          
+          // Show error message to user
+          const errorMessage: Message = {
+            id: generateMessageId(),
+            text: "⚠️ Unable to connect to an agent right now. Please try again later.",
+            sender: 'bot',
+            timestamp: new Date(),
+          };
+          setMessages(prev => [...prev, errorMessage]);
         }
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ [ChatBot] Error creating Slack channel:', error);
-        }
+        console.error('❌ [ChatBot] Error creating Slack channel:', error);
+        
+        // Show error message to user
+        const errorMessage: Message = {
+          id: generateMessageId(),
+          text: "⚠️ Unable to connect to an agent right now. Please try again later.",
+          sender: 'bot',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
       }
     }
     

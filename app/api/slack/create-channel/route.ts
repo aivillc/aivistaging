@@ -20,9 +20,8 @@ export async function POST(request: NextRequest) {
     // Create channel name (Slack channels must be lowercase, no spaces)
     const channelName = `aivi-session-${sessionId.toLowerCase().replace(/[^a-z0-9-_]/g, '')}`;
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔨 Creating Slack channel:', channelName);
-    }
+    console.log('🔨 Creating Slack channel:', channelName);
+    console.log('👥 Team members to invite:', teamMemberIds.length > 0 ? teamMemberIds : 'None configured');
 
     // Create the channel
     const createChannelResponse = await fetch('https://slack.com/api/conversations.create', {
