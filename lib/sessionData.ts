@@ -100,64 +100,69 @@ export function clearSessionData(sessionId: string): void {
 
 /**
  * Extract information from user message using keywords
+ * Only extracts when user explicitly provides information
  */
 export function extractInfoFromMessage(message: string, currentData: SessionData): Partial<SessionData> {
   const updates: Partial<SessionData> = {};
   const lowerMessage = message.toLowerCase();
   
-  // Email regex
-  const emailMatch = message.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
-  if (emailMatch && !currentData.email) {
-    updates.email = emailMatch[0];
+  // Only extract email if user explicitly mentions it
+  if (lowerMessage.includes('my email') || lowerMessage.includes('email is') || lowerMessage.includes('email:')) {
+    const emailMatch = message.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
+    if (emailMatch) {
+      updates.email = emailMatch[0];
+    }
   }
   
-  // Phone regex (various formats)
-  const phoneMatch = message.match(/(\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
-  if (phoneMatch && !currentData.phone) {
-    updates.phone = phoneMatch[0];
+  // Only extract phone if user explicitly mentions it
+  if (lowerMessage.includes('my phone') || lowerMessage.includes('my number') || 
+      lowerMessage.includes('phone is') || lowerMessage.includes('number is') ||
+      lowerMessage.includes('phone:') || lowerMessage.includes('call me at')) {
+    const phoneMatch = message.match(/(\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
+    if (phoneMatch) {
+      updates.phone = phoneMatch[0];
+    }
   }
   
-  // Name extraction (simple heuristic)
+  // Only extract name if user explicitly introduces themselves
   const namePatterns = [
-    /(?:my name is|i'm|i am|this is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i,
-    /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)$/i, // Just a name
+    /(?:my name is|i'm|i am|this is|call me)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i,
   ];
   
   for (const pattern of namePatterns) {
     const nameMatch = message.match(pattern);
-    if (nameMatch && !currentData.name) {
+    if (nameMatch) {
       updates.name = nameMatch[1];
       break;
     }
   }
   
-  // Business/Company name
+  // Only extract business name if user explicitly mentions it
   const companyPatterns = [
-    /(?:company|business|organization|firm|from)\s+(?:is\s+)?(?:called\s+)?([A-Z][A-Za-z0-9\s&,.'-]+(?:Inc|LLC|Ltd|Corp|Co)?)/,
-    /(?:work at|working for|employed by)\s+([A-Z][A-Za-z0-9\s&,.'-]+)/,
+    /(?:my company is|my business is|company is|business is|i work at|i work for|working for|employed by|from)\s+([A-Z][A-Za-z0-9\s&,.'-]+(?:Inc|LLC|Ltd|Corp|Co)?)/i,
   ];
   
   for (const pattern of companyPatterns) {
     const companyMatch = message.match(pattern);
-    if (companyMatch && !currentData.businessName) {
+    if (companyMatch) {
       updates.businessName = companyMatch[1].trim();
       break;
     }
   }
   
-  // Industry keywords
-  const industries: { [key: string]: string[] } = {
-    'Trucking & Logistics': ['trucking', 'logistics', 'freight', 'transportation', 'shipping', 'delivery'],
-    'Financial Services': ['finance', 'financial', 'banking', 'investment', 'wealth management'],
-    'Insurance': ['insurance', 'insurer', 'underwriting', 'claims', 'policy', 'coverage'],
-    'Healthcare': ['healthcare', 'medical', 'hospital', 'clinic', 'health', 'doctor', 'patient'],
-    'Real Estate': ['real estate', 'property', 'realty', 'housing', 'realtor'],
-    'Retail': ['retail', 'store', 'shop', 'ecommerce', 'e-commerce'],
-    'Manufacturing': ['manufacturing', 'factory', 'production', 'assembly'],
-    'Technology': ['technology', 'software', 'tech', 'IT', 'saas'],
-  };
-  
-  if (!currentData.industry) {
+  // Only extract industry if user explicitly mentions it
+  if (lowerMessage.includes('industry') || lowerMessage.includes('in the') || lowerMessage.includes('business')) {
+    const industries: { [key: string]: string[] } = {
+      'Trucking & Logistics': ['trucking', 'logistics', 'freight', 'transportation', 'shipping', 'delivery'],
+      'Financial Services': ['finance', 'financial', 'banking', 'investment', 'wealth management'],
+      'Insurance': ['insurance', 'insurer', 'underwriting', 'claims', 'policy', 'coverage'],
+      'Healthcare': ['healthcare', 'medical', 'hospital', 'clinic', 'health', 'doctor', 'patient'],
+      'Real Estate': ['real estate', 'property', 'realty', 'housing', 'realtor'],
+      'Retail': ['retail', 'store', 'shop', 'ecommerce', 'e-commerce'],
+      'Manufacturing': ['manufacturing', 'factory', 'production', 'assembly'],
+      'Technology': ['technology', 'software', 'tech', 'IT', 'saas'],
+    };
+    
     for (const [industry, keywords] of Object.entries(industries)) {
       if (keywords.some(keyword => lowerMessage.includes(keyword))) {
         updates.industry = industry;
@@ -166,13 +171,14 @@ export function extractInfoFromMessage(message: string, currentData: SessionData
     }
   }
   
-  // Country extraction
-  const countries = [
-    'USA', 'United States', 'America', 'Canada', 'UK', 'United Kingdom', 
-    'Australia', 'Mexico', 'Germany', 'France', 'Spain', 'Italy'
-  ];
-  
-  if (!currentData.country) {
+  // Only extract country if user explicitly mentions it
+  if (lowerMessage.includes('from') || lowerMessage.includes('located in') || 
+      lowerMessage.includes('based in') || lowerMessage.includes('country')) {
+    const countries = [
+      'USA', 'United States', 'America', 'Canada', 'UK', 'United Kingdom', 
+      'Australia', 'Mexico', 'Germany', 'France', 'Spain', 'Italy'
+    ];
+    
     for (const country of countries) {
       if (lowerMessage.includes(country.toLowerCase())) {
         updates.country = country;
