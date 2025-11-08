@@ -67,7 +67,17 @@ export default function ChatBot() {
 
   // Initialize state - will be hydrated from localStorage after mount
   const [isOpen, setIsOpen] = useState(false);
-  const [sessionId, setSessionId] = useState(() => generateSessionId());
+  const [sessionId, setSessionId] = useState(() => {
+    // Check if form was filled first (client-side only)
+    if (typeof window !== 'undefined') {
+      const formSessionId = localStorage.getItem('aivi_form_session_id');
+      if (formSessionId) {
+        console.log('🤖 [ChatBot] Found form session, using it:', formSessionId);
+        return formSessionId;
+      }
+    }
+    return generateSessionId();
+  });
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -91,6 +101,13 @@ export default function ChatBot() {
     if (checkAndClearExpiredCache()) {
       setIsHydrated(true);
       return;
+    }
+
+    // If we used the form session ID, clear the reference
+    const formSessionId = localStorage.getItem('aivi_form_session_id');
+    if (formSessionId && formSessionId === sessionId) {
+      localStorage.removeItem('aivi_form_session_id');
+      console.log('🤖 [ChatBot] Cleared form session reference after using it');
     }
 
     const state = getCachedState();
