@@ -1,7 +1,23 @@
+import TronHeader from '@/components/TronHeader';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import ChatBot from '@/components/ChatBot';
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHouse, 
+  faKey, 
+  faCalendarAlt, 
+  faHome,
+  faBriefcase,
+  faFileAlt,
+  faBell,
+  faBuilding,
+  faUsers,
+  faCity,
+  faCheck
+} from '@fortawesome/free-solid-svg-icons';
 
 export const metadata = {
   title: 'Real Estate AI Solutions | AIVI',
@@ -11,6 +27,7 @@ export const metadata = {
 export default function RealEstatePage() {
   return (
     <main className="min-h-screen bg-black">
+      <TronHeader />
       <Navigation />
       
       {/* Hero Section */}
@@ -25,11 +42,17 @@ export default function RealEstatePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           <div className="text-center mb-16">
-            {/* Icon */}
-            <div className="mb-8 flex justify-center">
-              <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-5xl shadow-2xl shadow-purple-500/50">
-                🏠
-              </div>
+            {/* Logo */}
+            <div className="mb-12 flex flex-col items-center">
+              <Image
+                src="/AIVI-LOGO-W.png"
+                alt="AIVI"
+                width={400}
+                height={167}
+                priority
+                className="h-24 md:h-32 w-auto mb-6 drop-shadow-2xl"
+              />
+              <div className="h-px w-48 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
             </div>
 
             {/* Headline */}
@@ -70,7 +93,7 @@ export default function RealEstatePage() {
       </section>
 
       {/* Real Estate Features */}
-      <section id="features" className="relative py-20 px-6 bg-gradient-to-b from-black to-purple-950/20">
+      <section id="features" className="relative py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
@@ -87,7 +110,9 @@ export default function RealEstatePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">🔑</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faKey} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Instant Lead Response</h3>
               <p className="text-white/70">
                 Respond to property inquiries within seconds via SMS, email, or voice. Never miss a hot lead again.
@@ -96,7 +121,9 @@ export default function RealEstatePage() {
 
             {/* Feature 2 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">📅</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faCalendarAlt} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Automated Showing Scheduling</h3>
               <p className="text-white/70">
                 Let buyers schedule property viewings via SMS or voice. Automated calendar integration and reminders included.
@@ -105,7 +132,9 @@ export default function RealEstatePage() {
 
             {/* Feature 3 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">🏡</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faHome} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Property Alerts</h3>
               <p className="text-white/70">
                 Notify interested buyers instantly when matching properties hit the market. First to know, first to show.
@@ -114,7 +143,9 @@ export default function RealEstatePage() {
 
             {/* Feature 4 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">💼</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faBriefcase} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Open House Management</h3>
               <p className="text-white/70">
                 Automated open house invitations, reminders, and follow-ups. Collect feedback and schedule private showings.
@@ -123,7 +154,9 @@ export default function RealEstatePage() {
 
             {/* Feature 5 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">📝</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faFileAlt} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Offer Status Updates</h3>
               <p className="text-white/70">
                 Keep buyers and sellers informed throughout the offer process. Automated updates for counteroffers and acceptance.
@@ -132,7 +165,9 @@ export default function RealEstatePage() {
 
             {/* Feature 6 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">🔔</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faBell} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Closing Coordination</h3>
               <p className="text-white/70">
                 Automated reminders for inspections, appraisals, and closing dates. Keep all parties on track and informed.
@@ -238,22 +273,24 @@ export default function RealEstatePage() {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Use Case 1 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🏢</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faBuilding} className="text-purple-600" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Independent Agents</h3>
               <p className="text-gray-600 mb-4">
                 Compete with large teams by providing instant 24/7 lead response. Never lose a lead to a faster competitor again.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Instant lead response automation</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Showing scheduling while you sleep</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Buyer qualification and nurturing</span>
                 </li>
               </ul>
@@ -261,22 +298,24 @@ export default function RealEstatePage() {
 
             {/* Use Case 2 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">👥</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faUsers} className="text-orange-500" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Real Estate Teams</h3>
               <p className="text-gray-600 mb-4">
                 Scale your operations without hiring more ISAs. Distribute leads intelligently and track team performance.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Smart lead routing by geography/price</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Team calendar coordination</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Performance analytics dashboard</span>
                 </li>
               </ul>
@@ -284,22 +323,24 @@ export default function RealEstatePage() {
 
             {/* Use Case 3 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🏘️</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faCity} className="text-purple-600" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Brokerages</h3>
               <p className="text-gray-600 mb-4">
                 Provide enterprise-level lead response as a value-add for your agents. Increase agent retention and recruitment.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>White-label branding options</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Multi-agent management dashboard</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Compliance and call recording</span>
                 </li>
               </ul>
@@ -307,22 +348,24 @@ export default function RealEstatePage() {
 
             {/* Use Case 4 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🏘️</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faCity} className="text-orange-500" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Property Managers</h3>
               <p className="text-gray-600 mb-4">
                 Automate tenant inquiries, maintenance requests, and lease renewals. Reduce vacancy time and improve tenant satisfaction.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Automated showing appointments</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Maintenance ticket creation</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Lease renewal reminders</span>
                 </li>
               </ul>

@@ -1,7 +1,9 @@
+import TronHeader from '@/components/TronHeader';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import ChatBot from '@/components/ChatBot';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTruck, 
@@ -24,6 +26,7 @@ export const metadata = {
 export default function LogisticsPage() {
   return (
     <main className="min-h-screen bg-black">
+      <TronHeader />
       <Navigation />
       
       {/* Hero Section */}
@@ -38,11 +41,17 @@ export default function LogisticsPage() {
 
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           <div className="text-center mb-16">
-            {/* Icon */}
-            <div className="mb-8 flex justify-center">
-              <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-5xl shadow-2xl shadow-orange-500/50">
-                <FontAwesomeIcon icon={faTruck} className="text-white" />
-              </div>
+            {/* Logo */}
+            <div className="mb-12 flex flex-col items-center">
+              <Image
+                src="/AIVI-LOGO-W.png"
+                alt="AIVI"
+                width={400}
+                height={167}
+                priority
+                className="h-24 md:h-32 w-auto mb-6 drop-shadow-2xl"
+              />
+              <div className="h-px w-48 bg-gradient-to-r from-transparent via-orange-500 to-transparent" />
             </div>
 
             {/* Headline */}
@@ -84,7 +93,7 @@ export default function LogisticsPage() {
       </section>
 
       {/* Logistics Features */}
-      <section id="features" className="relative py-20 px-6 bg-gradient-to-b from-black to-orange-950/20">
+      <section id="features" className="relative py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
