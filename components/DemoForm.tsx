@@ -224,6 +224,22 @@ export default function DemoForm() {
       // Sync to HubSpot after form submission
       try {
         console.log('📤 [HubSpot] Syncing form submission...');
+        
+        // Get the session data we just saved to send to API
+        const savedSessionData = {
+          name: contactData.fullName,
+          email: contactData.email,
+          phone: contactData.phone,
+          businessName: contactData.companyName,
+          industry: responses.industry as string,
+          challenge: responses.challenge as string,
+          channels: responses.channels as string[],
+          volume: responses.volume as string,
+          goal: responses.goal as string,
+          crm: responses.crm as string,
+          additionalNotes: contactData.additionalNotes,
+        };
+        
         const hubspotResponse = await fetch('/api/hubspot/sync', {
           method: 'POST',
           headers: {
@@ -232,6 +248,7 @@ export default function DemoForm() {
           body: JSON.stringify({
             sessionId,
             includeConversation: false, // No chat conversation from form
+            sessionData: savedSessionData, // Send session data directly
           }),
         });
         

@@ -5,7 +5,7 @@ import { createOrUpdateHubSpotContact } from '@/lib/hubspotService';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { sessionId, includeConversation, conversationTranscript } = body;
+    const { sessionId, includeConversation, conversationTranscript, sessionData: providedSessionData } = body;
 
     if (!sessionId) {
       return NextResponse.json(
@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
 
     console.log('📊 [HubSpot Sync] Syncing session:', sessionId);
 
-    // Get session data
-    const sessionData = getSessionData(sessionId);
+    // Use provided session data (from client) or try to get from server memory
+    let sessionData = providedSessionData || getSessionData(sessionId);
     
     if (!sessionData) {
       console.log('⚠️ [HubSpot Sync] Session data not found, skipping sync');
