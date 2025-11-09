@@ -32,26 +32,43 @@ const industryHeadlines = [
     subtitle: 'In 13 Seconds',
     description: 'AI-powered showing requests and buyer engagement that closes deals',
     stat: '3x Faster'
+  },
+  {
+    industry: 'Logistics',
+    title: 'Shipment Tracking That',
+    subtitle: 'In 13 Seconds',
+    description: 'AI-powered delivery notifications and customer updates that improve satisfaction by',
+    stat: '85%'
   }
 ];
 
-export default function Hero() {
+interface HeroProps {
+  industry?: 'Healthcare' | 'Logistics' | 'Real Estate';
+}
+
+export default function Hero({ industry }: HeroProps = {}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // If industry prop is provided, find that specific industry, otherwise use rotation
+  const fixedIndustry = industry ? industryHeadlines.find(h => h.industry === industry) : null;
+  const shouldRotate = !industry;
+
   useEffect(() => {
+    if (!shouldRotate) return;
+    
     const interval = setInterval(() => {
       setIsTransitioning(true);
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % industryHeadlines.length);
         setIsTransitioning(false);
-      }, 500); // Half second fade out, then change content
-    }, 5000); // Rotate every 5 seconds
+      }, 500);
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [shouldRotate]);
 
-  const current = industryHeadlines[currentIndex];
+  const current = fixedIndustry || industryHeadlines[currentIndex];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden bg-black">
@@ -109,22 +126,24 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Industry Indicator Pills */}
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {industryHeadlines.map((item, index) => (
-              <button
-                key={item.industry}
-                onClick={() => setCurrentIndex(index)}
-                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                  index === currentIndex
-                    ? 'bg-gradient-to-r from-orange-500 to-purple-500 text-white scale-110'
-                    : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80'
-                }`}
-              >
-                {item.industry}
-              </button>
-            ))}
-          </div>
+          {/* Industry Indicator Pills - Only show if rotating */}
+          {shouldRotate && (
+            <div className="flex flex-wrap justify-center gap-2 mb-10">
+              {industryHeadlines.map((item, index) => (
+                <button
+                  key={item.industry}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                    index === currentIndex
+                      ? 'bg-gradient-to-r from-orange-500 to-purple-500 text-white scale-110'
+                      : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80'
+                  }`}
+                >
+                  {item.industry}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* ROI Stats - Sleek cards */}
           <div className="flex flex-wrap justify-center gap-6 mb-12">
