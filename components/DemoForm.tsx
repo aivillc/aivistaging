@@ -237,7 +237,13 @@ export default function DemoForm() {
         
         if (hubspotResponse.ok) {
           const data = await hubspotResponse.json();
-          console.log('✅ [HubSpot] Form data synced:', data);
+          
+          // Only log if actually synced (not skipped)
+          if (data.success) {
+            console.log('✅ [HubSpot] Form data synced:', data);
+          } else if (data.skipped) {
+            console.log('⏭️ [HubSpot]', data.message);
+          }
         } else {
           const errorText = await hubspotResponse.text();
           console.error('❌ [HubSpot] Sync failed:', errorText);

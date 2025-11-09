@@ -20,16 +20,26 @@ export async function POST(request: NextRequest) {
     const sessionData = getSessionData(sessionId);
     
     if (!sessionData) {
+      console.log('⚠️ [HubSpot Sync] Session data not found, skipping sync');
       return NextResponse.json(
-        { error: 'Session data not found' },
-        { status: 404 }
+        { 
+          success: false,
+          skipped: true,
+          message: 'Session data not found - this is normal if no data has been collected yet' 
+        },
+        { status: 200 } // Return 200 instead of 404 to avoid console errors
       );
     }
 
     if (!sessionData.email) {
+      console.log('⚠️ [HubSpot Sync] No email in session data, skipping sync');
       return NextResponse.json(
-        { error: 'Email is required to sync to HubSpot' },
-        { status: 400 }
+        { 
+          success: false,
+          skipped: true,
+          message: 'Email required to sync to HubSpot - will sync once email is captured' 
+        },
+        { status: 200 }
       );
     }
 

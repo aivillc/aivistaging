@@ -275,7 +275,13 @@ export default function ChatBot() {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ [ChatBot] Synced to HubSpot:', data);
+        
+        // Only log if actually synced (not skipped)
+        if (data.success) {
+          console.log('✅ [ChatBot] Synced to HubSpot:', data);
+        } else if (data.skipped) {
+          console.log('⏭️ [HubSpot]', data.message);
+        }
       } else {
         const errorText = await response.text();
         console.error('❌ [ChatBot] HubSpot sync failed:', errorText);
