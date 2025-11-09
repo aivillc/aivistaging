@@ -22,12 +22,12 @@ export default function HealthcarePage() {
       <TronHeader />
       <Navigation />
       <Hero industry="Healthcare" />
-      <Dashboard />
-      <Features />
+      <Dashboard industry="Healthcare" />
+      <Features industry="Healthcare" />
       <Solutions />
       <Integrations />
-      <PainPoints />
-      <Testimonials />
+      <PainPoints industry="Healthcare" />
+      <Testimonials industry="Healthcare" />
       <Footer />
       <ScrollToTop />
       <ChatBot />

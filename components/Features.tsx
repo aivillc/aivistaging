@@ -2,7 +2,35 @@
 
 import { useState } from 'react';
 
-export default function Features() {
+interface FeaturesProps {
+  industry?: 'Healthcare' | 'Logistics' | 'Real Estate';
+}
+
+const featuresContent = {
+  Healthcare: {
+    title: 'Healthcare-Specific AI',
+    subtitle: 'Capabilities',
+    description: 'HIPAA-compliant automation for patient engagement, appointment management, and healthcare communication'
+  },
+  Logistics: {
+    title: 'Logistics-Optimized AI',
+    subtitle: 'Capabilities',
+    description: 'Real-time shipment tracking, delivery notifications, and customer communication automation'
+  },
+  'Real Estate': {
+    title: 'Real Estate-Focused AI',
+    subtitle: 'Capabilities',
+    description: 'Instant lead response, showing automation, and property communication at scale'
+  }
+};
+
+export default function Features({ industry }: FeaturesProps = {}) {
+  const content = industry ? featuresContent[industry] : {
+    title: 'Multi-Channel AI',
+    subtitle: 'Capabilities',
+    description: 'Seamlessly engage customers across every channel with AI-powered automation'
+  };
+
   return (
     <section id="features" className="relative py-24 px-6 bg-black">
       {/* Subtle grid overlay */}
@@ -12,13 +40,13 @@ export default function Features() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Multi-Channel AI{' '}
+            {content.title}{' '}
             <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
-              Capabilities
+              {content.subtitle}
             </span>
           </h2>
           <p className="text-xl text-white/60 max-w-3xl mx-auto">
-            Seamlessly engage customers across every channel with AI-powered automation
+            {content.description}
           </p>
         </div>
 

@@ -1,7 +1,163 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
-export default function Testimonials() {
+interface TestimonialsProps {
+  industry?: 'Healthcare' | 'Logistics' | 'Real Estate';
+}
+
+const testimonialsContent = {
+  Healthcare: {
+    title: 'Trusted by Healthcare Providers',
+    subtitle: 'Healthcare Providers',
+    description: 'See how AIVI transforms patient engagement and communication',
+    testimonials: [
+      {
+        quote: "AIVI reduced our no-show rate by 67% in the first month. Automated appointment reminders reached 94% of patients, saving us over $50K in lost revenue.",
+        author: "Dr. Sarah Williams",
+        role: "Chief Medical Officer",
+        company: "City Medical Center",
+        industry: "Healthcare",
+        color: 'purple' as const
+      },
+      {
+        quote: "The HIPAA-compliant SMS automation is a game-changer. We now send prescription reminders, lab results, and follow-up instructions automatically.",
+        author: "Michael Chen",
+        role: "Director of Patient Services",
+        company: "HealthFirst Clinic",
+        industry: "Healthcare",
+        color: 'orange' as const
+      },
+      {
+        quote: "Patient satisfaction scores jumped from 3.2 to 4.7 stars. The 45-second response time for patient inquiries transformed our practice.",
+        author: "Jennifer Rodriguez",
+        role: "Practice Manager",
+        company: "Family Care Associates",
+        industry: "Healthcare",
+        color: 'purple' as const
+      }
+    ],
+    stats: [
+      { number: '67%', label: 'No-Show Reduction', color: 'purple' as const },
+      { number: '94%', label: 'Appointment Confirmations', color: 'orange' as const },
+      { number: '2x', label: 'Patient Retention', color: 'purple' as const },
+      { number: '45s', label: 'Response Time', color: 'orange' as const }
+    ]
+  },
+  Logistics: {
+    title: 'Trusted by Logistics Leaders',
+    subtitle: 'Logistics Leaders',
+    description: 'See how AIVI transforms delivery operations and customer satisfaction',
+    testimonials: [
+      {
+        quote: "Failed deliveries dropped by 15% after implementing AIVI's 30-minute arrival warnings. Customers love the real-time updates via SMS.",
+        author: "David Martinez",
+        role: "VP of Operations",
+        company: "Express Freight Solutions",
+        industry: "Logistics",
+        color: 'purple' as const
+      },
+      {
+        quote: "We eliminated 500+ monthly customer complaint calls. Automated tracking updates keep customers informed throughout the entire delivery process.",
+        author: "Lisa Thompson",
+        role: "Customer Experience Director",
+        company: "FastTrack Logistics",
+        industry: "Logistics",
+        color: 'orange' as const
+      },
+      {
+        quote: "On-time delivery rate increased to 96%. The AI instantly notifies customers of any delays and provides real-time ETAs.",
+        author: "James Wilson",
+        role: "CEO",
+        company: "Premier Shipping Co.",
+        industry: "Logistics",
+        color: 'purple' as const
+      }
+    ],
+    stats: [
+      { number: '96%', label: 'On-Time Deliveries', color: 'purple' as const },
+      { number: '85%', label: 'Complaint Reduction', color: 'orange' as const },
+      { number: '4.8/5', label: 'Customer Satisfaction', color: 'purple' as const },
+      { number: '2.1s', label: 'Notification Speed', color: 'orange' as const }
+    ]
+  },
+  'Real Estate': {
+    title: 'Trusted by Top Agents',
+    subtitle: 'Top Agents',
+    description: 'See how AIVI transforms lead conversion and deal closing speed',
+    testimonials: [
+      {
+        quote: "I went from 22% lead response to 98% overnight. AIVI's 8-second response time means I never lose a hot lead to a competitor again.",
+        author: "Amanda Foster",
+        role: "Top Producer",
+        company: "Luxury Realty Group",
+        industry: "Real Estate",
+        color: 'purple' as const
+      },
+      {
+        quote: "Automated showing scheduling freed up 20 hours weekly. The AI handles booking, confirmations, and reminders while I focus on closing deals.",
+        author: "Robert Chang",
+        role: "Broker/Owner",
+        company: "Metro Properties",
+        industry: "Real Estate",
+        color: 'orange' as const
+      },
+      {
+        quote: "My showing-to-contract conversion rate jumped 43%. Instant follow-up with property details keeps buyers engaged and ready to make offers.",
+        author: "Maria Santos",
+        role: "Senior Agent",
+        company: "Prestige Real Estate",
+        industry: "Real Estate",
+        color: 'purple' as const
+      }
+    ],
+    stats: [
+      { number: '98%', label: 'Lead Response Rate', color: 'purple' as const },
+      { number: '43%', label: 'Conversion Increase', color: 'orange' as const },
+      { number: '3x', label: 'Faster Deal Closing', color: 'purple' as const },
+      { number: '8s', label: 'Lead Response Time', color: 'orange' as const }
+    ]
+  }
+};
+
+export default function Testimonials({ industry }: TestimonialsProps = {}) {
+  const content = industry ? testimonialsContent[industry] : {
+    title: 'Trusted by Industry Leaders',
+    subtitle: 'Industry Leaders',
+    description: 'See how AIVI transforms customer engagement across industries',
+    testimonials: [
+      {
+        quote: "AIVI successfully grew our lead remarketing campaigns. From 1 in 5 using email to almost 1 in 2 using their AI SMS. Increasing our conversion rate by 120%.",
+        author: "Marketing Director",
+        role: "Lead Generation Manager",
+        company: "AIVI Client",
+        industry: "Lead Generation",
+        color: 'purple' as const
+      },
+      {
+        quote: "The document intelligence feature alone saved us 20 hours per week. OCR + LLM automatically processes invoices and updates our CRM.",
+        author: "Michael Chen",
+        role: "Director of Finance",
+        company: "Capital Solutions Group",
+        industry: "Financial Services",
+        color: 'orange' as const
+      },
+      {
+        quote: "Their managed service team had us up and running in 48 hours. The ROI was immediate—we saw 35% increase in policy renewals.",
+        author: "Jennifer Adams",
+        role: "Chief Marketing Officer",
+        company: "Shield Insurance Partners",
+        industry: "Insurance",
+        color: 'purple' as const
+      }
+    ],
+    stats: [
+      { number: '50%', label: 'Dead Leads Revived', color: 'purple' as const },
+      { number: '391%', label: 'Conversion Increase', color: 'orange' as const },
+      { number: '120%', label: 'Client ROI Boost', color: 'purple' as const },
+      { number: '13s', label: 'Response Time', color: 'orange' as const }
+    ]
+  };
+
   return (
     <section className="relative py-24 px-6 bg-black">
       {/* Subtle grid overlay */}
@@ -13,48 +169,39 @@ export default function Testimonials() {
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
             Trusted by{' '}
             <span className="bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
-              Industry Leaders
+              {content.subtitle}
             </span>
           </h2>
           <p className="text-xl text-white/60 max-w-3xl mx-auto">
-            See how AIVI transforms customer engagement across industries
+            {content.description}
           </p>
         </div>
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <TestimonialCard
-            quote="AIVI successfully grew our lead remarketing campaigns. From 1 in 5 using email to almost 1 in 2 using their AI SMS. Increasing our conversion rate by 120%."
-            author="Marketing Director"
-            role="Lead Generation Manager"
-            company="AIVI Client"
-            industry="Lead Generation"
-            color="purple"
-          />
-          <TestimonialCard
-            quote="The document intelligence feature alone saved us 20 hours per week. OCR + LLM automatically processes invoices and updates our CRM."
-            author="Michael Chen"
-            role="Director of Finance"
-            company="Capital Solutions Group"
-            industry="Financial Services"
-            color="orange"
-          />
-          <TestimonialCard
-            quote="Their managed service team had us up and running in 48 hours. The ROI was immediate—we saw 35% increase in policy renewals."
-            author="Jennifer Adams"
-            role="Chief Marketing Officer"
-            company="Shield Insurance Partners"
-            industry="Insurance"
-            color="purple"
-          />
+          {content.testimonials.map((testimonial, index) => (
+            <TestimonialCard
+              key={index}
+              quote={testimonial.quote}
+              author={testimonial.author}
+              role={testimonial.role}
+              company={testimonial.company}
+              industry={testimonial.industry}
+              color={testimonial.color}
+            />
+          ))}
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          <StatCard number="50%" label="Dead Leads Revived" color="purple" />
-          <StatCard number="391%" label="Conversion Increase" color="orange" />
-          <StatCard number="120%" label="Client ROI Boost" color="purple" />
-          <StatCard number="13s" label="Response Time" color="orange" />
+          {content.stats.map((stat, index) => (
+            <StatCard
+              key={index}
+              number={stat.number}
+              label={stat.label}
+              color={stat.color}
+            />
+          ))}
         </div>
 
         {/* Security & Compliance */}

@@ -1,7 +1,87 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullseye, faCheck, faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-export default function Dashboard() {
+interface DashboardProps {
+  industry?: 'Healthcare' | 'Logistics' | 'Real Estate';
+}
+
+const dashboardContent = {
+  Healthcare: {
+    badge: 'Patient Analytics',
+    title: 'Real-Time Patient Engagement',
+    subtitle: 'Dashboard',
+    description: 'Track appointment confirmations, no-show rates, and patient satisfaction with real-time healthcare analytics',
+    metrics: [
+      { label: 'Appointment Confirmations', value: '94%', change: '+18%', positive: true },
+      { label: 'No-Show Reduction', value: '67%', change: '+34%', positive: true },
+      { label: 'Patient Response Time', value: '45s', change: '-22%', positive: true },
+    ],
+    channels: [
+      { channel: 'Appointment Reminders', percentage: 92 },
+      { channel: 'Prescription Alerts', percentage: 88 },
+      { channel: 'Lab Result Notifications', percentage: 85 },
+      { channel: 'Follow-up Calls', percentage: 79 },
+    ],
+    insight: 'Detected patient confusion about insurance coverage. Suggested automated benefits verification call.'
+  },
+  Logistics: {
+    badge: 'Delivery Analytics',
+    title: 'Real-Time Shipment Performance',
+    subtitle: 'Dashboard',
+    description: 'Track delivery success rates, customer satisfaction, and response times with comprehensive logistics analytics',
+    metrics: [
+      { label: 'On-Time Deliveries', value: '96%', change: '+15%', positive: true },
+      { label: 'Customer Satisfaction', value: '4.8/5', change: '+0.4', positive: true },
+      { label: 'Avg Notification Time', value: '2.1s', change: '-18%', positive: true },
+    ],
+    channels: [
+      { channel: 'Delivery Updates', percentage: 94 },
+      { channel: 'Exception Alerts', percentage: 89 },
+      { channel: 'ETA Notifications', percentage: 91 },
+      { channel: 'Proof of Delivery', percentage: 87 },
+    ],
+    insight: 'Detected delivery delay pattern on Route 42. Suggested proactive customer notifications and alternative routing.'
+  },
+  'Real Estate': {
+    badge: 'Lead Analytics',
+    title: 'Real-Time Lead Performance',
+    subtitle: 'Dashboard',
+    description: 'Track showing requests, lead conversions, and response times with comprehensive real estate analytics',
+    metrics: [
+      { label: 'Lead Response Rate', value: '98%', change: '+25%', positive: true },
+      { label: 'Showing Conversion', value: '43%', change: '+19%', positive: true },
+      { label: 'Lead Response Time', value: '8s', change: '-31%', positive: true },
+    ],
+    channels: [
+      { channel: 'Property Inquiries', percentage: 96 },
+      { channel: 'Showing Requests', percentage: 91 },
+      { channel: 'Offer Notifications', percentage: 88 },
+      { channel: 'Open House RSVPs', percentage: 84 },
+    ],
+    insight: 'Detected high interest in waterfront properties. Suggested automated alerts for new waterfront listings.'
+  }
+};
+
+export default function Dashboard({ industry }: DashboardProps = {}) {
+  const content = industry ? dashboardContent[industry] : {
+    badge: 'Analytics & Insights',
+    title: 'Real-Time Performance',
+    subtitle: 'Dashboard',
+    description: 'Track performance, coach your team, and measure ROI with comprehensive analytics',
+    metrics: [
+      { label: 'Active Campaigns', value: '24', change: '+12%', positive: true },
+      { label: 'Conversion Rate', value: '47.3%', change: '+8.2%', positive: true },
+      { label: 'Avg Response Time', value: '1.2s', change: '-15%', positive: true },
+    ],
+    channels: [
+      { channel: 'Voice Calls', percentage: 85 },
+      { channel: 'SMS', percentage: 72 },
+      { channel: 'Email', percentage: 68 },
+      { channel: 'Document AI', percentage: 91 },
+    ],
+    insight: 'Detected frustration in last call. Suggested transfer to human agent.'
+  };
+
   return (
     <section className="relative py-24 px-6 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
       {/* Subtle background pattern */}
@@ -15,44 +95,33 @@ export default function Dashboard() {
           <div className="inline-block mb-4">
             <div className="px-4 py-2 bg-gradient-to-r from-purple-500/10 to-orange-500/10 border border-purple-500/20 rounded-full">
               <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-orange-600 text-transparent bg-clip-text uppercase tracking-wider">
-                Analytics & Insights
+                {content.badge}
               </span>
             </div>
           </div>
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
-            Real-Time Performance{' '}
+            {content.title}{' '}
             <span className="bg-gradient-to-r from-purple-600 to-orange-600 text-transparent bg-clip-text">
-              Dashboard
+              {content.subtitle}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Track performance, coach your team, and measure ROI with comprehensive analytics
+            {content.description}
           </p>
         </div>
 
         {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <MetricCard
-            label="Active Campaigns"
-            value="24"
-            change="+12%"
-            positive
-            color="purple"
-          />
-          <MetricCard
-            label="Conversion Rate"
-            value="47.3%"
-            change="+8.2%"
-            positive
-            color="orange"
-          />
-          <MetricCard
-            label="Avg Response Time"
-            value="1.2s"
-            change="-15%"
-            positive
-            color="purple"
-          />
+          {content.metrics.map((metric, index) => (
+            <MetricCard
+              key={index}
+              label={metric.label}
+              value={metric.value}
+              change={metric.change}
+              positive={metric.positive}
+              color={index % 2 === 0 ? 'purple' : 'orange'}
+            />
+          ))}
         </div>
 
         {/* Dashboard Visualization */}
@@ -67,10 +136,14 @@ export default function Dashboard() {
               </div>
               <div className="p-6 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl">
                 <div className="space-y-5 mt-4">
-                  <ChannelBar channel="Voice Calls" percentage={85} color="purple" />
-                  <ChannelBar channel="SMS" percentage={72} color="orange" />
-                  <ChannelBar channel="Email" percentage={68} color="purple" />
-                  <ChannelBar channel="Document AI" percentage={91} color="orange" />
+                  {content.channels.map((item, index) => (
+                    <ChannelBar 
+                      key={index}
+                      channel={item.channel} 
+                      percentage={item.percentage} 
+                      color={index % 2 === 0 ? 'purple' : 'orange'} 
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -91,7 +164,7 @@ export default function Dashboard() {
                 <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-orange-50 rounded-xl border border-purple-200/50">
                   <div className="text-xs text-gray-500 mb-2 font-bold uppercase tracking-wider">Latest AI Insight</div>
                   <div className="text-gray-900 text-sm font-semibold">
-                    "Detected frustration in last call. Suggested transfer to human agent."
+                    "{content.insight}"
                   </div>
                 </div>
               </div>
