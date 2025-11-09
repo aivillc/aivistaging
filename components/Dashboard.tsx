@@ -83,35 +83,35 @@ export default function Dashboard({ industry }: DashboardProps = {}) {
   };
 
   return (
-    <section className="relative py-24 px-6 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
+    <section className="relative py-32 px-6 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-[0.03]">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.1)_1px,transparent_1px)] bg-[size:50px_50px]" />
+      <div className="absolute inset-0 opacity-[0.04]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.15)_1px,transparent_1px)] bg-[size:60px_60px]" />
       </div>
 
       <div className="relative max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4">
-            <div className="px-4 py-2 bg-gradient-to-r from-purple-500/10 to-orange-500/10 border border-purple-500/20 rounded-full">
-              <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-orange-600 text-transparent bg-clip-text uppercase tracking-wider">
+        <div className="text-center mb-20">
+          <div className="inline-block mb-6 animate-fadeInUp">
+            <div className="px-6 py-3 bg-gradient-to-r from-purple-500/10 to-orange-500/10 border-2 border-purple-500/20 rounded-full shadow-[0_4px_20px_rgba(139,92,246,0.1)]">
+              <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-orange-600 text-transparent bg-clip-text uppercase tracking-widest">
                 {content.badge}
               </span>
             </div>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight leading-[1.1] animate-fadeInUp">
             {content.title}{' '}
             <span className="bg-gradient-to-r from-purple-600 to-orange-600 text-transparent bg-clip-text">
               {content.subtitle}
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed tracking-wide font-light animate-fadeInUp">
             {content.description}
           </p>
         </div>
 
         {/* Metric Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {content.metrics.map((metric, index) => (
             <MetricCard
               key={index}
@@ -125,17 +125,17 @@ export default function Dashboard({ industry }: DashboardProps = {}) {
         </div>
 
         {/* Dashboard Visualization */}
-        <div className="mb-12 p-8 bg-white border border-gray-200 rounded-3xl shadow-2xl shadow-purple-500/5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="mb-16 p-10 bg-white border-2 border-gray-200 rounded-3xl shadow-[0_20px_70px_rgba(139,92,246,0.08)] hover:shadow-[0_25px_90px_rgba(139,92,246,0.12)] transition-all duration-700">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Channel Performance */}
             <div className="relative">
               <div className="absolute -top-3 left-6">
-                <div className="px-4 py-1.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white text-xs font-bold rounded-full shadow-lg">
+                <div className="px-5 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white text-xs font-bold rounded-full shadow-lg">
                   Channel Analytics
                 </div>
               </div>
-              <div className="p-6 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl">
-                <div className="space-y-5 mt-4">
+              <div className="p-8 bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl">
+                <div className="space-y-6 mt-4">
                   {content.channels.map((item, index) => (
                     <ChannelBar 
                       key={index}
@@ -293,23 +293,23 @@ function MetricCard({ label, value, change, positive, color }: MetricCardProps) 
     : 'from-orange-500 to-orange-600';
   
   const glowColor = color === 'purple'
-    ? 'shadow-purple-500/10'
-    : 'shadow-orange-500/10';
+    ? 'shadow-purple-500/15'
+    : 'shadow-orange-500/15';
 
   return (
-    <div className={`group relative p-6 bg-white border border-gray-200 rounded-2xl hover:border-gray-300 transition-all duration-300 hover:shadow-xl ${glowColor}`}>
+    <div className={`group relative p-8 bg-white border-2 border-gray-200 rounded-2xl hover:border-gray-300 transition-all duration-500 hover:shadow-2xl ${glowColor} hover:-translate-y-2 card-hover`}>
       {/* Top gradient accent */}
-      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient} rounded-t-2xl`} />
+      <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient} rounded-t-2xl transition-all duration-500 group-hover:h-2`} />
       
-      <div className="text-gray-500 text-sm font-bold mb-2 uppercase tracking-wider">{label}</div>
-      <div className={`text-5xl font-black bg-gradient-to-r ${gradient} text-transparent bg-clip-text mb-2`}>
+      <div className="text-gray-500 text-xs font-bold mb-3 uppercase tracking-widest">{label}</div>
+      <div className={`text-5xl md:text-6xl font-black bg-gradient-to-r ${gradient} text-transparent bg-clip-text mb-3 tracking-tight`}>
         {value}
       </div>
       <div className="flex items-center gap-2">
-        <span className={`text-sm font-bold ${positive ? 'text-green-600' : 'text-red-600'}`}>
+        <span className={`text-sm font-bold px-2.5 py-1 rounded-lg ${positive ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}`}>
           {change}
         </span>
-        <span className="text-xs text-gray-400 font-medium">vs last month</span>
+        <span className="text-xs text-gray-400 font-semibold">vs last month</span>
       </div>
     </div>
   );
@@ -323,16 +323,19 @@ interface ChannelBarProps {
 
 function ChannelBar({ channel, percentage, color }: ChannelBarProps) {
   const bgColor = color === 'purple' ? 'bg-purple-500' : 'bg-orange-500';
+  const bgGradient = color === 'purple' 
+    ? 'bg-gradient-to-r from-purple-500 to-purple-600' 
+    : 'bg-gradient-to-r from-orange-500 to-orange-600';
 
   return (
-    <div>
-      <div className="flex justify-between text-sm mb-2">
-        <span className="text-gray-600 font-medium">{channel}</span>
+    <div className="group">
+      <div className="flex justify-between text-sm mb-3">
+        <span className="text-gray-700 font-semibold group-hover:text-gray-900 transition-colors">{channel}</span>
         <span className="text-black font-bold">{percentage}%</span>
       </div>
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="h-3 bg-gray-100 rounded-full overflow-hidden shadow-inner">
         <div
-          className={`h-full ${bgColor} rounded-full transition-all duration-500`}
+          className={`h-full ${bgGradient} rounded-full transition-all duration-700 ease-out shadow-lg`}
           style={{ width: `${percentage}%` }}
         />
       </div>

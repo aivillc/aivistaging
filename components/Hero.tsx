@@ -93,50 +93,50 @@ export default function Hero({ industry }: HeroProps = {}) {
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
           {/* Logo */}
-          <div className="mb-12 flex flex-col items-center">
+          <div className="mb-16 flex flex-col items-center animate-fadeInUp">
             <Image
               src="/AIVI-LOGO-W.png"
               alt="AIVI"
               width={400}
               height={167}
               priority
-              className="h-24 md:h-32 w-auto mb-6 drop-shadow-2xl"
+              className="h-24 md:h-32 w-auto mb-6 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:drop-shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all duration-500"
             />
-            <div className="h-px w-48 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+            <div className="h-0.5 w-56 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-60" />
           </div>
 
           {/* Main Headline - ROTATING with smooth transition */}
-          <div className={`transition-all duration-500 ${isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'}`}>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-8 tracking-tight">
-              {current.title}{' '}
-              <span className="inline-block bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 text-transparent bg-clip-text animate-gradient-x">
+          <div className={`transition-all duration-700 ease-out ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] mb-10 tracking-tight">
+              <span className="inline-block animate-fadeInUp">{current.title}</span>{' '}
+              <span className="inline-block bg-gradient-to-r from-orange-500 via-purple-500 to-orange-500 text-transparent bg-clip-text animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(139,92,246,0.4)]">
                 Revenue
               </span>
               <br />
-              <span className="text-4xl md:text-6xl lg:text-7xl text-white/60">
+              <span className="text-4xl md:text-6xl lg:text-7xl text-white/50 font-light tracking-wide">
                 {current.subtitle}
               </span>
             </h1>
 
             {/* Sub-headline - ROTATING with smooth transition */}
-            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-10 leading-relaxed font-light">
+            <p className="text-xl md:text-2xl text-white/60 max-w-4xl mx-auto mb-12 leading-relaxed font-light tracking-wide">
               {current.description}
               <br className="hidden md:block" />
-              <span className="text-orange-500 font-bold">{current.stat}</span>
+              <span className="text-orange-500 font-bold bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/20">{current.stat}</span>
             </p>
           </div>
 
           {/* Industry Indicator Pills - Only show if rotating */}
           {shouldRotate && (
-            <div className="flex flex-wrap justify-center gap-2 mb-10">
+            <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fadeInUp">
               {industryHeadlines.map((item, index) => (
                 <button
                   key={item.industry}
                   onClick={() => setCurrentIndex(index)}
-                  className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                  className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-400 ${
                     index === currentIndex
-                      ? 'bg-gradient-to-r from-orange-500 to-purple-500 text-white scale-110'
-                      : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80'
+                      ? 'bg-gradient-to-r from-purple-600 to-orange-500 text-white scale-105 shadow-[0_4px_20px_rgba(139,92,246,0.4)]'
+                      : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70 hover:scale-105 border border-white/10'
                   }`}
                 >
                   {item.industry}
@@ -146,14 +146,14 @@ export default function Hero({ industry }: HeroProps = {}) {
           )}
 
           {/* ROI Stats - Sleek cards */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12">
+          <div className="flex flex-wrap justify-center gap-6 mb-14 animate-fadeInUp">
             <StatCard number="391%" label="Conversion Increase" color="purple" />
             <StatCard number="50%" label="Dead Leads Revived" color="orange" />
             <StatCard number="13s" label="Response Time" color="purple" />
           </div>
 
           {/* Key Features - NO EMOJIS, sleek icons */}
-          <div className="flex flex-wrap justify-center gap-3 mb-16">
+          <div className="flex flex-wrap justify-center gap-3 mb-16 animate-fadeInUp">
             <FeaturePill text="AI Voice" />
             <FeaturePill text="SMS Automation" />
             <FeaturePill text="Email Campaigns" />
@@ -165,12 +165,14 @@ export default function Hero({ industry }: HeroProps = {}) {
         </div>
 
         {/* Demo Form */}
-        <DemoForm />
+        <div className="animate-fadeInUp">
+          <DemoForm />
+        </div>
 
         {/* Trust Indicators - Sleek */}
-        <div className="mt-16 text-center">
-          <p className="text-sm text-white/40 mb-4 uppercase tracking-wider">Trusted Globally</p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm font-medium text-white/60">
+        <div className="mt-16 text-center animate-fadeInUp">
+          <p className="text-sm text-white/30 mb-5 uppercase tracking-widest font-semibold">Trusted Globally</p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm font-medium text-white/50">
             <TrustBadge text="Trucking & Logistics" />
             <TrustBadge text="Financial Services" />
             <TrustBadge text="Insurance" />
@@ -298,18 +300,18 @@ function StatCard({ number, label, color }: StatCardProps) {
   return (
     <div className="relative group">
       {/* Glow effect on hover */}
-      <div className={`absolute -inset-0.5 bg-gradient-to-r ${gradientBorder} rounded-2xl blur opacity-0 group-hover:opacity-30 transition duration-500`} />
+      <div className={`absolute -inset-1 bg-gradient-to-r ${gradientBorder} rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-all duration-700`} />
       
       {/* Card */}
-      <div className="relative px-8 py-6 bg-black/80 backdrop-blur-sm border border-white/10 rounded-2xl min-w-[160px] hover:border-white/20 transition-all duration-300">
+      <div className="relative px-10 py-7 bg-black/90 backdrop-blur-md border-2 border-white/10 rounded-2xl min-w-[180px] hover:border-white/30 transition-all duration-500 group-hover:transform group-hover:scale-105">
         {/* Top gradient line */}
-        <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${gradientBorder}`} />
+        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientBorder} rounded-t-2xl`} />
         
         <div className="text-center">
-          <div className={`text-5xl md:text-6xl font-black bg-gradient-to-br ${gradientText} text-transparent bg-clip-text mb-2`}>
+          <div className={`text-5xl md:text-6xl font-black bg-gradient-to-br ${gradientText} text-transparent bg-clip-text mb-2 tracking-tight`}>
             {number}
           </div>
-          <div className="text-sm text-white/70 font-medium uppercase tracking-wider">
+          <div className="text-xs text-white/60 font-semibold uppercase tracking-widest">
             {label}
           </div>
         </div>
@@ -320,7 +322,7 @@ function StatCard({ number, label, color }: StatCardProps) {
 
 function FeaturePill({ text }: { text: string }) {
   return (
-    <span className="px-5 py-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-sm font-medium text-white/90 hover:bg-white/10 hover:border-purple-500/50 transition-all cursor-default">
+    <span className="px-6 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-sm font-semibold text-white/80 hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-orange-500/20 hover:border-purple-500/50 hover:text-white hover:scale-105 transition-all duration-400 cursor-default">
       {text}
     </span>
   );
@@ -328,7 +330,7 @@ function FeaturePill({ text }: { text: string }) {
 
 function TrustBadge({ text }: { text: string }) {
   return (
-    <span className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-purple-500/30 transition-colors">
+    <span className="px-5 py-2.5 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-purple-500/40 hover:bg-white/10 transition-all duration-400 text-white/50 hover:text-white/70 font-medium">
       {text}
     </span>
   );
