@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { updateSessionData } from '@/lib/sessionData';
 import { getGlobalSessionId } from '@/lib/globalSession';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faBullseye, faMobileAlt, faChartBar, faRocket, faBriefcase, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 type QuestionType = 'select' | 'multiselect' | 'text';
 
@@ -486,32 +488,32 @@ export default function DemoForm() {
             <ResultCard
               title="Industry Focus"
               value={responses.industry || 'N/A'}
-              icon="🏢"
+              icon={faBuilding}
             />
             <ResultCard
               title="Primary Challenge"
               value={responses.challenge || 'N/A'}
-              icon="🎯"
+              icon={faBullseye}
             />
             <ResultCard
               title="Current Channels"
               value={Array.isArray(responses.channels) ? responses.channels.join(', ') : 'N/A'}
-              icon="📱"
+              icon={faMobileAlt}
             />
             <ResultCard
               title="Monthly Volume"
               value={responses.volume || 'N/A'}
-              icon="📊"
+              icon={faChartBar}
             />
             <ResultCard
               title="Primary Goal"
               value={responses.goal || 'N/A'}
-              icon="🚀"
+              icon={faRocket}
             />
             <ResultCard
               title="CRM Status"
               value={responses.crm || 'N/A'}
-              icon="💼"
+              icon={faBriefcase}
             />
           </div>
 
@@ -523,21 +525,21 @@ export default function DemoForm() {
             </p>
             <ul className="space-y-2">
               <li className="flex items-start gap-3">
-                <span className="text-purple-400 text-xl font-black mt-0.5">✓</span>
+                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xl mt-0.5" />
                 <span className="text-white/80">AI-powered voice calls for instant lead response</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-purple-400 text-xl font-black mt-0.5">✓</span>
+                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xl mt-0.5" />
                 <span className="text-white/80">SMS automation for quick follow-ups</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-purple-400 text-xl font-black mt-0.5">✓</span>
+                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xl mt-0.5" />
                 <span className="text-white/80">
                   {responses.crm?.includes('Yes') ? 'Seamless integration with your existing CRM' : 'CRM setup and integration'}
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-purple-400 text-xl font-black mt-0.5">✓</span>
+                <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xl mt-0.5" />
                 <span className="text-white/80">Real-time analytics and coaching dashboard</span>
               </li>
             </ul>
@@ -645,7 +647,7 @@ export default function DemoForm() {
               <div className="flex items-center justify-between">
                 <span>{option}</span>
                 {selectedOptions.includes(option) && (
-                  <span className="text-purple-400 text-xl font-black">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 text-xl" />
                 )}
               </div>
             </button>
@@ -684,14 +686,14 @@ export default function DemoForm() {
 interface ResultCardProps {
   title: string;
   value: string;
-  icon: string;
+  icon: any;
 }
 
 function ResultCard({ title, value, icon }: ResultCardProps) {
   return (
     <div className="p-4 bg-white/5 border-2 border-white/10 rounded-xl hover:border-purple-500/30 transition-all">
       <div className="flex items-start gap-3">
-        <span className="text-2xl">{icon}</span>
+        <FontAwesomeIcon icon={icon} className="text-2xl text-purple-400" />
         <div className="flex-1">
           <div className="text-xs text-white/50 uppercase tracking-wider mb-1">{title}</div>
           <div className="text-white font-bold text-sm">{value}</div>

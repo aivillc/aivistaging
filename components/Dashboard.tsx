@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBullseye, faCheck, faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 export default function Dashboard() {
   return (
     <section className="relative py-24 px-6 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
@@ -129,7 +132,7 @@ export default function Dashboard() {
             <div>
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-orange-100 border border-purple-200 rounded-full mb-6">
-                <span className="text-2xl">🎯</span>
+                <FontAwesomeIcon icon={faBullseye} className="text-xl text-purple-600" />
                 <span className="text-sm font-black text-transparent bg-gradient-to-r from-purple-600 to-orange-600 bg-clip-text">
                   AI-Powered Coaching
                 </span>
@@ -146,7 +149,7 @@ export default function Dashboard() {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3 group">
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-white text-lg font-black">✓</span>
+                    <FontAwesomeIcon icon={faCheck} className="text-white text-sm" />
                   </div>
                   <span className="text-gray-700 font-medium pt-1">
                     Real-time sentiment analysis during calls
@@ -154,7 +157,7 @@ export default function Dashboard() {
                 </li>
                 <li className="flex items-start gap-3 group">
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-white text-lg font-black">✓</span>
+                    <FontAwesomeIcon icon={faCheck} className="text-white text-sm" />
                   </div>
                   <span className="text-gray-700 font-medium pt-1">
                     Automated coaching suggestions for human agents
@@ -162,7 +165,7 @@ export default function Dashboard() {
                 </li>
                 <li className="flex items-start gap-3 group">
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-white text-lg font-black">✓</span>
+                    <FontAwesomeIcon icon={faCheck} className="text-white text-sm" />
                   </div>
                   <span className="text-gray-700 font-medium pt-1">
                     Intelligent transfer logic based on conversation context
@@ -170,7 +173,7 @@ export default function Dashboard() {
                 </li>
                 <li className="flex items-start gap-3 group">
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <span className="text-white text-lg font-black">✓</span>
+                    <FontAwesomeIcon icon={faCheck} className="text-white text-sm" />
                   </div>
                   <span className="text-gray-700 font-medium pt-1">
                     Performance dashboards showing close rates by agent
@@ -345,14 +348,18 @@ function CoachingAlert({ type, message, action }: CoachingAlertProps) {
     warning: 'bg-orange-100',
     info: 'bg-purple-100',
   };
+  
+  const iconMap = {
+    success: faCheck,
+    warning: faExclamationTriangle,
+    info: faInfoCircle,
+  };
 
   return (
     <div className={`group p-5 border rounded-2xl ${styles[type]} hover:shadow-lg transition-all duration-300`}>
       <div className="flex items-start gap-4">
         <div className={`flex-shrink-0 w-10 h-10 ${iconBg[type]} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-          <span className={`text-2xl font-black ${iconColors[type]}`}>
-            {type === 'success' ? '✓' : type === 'warning' ? '⚠' : 'ℹ'}
-          </span>
+          <FontAwesomeIcon icon={iconMap[type]} className={`${iconColors[type]}`} />
         </div>
         <div className="flex-1">
           <div className="text-black font-black mb-1">{message}</div>

@@ -3,6 +3,19 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import ChatBot from '@/components/ChatBot';
 import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHospital, 
+  faCalendarAlt, 
+  faPills, 
+  faClipboardList, 
+  faBell, 
+  faLock,
+  faTooth,
+  faRunning,
+  faSyringe,
+  faCheck
+} from '@fortawesome/free-solid-svg-icons';
 
 export const metadata = {
   title: 'Healthcare AI Solutions | AIVI',
@@ -29,7 +42,7 @@ export default function HealthcarePage() {
             {/* Icon */}
             <div className="mb-8 flex justify-center">
               <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-orange-500 rounded-full flex items-center justify-center text-5xl shadow-2xl shadow-purple-500/50">
-                🏥
+                <FontAwesomeIcon icon={faHospital} className="text-white" />
               </div>
             </div>
 
@@ -88,7 +101,9 @@ export default function HealthcarePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">📅</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faCalendarAlt} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Appointment Reminders</h3>
               <p className="text-white/70">
                 Automated SMS, voice, and email reminders 48 hours, 24 hours, and 2 hours before appointments. Reduce no-shows dramatically.
@@ -97,7 +112,9 @@ export default function HealthcarePage() {
 
             {/* Feature 2 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">💊</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faPills} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Prescription Refill Automation</h3>
               <p className="text-white/70">
                 Proactive outreach when prescriptions are due. Patients can request refills via SMS or voice with instant confirmation.
@@ -106,7 +123,9 @@ export default function HealthcarePage() {
 
             {/* Feature 3 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">📋</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faClipboardList} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Pre-Visit Forms</h3>
               <p className="text-white/70">
                 Send and collect intake forms, insurance information, and medical history before appointments. Save time at check-in.
@@ -115,7 +134,9 @@ export default function HealthcarePage() {
 
             {/* Feature 4 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">🔔</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faBell} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Lab Results Notification</h3>
               <p className="text-white/70">
                 Automated notifications when lab results are ready. HIPAA-compliant delivery via secure patient portals.
@@ -124,7 +145,9 @@ export default function HealthcarePage() {
 
             {/* Feature 5 */}
             <div className="bg-white/5 border border-purple-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">🩺</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faHospital} className="text-purple-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">Post-Visit Follow-Up</h3>
               <p className="text-white/70">
                 Check-in with patients after procedures or visits. Collect feedback, address concerns, and improve care quality.
@@ -133,7 +156,9 @@ export default function HealthcarePage() {
 
             {/* Feature 6 */}
             <div className="bg-white/5 border border-orange-600/30 rounded-2xl p-8 backdrop-blur-sm hover:bg-white/10 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20">
-              <div className="text-4xl mb-4">🔒</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faLock} className="text-orange-400" />
+              </div>
               <h3 className="text-2xl font-bold text-white mb-4">HIPAA Compliant</h3>
               <p className="text-white/70">
                 Fully HIPAA-compliant infrastructure with encrypted communications, secure data storage, and audit trails.
@@ -239,22 +264,24 @@ export default function HealthcarePage() {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Use Case 1 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🏥</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faHospital} className="text-purple-600" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Primary Care Practices</h3>
               <p className="text-gray-600 mb-4">
                 Reduce administrative burden with automated appointment reminders, prescription refill requests, and post-visit follow-ups.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Automated wellness visit reminders</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Chronic care management outreach</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Annual physical scheduling</span>
                 </li>
               </ul>
@@ -262,22 +289,24 @@ export default function HealthcarePage() {
 
             {/* Use Case 2 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🦷</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faTooth} className="text-orange-500" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Dental Offices</h3>
               <p className="text-gray-600 mb-4">
                 Keep chairs filled with proactive recall campaigns, appointment confirmations, and payment reminders.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>6-month cleaning reminders</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Treatment plan follow-ups</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Insurance verification automation</span>
                 </li>
               </ul>
@@ -285,22 +314,24 @@ export default function HealthcarePage() {
 
             {/* Use Case 3 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">🏃</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faRunning} className="text-purple-600" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Physical Therapy & Rehab</h3>
               <p className="text-gray-600 mb-4">
                 Improve patient compliance with exercise reminders, session scheduling, and progress check-ins.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Home exercise reminders</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Session confirmations</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-purple-600 mt-1" />
                   <span>Progress milestone celebrations</span>
                 </li>
               </ul>
@@ -308,22 +339,24 @@ export default function HealthcarePage() {
 
             {/* Use Case 4 */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300">
-              <div className="text-4xl mb-4">💉</div>
+              <div className="text-4xl mb-4">
+                <FontAwesomeIcon icon={faSyringe} className="text-orange-500" />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Specialty Practices</h3>
               <p className="text-gray-600 mb-4">
                 Coordinate complex care with automated pre-procedure instructions, lab work reminders, and post-op check-ins.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Pre-surgical prep instructions</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Lab result follow-ups</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">✓</span>
+                  <FontAwesomeIcon icon={faCheck} className="text-orange-500 mt-1" />
                   <span>Referral coordination</span>
                 </li>
               </ul>

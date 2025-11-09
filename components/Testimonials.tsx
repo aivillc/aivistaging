@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+
 export default function Testimonials() {
   return (
     <section className="relative py-24 px-6 bg-black">
@@ -139,7 +142,7 @@ function StatCard({ number, label, color }: StatCardProps) {
 function ComplianceBadge({ text }: { text: string }) {
   return (
     <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-2 border-green-500/30 rounded-lg hover:border-green-500/50 transition-all">
-      <span className="text-green-400 text-lg font-black">✓</span>
+      <FontAwesomeIcon icon={faCheck} className="text-green-400 text-lg" />
       <span className="text-white/80 font-medium">{text}</span>
     </div>
   );

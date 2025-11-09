@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartLine, faHospital, faTruck, faHouse } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -67,7 +69,7 @@ export default function Navigation() {
                   className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-orange-500">💰</span>
+                    <FontAwesomeIcon icon={faChartLine} className="text-orange-500 w-4 h-4" />
                     Financial
                   </span>
                 </Link>
@@ -76,7 +78,7 @@ export default function Navigation() {
                   className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-purple-400">🏥</span>
+                    <FontAwesomeIcon icon={faHospital} className="text-purple-400 w-4 h-4" />
                     Healthcare
                   </span>
                 </Link>
@@ -85,7 +87,7 @@ export default function Navigation() {
                   className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm border-b border-purple-600/10"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-orange-400">🚚</span>
+                    <FontAwesomeIcon icon={faTruck} className="text-orange-400 w-4 h-4" />
                     Logistics
                   </span>
                 </Link>
@@ -94,7 +96,7 @@ export default function Navigation() {
                   className="block px-4 py-3 text-white/80 hover:text-white hover:bg-purple-600/10 transition-all duration-200 text-sm"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-purple-500">🏠</span>
+                    <FontAwesomeIcon icon={faHouse} className="text-purple-500 w-4 h-4" />
                     Real Estate
                   </span>
                 </Link>

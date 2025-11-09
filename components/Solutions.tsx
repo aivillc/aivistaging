@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+
 export default function Solutions() {
   const [hoveredCard, setHoveredCard] = useState<'saas' | 'managed' | null>(null);
 
@@ -162,11 +165,14 @@ function Feature({ text, highlight = false }: { text: string; highlight?: boolea
   return (
     <div className="flex items-center gap-3 group">
       <div className="flex items-center gap-3 flex-1">
-        <span className={`font-black text-lg transition-all ${
-          highlight 
-            ? 'text-transparent bg-gradient-to-r from-purple-500 to-orange-500 bg-clip-text' 
-            : 'text-transparent bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text'
-        }`}>✓</span>
+        <FontAwesomeIcon 
+          icon={faCheck} 
+          className={`font-black text-lg transition-all ${
+            highlight 
+              ? 'text-transparent bg-gradient-to-r from-purple-500 to-orange-500 bg-clip-text' 
+              : 'text-transparent bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text'
+          }`}
+        />
         <span className="text-gray-700 font-medium group-hover:text-gray-900 transition-colors">{text}</span>
       </div>
     </div>
