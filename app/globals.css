@@ -255,7 +255,7 @@ button:active, a:active {
 }
 
 .animate-scroll {
-  animation: scroll 40s linear infinite;
+  animation: scroll 51s linear infinite;
 }
 
 .animate-scroll:hover {

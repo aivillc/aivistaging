@@ -150,7 +150,12 @@ export default function Solutions() {
                 </div>
               </div>
 
-              <button className="w-full py-4 px-6 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl transition-all transform hover:scale-[1.02] shadow-xl uppercase tracking-wider text-sm">
+              <button
+                onClick={() => {
+                  document.getElementById('demo-form')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full py-4 px-6 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl transition-all transform hover:scale-[1.02] shadow-xl uppercase tracking-wider text-sm"
+              >
                 Get Started
               </button>
             </div>

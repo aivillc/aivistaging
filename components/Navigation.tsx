@@ -29,39 +29,61 @@ export default function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo - 35% bigger */}
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/AIVI-LOGO-W.png"
               alt="AIVI"
-              width={182}
-              height={78}
+              width={246}
+              height={105}
               priority
-              className="h-12 w-auto transition-all duration-500 hover:scale-105 hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)] cursor-pointer"
+              className="h-16 w-auto transition-all duration-500 hover:scale-105 hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)] cursor-pointer"
             />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
+            <a
+              href="#features"
+              className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
+            >
+              Features
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
+            </a>
+            <a
+              href="#solutions"
+              className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
+            >
+              Solutions
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
+            </a>
+            <a
+              href="#integrations"
+              className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
+            >
+              Integrations
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
+            </a>
+
             {/* Use Cases Dropdown */}
-            <div 
+            <div
               className="relative group"
               onMouseEnter={() => setUseCasesOpen(true)}
               onMouseLeave={() => setUseCasesOpen(false)}
             >
               <button className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative flex items-center gap-2 py-2">
                 Use Cases
-                <svg 
-                  className={`w-4 h-4 transition-all duration-300 ${useCasesOpen ? 'rotate-180 text-purple-400' : 'text-white/50'}`} 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className={`w-4 h-4 transition-all duration-300 ${useCasesOpen ? 'rotate-180 text-purple-400' : 'text-white/50'}`}
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
               </button>
-              
+
               {/* Dropdown Menu */}
               <div className={`absolute top-full left-0 pt-3 w-52 transition-all duration-400 ease-out ${useCasesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-3 pointer-events-none'}`}>
                 <div className="bg-black/98 backdrop-blur-2xl border border-purple-600/30 rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.6)] overflow-hidden">
@@ -115,32 +137,18 @@ export default function Navigation() {
             </div>
 
             <a
-              href="#features"
+              href="#about"
               className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
             >
-              Features
+              About Us
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
             </a>
-            <a
-              href="#solutions"
-              className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
-            >
-              Solutions
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
-            </a>
-            <a
-              href="#integrations"
-              className="text-white/70 hover:text-white transition-all duration-300 text-sm font-semibold tracking-wide relative group py-2"
-            >
-              Integrations
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-orange-500 group-hover:w-full transition-all duration-500 ease-out" />
-            </a>
-            
+
             <button
-              onClick={() => window.location.href = '#contact'}
+              onClick={() => window.location.href = '#demo-form'}
               className="relative px-7 py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white text-sm font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(139,92,246,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
             >
-              <span className="relative z-10">Get Started</span>
+              <span className="relative z-10">Contact</span>
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
             </button>
           </div>

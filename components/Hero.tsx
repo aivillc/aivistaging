@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import DemoForm from './DemoForm';
-import Image from 'next/image';
 
 const industryHeadlines = [
   {
@@ -117,23 +115,8 @@ export default function Hero({ industry }: HeroProps = {}) {
         <div className="absolute w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent top-3/4 animate-scan-horizontal-slow" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-[15vh]">
         <div className="text-center mb-16">
-          {/* Logo */}
-          <div className="mb-16 flex flex-col items-center animate-fadeInUp">
-            <Link href="/" className="cursor-pointer">
-              <Image
-                src="/AIVI-LOGO-W.png"
-                alt="AIVI"
-                width={400}
-                height={167}
-                priority
-                className="h-24 md:h-32 w-auto mb-6 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:drop-shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all duration-500"
-              />
-            </Link>
-            <div className="h-0.5 w-56 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-60" />
-          </div>
-
           {/* Main Headline - ROTATING with smooth transition */}
           <div className={`transition-all duration-700 ease-out ${isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] mb-10 tracking-tight">
@@ -194,7 +177,7 @@ export default function Hero({ industry }: HeroProps = {}) {
         </div>
 
         {/* Demo Form */}
-        <div className="animate-fadeInUp">
+        <div id="demo-form" className="animate-fadeInUp">
           <DemoForm />
         </div>
 
