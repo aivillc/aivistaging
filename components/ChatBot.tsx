@@ -676,7 +676,7 @@ export default function ChatBot() {
           }
           setIsOpen(!isOpen);
         }}
-        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-orange-500 shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-[#3d5a80] to-[#00cc99] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
         aria-label="Open chat"
       >
         {isOpen ? (
@@ -710,7 +710,7 @@ export default function ChatBot() {
             </svg>
             {/* Pulse animation ring */}
             <div 
-              className="absolute inset-0 rounded-full bg-purple-600 animate-ping opacity-30"
+              className="absolute inset-0 rounded-full bg-[#3d5a80] animate-ping opacity-30"
             />
           </>
         )}
@@ -719,12 +719,12 @@ export default function ChatBot() {
       {/* Chat Window */}
       {isOpen && (
         <div 
-          className="fixed bottom-28 right-6 w-[360px] h-[600px] bg-black/95 border-2 border-purple-600/50 rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn"
+          className="fixed bottom-28 right-6 w-[360px] h-[600px] bg-black/95 border-2 border-[#3d5a80]/50 rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn"
         >
           {/* Header */}
-          <div className="p-4 border-b border-purple-600/30 rounded-t-2xl bg-gradient-to-r from-purple-600/10 to-orange-500/10">
+          <div className="p-4 border-b border-[#3d5a80]/30 rounded-t-2xl bg-gradient-to-r from-[#3d5a80]/10 to-orange-500/10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-orange-500 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3d5a80] to-[#00cc99] flex items-center justify-center">
                 <span className="text-white font-black text-lg">AI</span>
               </div>
               <div className="flex-1">
@@ -777,8 +777,8 @@ export default function ChatBot() {
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${
                     message.sender === 'user'
-                      ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
-                      : 'bg-white/5 border border-purple-500/30 text-white backdrop-blur-sm'
+                      ? 'bg-gradient-to-br from-[#00cc99] to-[#00b388] text-white'
+                      : 'bg-white/5 border border-[#3d5a80]/30 text-white backdrop-blur-sm'
                   }`}
                 >
                   <p className="text-sm leading-relaxed">{message.text}</p>
@@ -799,11 +799,11 @@ export default function ChatBot() {
             ))}
             {isTyping && (
               <div className="flex justify-start animate-fadeIn">
-                <div className="bg-white/5 border border-purple-500/30 text-white backdrop-blur-sm p-3 rounded-2xl">
+                <div className="bg-white/5 border border-[#3d5a80]/30 text-white backdrop-blur-sm p-3 rounded-2xl">
                   <div className="flex gap-1 items-center">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 bg-[#3d5a80] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-[#3d5a80] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-[#3d5a80] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -812,7 +812,7 @@ export default function ChatBot() {
           </div>
 
           {/* Input Area */}
-          <form onSubmit={handleSendMessage} className="p-4 border-t border-purple-500/30 bg-black/50">
+          <form onSubmit={handleSendMessage} className="p-4 border-t border-[#3d5a80]/30 bg-black/50">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -820,12 +820,12 @@ export default function ChatBot() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-3 bg-white/5 border border-purple-500/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                className="flex-1 px-4 py-3 bg-white/5 border border-[#3d5a80]/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#3d5a80] focus:ring-2 focus:ring-purple-500/20 transition-all"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all hover:scale-105 disabled:scale-100"
+                className="px-6 py-3 bg-gradient-to-r from-[#3d5a80] to-[#00cc99] hover:from-[#3d5a80] hover:to-orange-600 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all hover:scale-105 disabled:scale-100"
               >
                 <svg
                   className="w-5 h-5"
@@ -853,28 +853,28 @@ export default function ChatBot() {
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: linear-gradient(180deg, rgba(139, 92, 246, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+          background: linear-gradient(180deg, rgba(61, 90, 128, 0.1) 0%, rgba(0, 204, 153, 0.1) 100%);
           border-radius: 10px;
           margin: 8px 0;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #8b5cf6 0%, #ff6b35 100%);
+          background: linear-gradient(180deg, #3d5a80 0%, #00cc99 100%);
           border-radius: 10px;
           border: 2px solid rgba(0, 0, 0, 0.8);
           transition: all 0.3s ease;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #7c3aed 0%, #ff5722 100%);
-          box-shadow: 0 0 12px rgba(139, 92, 246, 0.6), 0 0 20px rgba(255, 107, 53, 0.4);
-          border-color: rgba(139, 92, 246, 0.3);
+          background: linear-gradient(180deg, #2d4560 0%, #00b388 100%);
+          box-shadow: 0 0 12px rgba(61, 90, 128, 0.6), 0 0 20px rgba(0, 204, 153, 0.4);
+          border-color: rgba(61, 90, 128, 0.3);
         }
 
         /* Firefox scrollbar */
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #8b5cf6 rgba(139, 92, 246, 0.1);
+          scrollbar-color: #3d5a80 rgba(61, 90, 128, 0.1);
         }
       `}</style>
     </>

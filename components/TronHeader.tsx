@@ -5,13 +5,13 @@ export default function TronHeader() {
     <>
       {/* Animated TRON-style gradient lines */}
       <div className="fixed top-0 left-0 right-0 h-1 z-50 overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-75 animate-scan" />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-75 animate-scan-reverse" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#3d5a80] to-transparent opacity-75 animate-scan" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00cc99] to-transparent opacity-75 animate-scan-reverse" />
       </div>
 
       {/* Secondary animated line */}
       <div className="fixed top-1 left-0 right-0 h-px z-50 overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-cyan-400 to-orange-500 opacity-50 animate-shimmer" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#3d5a80] via-[#e0fbfc] to-[#00cc99] opacity-50 animate-shimmer" />
       </div>
 
       <style jsx>{`
