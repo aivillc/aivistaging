@@ -314,24 +314,33 @@ function TestimonialCard({ quote, author, role, company, industry, color }: Test
   const badgeBg = color === 'purple' ? 'bg-purple-500/10' : 'bg-orange-500/10';
   const badgeBorder = color === 'purple' ? 'border-purple-500/30' : 'border-orange-500/30';
   const badgeText = color === 'purple' ? 'text-purple-400' : 'text-orange-400';
+  const glowColor = color === 'purple' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 107, 53, 0.2)';
 
   return (
-    <div className={`relative p-8 bg-white/5 backdrop-blur-sm border-2 ${borderColor} ${hoverBorder} rounded-2xl transition-all hover:shadow-2xl`}>
-      <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${gradient} rounded-l-2xl`} />
-      <div className="pl-4">
-        <div className={`${color === 'purple' ? 'text-purple-400' : 'text-orange-400'} text-5xl font-bold mb-4 leading-none`}>"</div>
-        <p className="text-white/80 mb-6 leading-relaxed">{quote}</p>
+    <div className={`group relative p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border-2 ${borderColor} ${hoverBorder} rounded-2xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1`}
+         style={{ boxShadow: `0 0 0 0 ${glowColor}`, transition: 'all 0.5s ease' }}
+         onMouseEnter={(e) => e.currentTarget.style.boxShadow = `0 20px 60px ${glowColor}`}
+         onMouseLeave={(e) => e.currentTarget.style.boxShadow = `0 0 0 0 ${glowColor}`}>
+      {/* Gradient accent bar */}
+      <div className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${gradient} rounded-l-2xl opacity-80 group-hover:w-2 transition-all duration-300`} />
+      
+      {/* Corner accent */}
+      <div className={`absolute top-4 right-4 w-12 h-12 bg-gradient-to-br ${gradient} opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300`} />
+      
+      <div className="relative pl-4">
+        <div className={`${color === 'purple' ? 'text-purple-400' : 'text-orange-400'} text-6xl font-bold mb-4 leading-none opacity-40`}>"</div>
+        <p className="text-white/90 mb-6 leading-relaxed text-base font-light">{quote}</p>
         <div className="flex items-center gap-4 mb-4">
-          <div className={`w-12 h-12 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-black text-lg`}>
+          <div className={`w-14 h-14 bg-gradient-to-br ${gradient} rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg`}>
             {author.charAt(0)}
           </div>
           <div>
-            <div className="text-white font-bold">{author}</div>
-            <div className="text-sm text-white/60">{role}</div>
-            <div className="text-sm text-white/40">{company}</div>
+            <div className="text-white font-bold text-base">{author}</div>
+            <div className="text-sm text-white/70 font-medium">{role}</div>
+            <div className="text-sm text-white/50">{company}</div>
           </div>
         </div>
-        <div className={`inline-block px-3 py-1 ${badgeBg} border ${badgeBorder} rounded-full text-xs ${badgeText} font-medium`}>
+        <div className={`inline-block px-4 py-1.5 ${badgeBg} border ${badgeBorder} rounded-full text-xs ${badgeText} font-semibold tracking-wide backdrop-blur-sm`}>
           {industry}
         </div>
       </div>

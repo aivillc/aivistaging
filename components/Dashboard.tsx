@@ -422,9 +422,9 @@ function DashboardFeature({ title, description, color }: DashboardFeatureProps) 
   const hoverBorder = color === 'purple' ? 'hover:border-purple-300' : 'hover:border-orange-300';
 
   return (
-    <div className={`group relative p-6 bg-gradient-to-br from-gray-50 to-white border border-gray-200 ${hoverBorder} rounded-2xl transition-all duration-300 hover:shadow-lg`}>
-      {/* Top gradient accent */}
-      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient} rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+    <div className={`group relative p-6 bg-gradient-to-br from-gray-50 to-white border border-gray-200 ${hoverBorder} rounded-2xl transition-all duration-300 hover:shadow-lg overflow-hidden`}>
+      {/* Top gradient accent - properly aligned with border */}
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
       
       <div className="relative">
         <h4 className="text-lg font-black text-black mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-orange-600 transition-all duration-300">

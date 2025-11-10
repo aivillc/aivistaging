@@ -5,6 +5,109 @@ Current Version: v1.0.11
 Date: November 10, 2025
 
 ================================================================================
+MAJOR UI/UX IMPROVEMENTS & LEGAL PAGES (November 10, 2025) - Post v1.0.11
+================================================================================
+
+PROMPT: "Make it so when you click the logo on the top header or the hero section, in any of the pages, it redirects you back to the home page. Change the scrollbar of the site to something similar for the feel of the site. for the Lead Scoring, Call Coaching, Transfer Analytics, A/B Testing - The colored part when hovering is a little off from the borders of the tile, can you make sure it's correct? When you scroll all the way to the top, for a split second there's a thin white bar appearing between the header and the hero, remove that. Improve the tiles in the 'Trusted by Financial Leaders'. Generate an up to date Privacy Policy and Terms of Condition (separate pages), to include any clauses and terms for any of the services we provide, including Twilio, N8N, Retell, etc.. Make sure all is legal"
+
+CHANGES MADE:
+
+1. Logo Click-to-Home Functionality
+   - components/Navigation.tsx: Wrapped logo in Link component pointing to "/"
+   - components/Hero.tsx: Added Link import and wrapped hero logo to redirect home
+   - All logos across all pages now clickable and redirect to homepage
+
+2. Custom TRON-Themed Scrollbar
+   - app/globals.css: Added custom scrollbar styling with purple-orange gradient
+   - WebKit scrollbar: Purple to orange gradient with rounded corners and hover effects
+   - Firefox scrollbar: Thin purple scrollbar with dark background
+   - Hover effects: Glowing shadow on hover, lighter gradient on active
+
+3. Fixed Dashboard Tiles Hover Border Alignment
+   - components/Dashboard.tsx: Fixed DashboardFeature component
+   - Added "overflow-hidden" to parent container
+   - Removed "rounded-t-2xl" from gradient bar to prevent overflow
+   - Colored gradient bar now properly aligns with tile borders on hover
+   - Affects: Lead Scoring, Call Coaching, Transfer Analytics, A/B Testing tiles
+
+4. Removed White Bar Between Header and Hero
+   - components/Navigation.tsx: Changed background from "bg-black/85" to "bg-black"
+   - Ensures solid black background prevents any white bar flickering
+   - Fixed visual glitch when scrolling to top of page
+
+5. Enhanced Testimonials Tile Design
+   - components/Testimonials.tsx: Complete redesign of TestimonialCard component
+   - Added gradient background (from-white/10 to-white/5)
+   - Implemented hover animations with shadow glow effects
+   - Widened gradient accent bar (1px → 1.5px) with smooth expansion on hover
+   - Added corner accent with gradient blur effect
+   - Increased quote mark size and opacity
+   - Enhanced author avatar (larger, with shadow)
+   - Improved typography hierarchy and spacing
+   - Added hover lift effect (-translate-y-1)
+   - Custom glow shadow based on purple/orange color theme
+
+6. Created Privacy Policy Page (NEW)
+   - app/privacy/page.tsx: Comprehensive legal privacy policy
+   - Covers data collection, usage, and protection
+   - Third-party service disclosures: Twilio, Retell AI, N8N, OpenAI
+   - HIPAA, GDPR, CCPA compliance sections
+   - Security measures: SOC 2, encryption, PII handling
+   - Data retention and deletion policies
+   - User privacy rights (access, correction, deletion, portability)
+   - International data transfers
+   - Cookies and tracking technologies
+   - Contact information and compliance certifications
+   - Fully styled with TRON theme gradients
+
+7. Created Terms of Service Page (NEW)
+   - app/terms/page.tsx: Comprehensive legal terms and conditions
+   - Service description covering all AIVI offerings
+   - Acceptable Use Policy and prohibited uses
+   - TCPA, CAN-SPAM, Do Not Call compliance
+   - Pricing, payment terms, and refund policy
+   - Third-party service terms (Twilio, Retell, N8N, OpenAI, CRM integrations)
+   - Intellectual property rights
+   - Data privacy and security obligations
+   - Service Level Agreement (SLA) and support
+   - Warranties, disclaimers, and AI limitations
+   - Limitation of liability and indemnification
+   - Term, termination, and dispute resolution (arbitration)
+   - General provisions (governing law, modifications, assignment)
+   - Fully styled with TRON theme gradients
+
+8. Updated Footer with Legal Links
+   - components/Footer.tsx: Updated Privacy Policy and Terms links
+   - Changed from "#" anchors to "/privacy" and "/terms" routes
+   - Links now functional and navigate to legal pages
+
+TECHNICAL DETAILS:
+- Custom scrollbar uses WebKit pseudo-elements and Firefox scrollbar-* properties
+- Gradient: linear-gradient(180deg, #8b5cf6 0%, #ff6b35 100%)
+- Hover shadow: box-shadow with rgba color based on tile color theme
+- Navigation background: Solid black to prevent transparency issues
+- Legal pages: Full TRON theme styling, responsive layout, accessibility-ready
+
+LEGAL COMPLIANCE:
+- Privacy Policy covers: GDPR, CCPA, HIPAA, SOC 2, ISO 27001, PCI DSS
+- Terms of Service covers: TCPA, CAN-SPAM, DNC Registry, international compliance
+- All third-party services disclosed: Twilio, Retell AI, N8N, OpenAI, CRM platforms
+- Data processing, security, and retention policies clearly defined
+- User rights, dispute resolution, and liability limitations included
+
+FILES MODIFIED: 6
+- components/Navigation.tsx (logo link, background fix)
+- components/Hero.tsx (logo link with Link import)
+- app/globals.css (custom scrollbar CSS)
+- components/Dashboard.tsx (hover border fix)
+- components/Testimonials.tsx (enhanced card design)
+- components/Footer.tsx (legal page links)
+
+FILES CREATED: 2
+- app/privacy/page.tsx (Privacy Policy page)
+- app/terms/page.tsx (Terms of Service page)
+
+================================================================================
 ADDED HEADER/NAVIGATION TO INDUSTRY PAGES (November 10, 2025) - Post v1.0.11
 ================================================================================
 

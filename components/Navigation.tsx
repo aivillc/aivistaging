@@ -24,22 +24,22 @@ export default function Navigation() {
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-700 ease-out ${
         isScrolled
           ? 'bg-black/98 backdrop-blur-2xl border-b border-purple-600/30 shadow-[0_8px_32px_rgba(139,92,246,0.15)]'
-          : 'bg-black/85 backdrop-blur-lg'
+          : 'bg-black backdrop-blur-lg'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <Image
               src="/AIVI-LOGO-W.png"
               alt="AIVI"
               width={182}
               height={78}
               priority
-              className="h-12 w-auto transition-all duration-500 hover:scale-105 hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)]"
+              className="h-12 w-auto transition-all duration-500 hover:scale-105 hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)] cursor-pointer"
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
