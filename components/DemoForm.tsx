@@ -611,12 +611,8 @@ export default function DemoForm() {
     <div className="w-full max-w-4xl mx-auto">
       {/* Background container with low opacity */}
       <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
-        {/* Progress Bar - Minimalist */}
+        {/* Progress Bar */}
         <div className="mb-12">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm text-white/40 font-medium">{currentQuestion + 1} / {questions.length}</span>
-            <span className="text-sm text-white/40 font-medium">{Math.round(progress)}%</span>
-          </div>
           <div className="h-px bg-white/10">
             <div
               className="h-full bg-white transition-all duration-500 ease-out"
