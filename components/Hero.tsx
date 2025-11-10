@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import DemoForm from './DemoForm';
 
 const industryHeadlines = [
@@ -54,7 +53,6 @@ interface HeroProps {
 }
 
 export default function Hero({ industry }: HeroProps = {}) {
-  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -62,22 +60,6 @@ export default function Hero({ industry }: HeroProps = {}) {
   const fixedIndustry = industry ? industryHeadlines.find(h => h.industry === industry) : null;
   const shouldRotate = !industry;
 
-  // Map industry names to page routes
-  const industryRoutes: Record<string, string> = {
-    'General': '/',
-    'Financial': '/financial',
-    'Healthcare': '/healthcare',
-    'Law Firms': '/law-firms',
-    'Real Estate': '/real-estate',
-    'Logistics': '/logistics'
-  };
-
-  const handleIndustryClick = (industryName: string) => {
-    const route = industryRoutes[industryName];
-    if (route) {
-      router.push(route);
-    }
-  };
 
   useEffect(() => {
     if (!shouldRotate) return;
@@ -138,31 +120,6 @@ export default function Hero({ industry }: HeroProps = {}) {
             </p>
           </div>
 
-          {/* Industry Indicator Pills - Only show if rotating */}
-          {shouldRotate && (
-            <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fadeInUp">
-              {industryHeadlines.map((item, index) => (
-                <button
-                  key={item.industry}
-                  onClick={() => handleIndustryClick(item.industry)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-400 cursor-pointer ${
-                    index === currentIndex
-                      ? 'bg-gradient-to-r from-purple-600 to-orange-500 text-white scale-105 shadow-[0_4px_20px_rgba(139,92,246,0.4)]'
-                      : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70 hover:scale-105 border border-white/10'
-                  }`}
-                >
-                  {item.industry}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* ROI Stats - Sleek cards */}
-          <div className="flex flex-wrap justify-center gap-6 mb-14 animate-fadeInUp">
-            <StatCard number="391%" label="Conversion Increase" color="purple" />
-            <StatCard number="50%" label="Dead Leads Revived" color="orange" />
-            <StatCard number="13s" label="Response Time" color="purple" />
-          </div>
 
           {/* Key Features - NO EMOJIS, sleek icons */}
           <div className="flex flex-wrap justify-center gap-3 mb-16 animate-fadeInUp">
@@ -291,44 +248,6 @@ export default function Hero({ industry }: HeroProps = {}) {
         }
       `}</style>
     </section>
-  );
-}
-
-interface StatCardProps {
-  number: string;
-  label: string;
-  color: 'purple' | 'orange';
-}
-
-function StatCard({ number, label, color }: StatCardProps) {
-  const gradientBorder = color === 'purple'
-    ? 'from-purple-500 to-purple-600'
-    : 'from-orange-500 to-orange-600';
-  
-  const gradientText = color === 'purple'
-    ? 'from-purple-400 to-purple-600'
-    : 'from-orange-400 to-orange-600';
-
-  return (
-    <div className="relative group">
-      {/* Glow effect on hover */}
-      <div className={`absolute -inset-1 bg-gradient-to-r ${gradientBorder} rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-all duration-700`} />
-      
-      {/* Card */}
-      <div className="relative px-10 py-7 bg-black/90 backdrop-blur-md border-2 border-white/10 rounded-2xl min-w-[180px] hover:border-white/30 transition-all duration-500 group-hover:transform group-hover:scale-105 overflow-hidden">
-        {/* Top gradient line */}
-        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientBorder}`} />
-        
-        <div className="text-center">
-          <div className={`text-5xl md:text-6xl font-black bg-gradient-to-br ${gradientText} text-transparent bg-clip-text mb-2 tracking-tight`}>
-            {number}
-          </div>
-          <div className="text-xs text-white/60 font-semibold uppercase tracking-widest">
-            {label}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
