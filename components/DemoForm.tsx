@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { updateSessionData } from '@/lib/sessionData';
 import { getGlobalSessionId } from '@/lib/globalSession';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuilding, faBullseye, faMobileAlt, faChartBar, faRocket, faBriefcase, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 type QuestionType = 'select' | 'multiselect' | 'text';
 
@@ -370,41 +368,22 @@ export default function DemoForm() {
   // Contact Form View
   if (showContactForm) {
     return (
-      <div className="w-full max-w-3xl mx-auto">
-        <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:border-purple-500/40 transition-all duration-500">
-          {/* Decorative gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-orange-500/5 rounded-3xl pointer-events-none" />
-
-          {/* Bot Avatar - Enhanced */}
-          <div className="relative flex items-center gap-4 mb-8 pb-6 border-b border-white/10">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-orange-500 rounded-2xl blur-md opacity-60 animate-pulse" />
-              <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-white font-bold tracking-wide">AIVI Assistant</div>
-              <div className="text-xs text-white/50 font-medium">Final Step - Contact Information</div>
-            </div>
-          </div>
-
-          <div className="relative mb-8">
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-3 leading-tight tracking-tight">
-              Perfect{responses.userName ? `, ${responses.userName}` : ''}! Let's get you started
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="space-y-12">
+          <div>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
+              Perfect{responses.userName ? `, ${responses.userName}` : ''}!
             </h3>
-            <p className="text-white/70 text-lg">
-              Share your contact information so we can create your custom AI solution and schedule a personalized demo.
+            <p className="text-white/40 text-lg font-light">
+              Share your contact information to receive your personalized solution.
             </p>
           </div>
 
-          <form onSubmit={handleContactSubmit} className="relative space-y-6">
+          <form onSubmit={handleContactSubmit} className="space-y-8">
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-bold text-white/90 mb-2.5 uppercase tracking-wider">
-                Full Name *
+              <label htmlFor="fullName" className="block text-sm text-white/40 mb-3 font-light">
+                Full Name
               </label>
               <input
                 type="text"
@@ -413,15 +392,15 @@ export default function DemoForm() {
                 required
                 value={contactData.fullName}
                 onChange={handleContactChange}
-                className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300"
-                placeholder="John Doe"
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/20 focus:outline-none focus:border-white transition-colors duration-300"
+                placeholder="Your name"
               />
             </div>
 
             {/* Company Name */}
             <div>
-              <label htmlFor="companyName" className="block text-sm font-bold text-white/90 mb-2.5 uppercase tracking-wider">
-                Company Name *
+              <label htmlFor="companyName" className="block text-sm text-white/40 mb-3 font-light">
+                Company Name
               </label>
               <input
                 type="text"
@@ -430,15 +409,15 @@ export default function DemoForm() {
                 required
                 value={contactData.companyName}
                 onChange={handleContactChange}
-                className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300"
-                placeholder="Acme Corporation"
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/20 focus:outline-none focus:border-white transition-colors duration-300"
+                placeholder="Your company"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-white/90 mb-2.5 uppercase tracking-wider">
-                Email Address *
+              <label htmlFor="email" className="block text-sm text-white/40 mb-3 font-light">
+                Email Address
               </label>
               <input
                 type="email"
@@ -447,15 +426,15 @@ export default function DemoForm() {
                 required
                 value={contactData.email}
                 onChange={handleContactChange}
-                className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300"
-                placeholder="john@acmecorp.com"
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/20 focus:outline-none focus:border-white transition-colors duration-300"
+                placeholder="your@email.com"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-bold text-white/90 mb-2.5 uppercase tracking-wider">
-                Phone Number *
+              <label htmlFor="phone" className="block text-sm text-white/40 mb-3 font-light">
+                Phone Number
               </label>
               <input
                 type="tel"
@@ -464,34 +443,36 @@ export default function DemoForm() {
                 required
                 value={contactData.phone}
                 onChange={handleContactChange}
-                className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300"
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/20 focus:outline-none focus:border-white transition-colors duration-300"
                 placeholder="+1 (555) 123-4567"
               />
             </div>
 
             {/* Additional Notes */}
             <div>
-              <label htmlFor="additionalNotes" className="block text-sm font-bold text-white/90 mb-2.5 uppercase tracking-wider">
+              <label htmlFor="additionalNotes" className="block text-sm text-white/40 mb-3 font-light">
                 Additional Notes (Optional)
               </label>
               <textarea
                 id="additionalNotes"
                 name="additionalNotes"
-                rows={4}
+                rows={3}
                 value={contactData.additionalNotes}
                 onChange={handleContactChange}
-                className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300 resize-none"
-                placeholder="Any specific requirements or questions you'd like us to know about..."
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/20 focus:outline-none focus:border-white transition-colors duration-300 resize-none"
+                placeholder="Tell us more..."
               />
             </div>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full py-5 px-8 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl shadow-xl shadow-purple-500/20 transition-all transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 uppercase tracking-wider text-base"
-            >
-              See My Custom Solution →
-            </button>
+            <div className="pt-4">
+              <button
+                type="submit"
+                className="px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors"
+              >
+                Submit
+              </button>
+            </div>
 
             {/* Back Button */}
             <button
@@ -500,9 +481,9 @@ export default function DemoForm() {
                 setShowContactForm(false);
                 setCurrentQuestion(questions.length - 1);
               }}
-              className="w-full py-4 px-6 bg-white/5 border-2 border-white/10 text-white/70 rounded-xl hover:bg-white/10 hover:border-white/20 hover:text-white transition-all font-semibold"
+              className="text-white/40 hover:text-white transition-colors text-sm font-medium"
             >
-              ← Back to Questions
+              ← Back
             </button>
           </form>
         </div>
@@ -512,148 +493,104 @@ export default function DemoForm() {
 
   if (showResults) {
     return (
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-          {/* Decorative gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-orange-500/5 rounded-3xl pointer-events-none" />
-
-          <div className="relative text-center mb-12">
-            <div className="inline-block relative mb-6">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full blur-xl opacity-40 animate-pulse" />
-              <div className="relative p-5 bg-gradient-to-br from-purple-500/20 to-orange-500/20 rounded-full border-2 border-purple-500/30">
-                <svg className="w-16 h-16 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <h3 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="space-y-16">
+          {/* Header */}
+          <div>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 leading-tight">
               Your Custom AI Solution
             </h3>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">
+            <p className="text-white/40 text-lg font-light">
               Based on your responses, here's your personalized automation strategy
             </p>
           </div>
 
-          <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-            <ResultCard
-              title="Industry Focus"
-              value={responses.industry || 'N/A'}
-              icon={faBuilding}
-            />
-            <ResultCard
-              title="Primary Challenge"
-              value={responses.challenge || 'N/A'}
-              icon={faBullseye}
-            />
-            <ResultCard
-              title="Current Channels"
-              value={Array.isArray(responses.channels) ? responses.channels.join(', ') : 'N/A'}
-              icon={faMobileAlt}
-            />
-            <ResultCard
-              title="Monthly Volume"
-              value={responses.volume || 'N/A'}
-              icon={faChartBar}
-            />
-            <ResultCard
-              title="Primary Goal"
-              value={responses.goal || 'N/A'}
-              icon={faRocket}
-            />
-            <ResultCard
-              title="CRM Status"
-              value={responses.crm || 'N/A'}
-              icon={faBriefcase}
-            />
+          {/* Results List */}
+          <div className="space-y-8">
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">Industry Focus</div>
+              <div className="text-white text-xl font-light">{responses.industry || 'N/A'}</div>
+            </div>
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">Primary Challenge</div>
+              <div className="text-white text-xl font-light">{responses.challenge || 'N/A'}</div>
+            </div>
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">Current Channels</div>
+              <div className="text-white text-xl font-light">
+                {Array.isArray(responses.channels) ? responses.channels.join(', ') : 'N/A'}
+              </div>
+            </div>
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">Monthly Volume</div>
+              <div className="text-white text-xl font-light">{responses.volume || 'N/A'}</div>
+            </div>
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">Primary Goal</div>
+              <div className="text-white text-xl font-light">{responses.goal || 'N/A'}</div>
+            </div>
+            <div className="pb-6 border-b border-white/10">
+              <div className="text-sm text-white/40 mb-2 font-light">CRM Status</div>
+              <div className="text-white text-xl font-light">{responses.crm || 'N/A'}</div>
+            </div>
           </div>
 
-          <div className="relative p-8 bg-gradient-to-br from-purple-500/10 to-orange-500/10 border-2 border-purple-500/30 rounded-2xl shadow-xl">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-orange-500 rounded-t-2xl" />
-
-            <h4 className="text-2xl font-black text-white mb-4 flex items-center gap-3">
-              <span className="w-2 h-2 bg-gradient-to-r from-purple-500 to-orange-500 rounded-full animate-pulse" />
+          {/* Recommended Solution */}
+          <div className="pt-8 border-t border-white/20">
+            <h4 className="text-2xl md:text-3xl font-light text-white mb-6">
               Recommended Solution
             </h4>
-            <p className="text-white/80 leading-relaxed mb-6 text-lg">
-              Based on your <span className="text-purple-400 font-bold">{responses.industry}</span> business handling <span className="text-orange-400 font-bold">{responses.volume}</span> interactions monthly,
-              we recommend a <span className="text-transparent bg-gradient-to-r from-purple-400 to-orange-400 bg-clip-text font-black">managed service approach</span> with:
+            <p className="text-white/60 leading-relaxed mb-8 text-lg font-light">
+              Based on your {responses.industry} business handling {responses.volume} interactions monthly,
+              we recommend a managed service approach with:
             </p>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-4 group">
-                <div className="flex items-center justify-center w-8 h-8 bg-purple-500/20 border border-purple-500/50 rounded-lg group-hover:bg-purple-500 transition-all">
-                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 group-hover:text-white text-sm transition-colors" />
-                </div>
-                <span className="text-white/80 text-base pt-1 group-hover:text-white transition-colors">AI-powered voice calls for instant lead response</span>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="flex items-center justify-center w-8 h-8 bg-purple-500/20 border border-purple-500/50 rounded-lg group-hover:bg-purple-500 transition-all">
-                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 group-hover:text-white text-sm transition-colors" />
-                </div>
-                <span className="text-white/80 text-base pt-1 group-hover:text-white transition-colors">SMS automation for quick follow-ups</span>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="flex items-center justify-center w-8 h-8 bg-purple-500/20 border border-purple-500/50 rounded-lg group-hover:bg-purple-500 transition-all">
-                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 group-hover:text-white text-sm transition-colors" />
-                </div>
-                <span className="text-white/80 text-base pt-1 group-hover:text-white transition-colors">
-                  {responses.crm?.includes('Yes') ? 'Seamless integration with your existing CRM' : 'CRM setup and integration'}
-                </span>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="flex items-center justify-center w-8 h-8 bg-purple-500/20 border border-purple-500/50 rounded-lg group-hover:bg-purple-500 transition-all">
-                  <FontAwesomeIcon icon={faCheck} className="text-purple-400 group-hover:text-white text-sm transition-colors" />
-                </div>
-                <span className="text-white/80 text-base pt-1 group-hover:text-white transition-colors">Real-time analytics and coaching dashboard</span>
-              </li>
-            </ul>
+            <div className="space-y-4">
+              <div className="text-white/60 text-base font-light">
+                AI-powered voice calls for instant lead response
+              </div>
+              <div className="text-white/60 text-base font-light">
+                SMS automation for quick follow-ups
+              </div>
+              <div className="text-white/60 text-base font-light">
+                {responses.crm?.includes('Yes') ? 'Seamless integration with your existing CRM' : 'CRM setup and integration'}
+              </div>
+              <div className="text-white/60 text-base font-light">
+                Real-time analytics and coaching dashboard
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Thank You Popup Modal */}
         {showThankYouPopup && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
-            <div className="relative max-w-lg w-full bg-gradient-to-br from-purple-900/95 to-black/95 backdrop-blur-xl border-2 border-purple-500/50 rounded-3xl p-10 shadow-2xl animate-scaleIn">
-              {/* Decorative gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-orange-500/10 rounded-3xl pointer-events-none" />
-
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fadeIn">
+            <div className="relative max-w-lg w-full bg-black border border-white/20 p-12 animate-scaleIn">
               {/* Close button */}
               <button
                 onClick={() => setShowThankYouPopup(false)}
-                className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 hover:scale-110"
+                className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
                 aria-label="Close"
               >
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              {/* Success Icon */}
-              <div className="relative flex justify-center mb-8">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full blur-xl opacity-50 animate-pulse" />
-                </div>
-                <div className="relative w-24 h-24 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full flex items-center justify-center shadow-2xl">
-                  <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+              {/* Content */}
+              <div className="space-y-6">
+                <h3 className="text-3xl md:text-4xl font-light text-white">
+                  Thank You
+                </h3>
+                <p className="text-white/60 leading-relaxed text-lg font-light">
+                  Your information has been submitted successfully. The AIVI team will reach out to you shortly to schedule a personalized demo.
+                </p>
+                <button
+                  onClick={() => setShowThankYouPopup(false)}
+                  className="w-full py-3 px-8 bg-white text-black font-medium hover:bg-white/90 transition-colors"
+                >
+                  Close
+                </button>
               </div>
-
-              {/* Message */}
-              <h3 className="relative text-3xl font-black text-white text-center mb-4">
-                Thank You!
-              </h3>
-              <p className="relative text-white/80 text-center leading-relaxed mb-8 text-lg">
-                Your information has been submitted successfully. The AIVI team will reach out to you shortly to schedule a personalized demo.
-              </p>
-
-              {/* Close button */}
-              <button
-                onClick={() => setShowThankYouPopup(false)}
-                className="relative w-full py-4 px-8 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl transition-all transform hover:scale-[1.02] shadow-xl shadow-purple-500/30 uppercase tracking-wider"
-              >
-                Close
-              </button>
             </div>
           </div>
         )}
@@ -665,110 +602,82 @@ export default function DemoForm() {
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      {/* Progress Bar - Enhanced */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Question {currentQuestion + 1} of {questions.length}</span>
-          <span className="text-xs font-bold text-purple-400">{Math.round(progress)}%</span>
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Progress Bar - Minimalist */}
+      <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-sm text-white/40 font-medium">{currentQuestion + 1} / {questions.length}</span>
+          <span className="text-sm text-white/40 font-medium">{Math.round(progress)}%</span>
         </div>
-        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden backdrop-blur-sm">
+        <div className="h-px bg-white/10">
           <div
-            className="h-full bg-gradient-to-r from-purple-500 via-purple-400 to-orange-500 transition-all duration-700 ease-out rounded-full shadow-lg shadow-purple-500/50"
+            className="h-full bg-white transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
-      <div className={`relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:border-purple-500/40 transition-all duration-500 ${
-        isAnimating ? 'opacity-50 scale-[0.98]' : 'opacity-100 scale-100'
+      <div className={`relative transition-opacity duration-300 ${
+        isAnimating ? 'opacity-40' : 'opacity-100'
       }`}>
-        {/* Decorative gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-orange-500/5 rounded-3xl pointer-events-none" />
-
-        {/* Bot Avatar - Enhanced */}
-        <div className="relative flex items-center gap-4 mb-8 pb-6 border-b border-white/10">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-orange-500 rounded-2xl blur-md opacity-60 animate-pulse" />
-            <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <div className="text-sm text-white font-bold tracking-wide">AIVI Assistant</div>
-            <div className="text-xs text-white/50 font-medium">AI-Powered Solution Designer</div>
-          </div>
-        </div>
 
         {/* Vertical Layout for First Question (Name Input) */}
         {currentQuestion === 0 ? (
-          <div className="relative">
+          <div className="relative space-y-12">
             {/* Question */}
-            <div className="relative mb-8">
-              <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight">
-                {getPersonalizedQuestion(question)}
-              </h3>
-            </div>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white leading-tight">
+              {getPersonalizedQuestion(question)}
+            </h3>
 
             {/* Text Input */}
-            <form onSubmit={handleTextSubmit} className="relative space-y-5">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  placeholder="Enter your name..."
-                  disabled={isAnimating}
-                  className="w-full px-6 py-5 bg-white/5 border-2 border-white/10 rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-50 font-medium"
-                  autoFocus
-                />
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/0 via-purple-500/5 to-orange-500/0 pointer-events-none opacity-0 transition-opacity duration-300 peer-focus:opacity-100" />
-              </div>
+            <form onSubmit={handleTextSubmit} className="space-y-6">
+              <input
+                type="text"
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
+                placeholder="Your name"
+                disabled={isAnimating}
+                className="w-full px-0 py-4 bg-transparent border-b border-white/20 text-white text-xl placeholder-white/30 focus:outline-none focus:border-white transition-colors duration-300 disabled:opacity-50"
+                autoFocus
+              />
               <button
                 type="submit"
                 disabled={isAnimating || !textInput.trim()}
-                className="w-full py-5 px-8 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl shadow-xl shadow-purple-500/20 transition-all transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none uppercase tracking-wider text-base"
+                className="px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                Continue →
+                Continue
               </button>
             </form>
           </div>
         ) : (
           /* Horizontal Layout for Subsequent Questions */
-          <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
             {/* Left Side - Question */}
             <div className="lg:col-span-2">
-              <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight lg:sticky lg:top-8">
+              <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white leading-tight lg:sticky lg:top-8">
                 {getPersonalizedQuestion(question)}
               </h3>
             </div>
 
             {/* Right Side - Options */}
             <div className="lg:col-span-3">
-              <div className="relative space-y-3">
+              <div className="space-y-2">
                 {question.options?.map((option, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => handleOptionClick(option)}
                     disabled={isAnimating}
-                    className={`group relative w-full text-left px-6 py-5 rounded-xl border-2 font-semibold text-base transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden ${
+                    className={`group w-full text-left px-6 py-4 border-b border-white/10 font-normal text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
                       selectedOptions.includes(option)
-                        ? 'bg-gradient-to-r from-purple-500/20 to-orange-500/10 border-purple-500 text-white shadow-lg shadow-purple-500/20'
-                        : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-purple-500/50 hover:text-white'
+                        ? 'text-white border-white'
+                        : 'text-white/60 hover:text-white hover:border-white/30'
                     }`}
                   >
-                    {/* Animated gradient on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-r from-purple-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${selectedOptions.includes(option) ? 'opacity-100' : ''}`} />
-
-                    <div className="relative flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                       <span>{option}</span>
                       {selectedOptions.includes(option) && (
-                        <div className="flex items-center justify-center w-7 h-7 bg-purple-500 rounded-lg shadow-lg">
-                          <FontAwesomeIcon icon={faCheck} className="text-white text-sm" />
-                        </div>
+                        <div className="w-2 h-2 bg-white rounded-full" />
                       )}
                     </div>
                   </button>
@@ -780,16 +689,16 @@ export default function DemoForm() {
                 <button
                   onClick={handleMultiselectConfirm}
                   disabled={isAnimating}
-                  className="w-full mt-6 py-5 px-8 bg-gradient-to-r from-purple-500 to-orange-500 hover:from-purple-600 hover:to-orange-600 text-white font-black rounded-xl shadow-xl shadow-purple-500/20 transition-all transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none uppercase tracking-wider text-base"
+                  className="mt-8 px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  Continue ({selectedOptions.length} selected) →
+                  Continue
                 </button>
               )}
             </div>
           </div>
         )}
 
-        {/* Back button - Full width at bottom */}
+        {/* Back button - Minimalist */}
         {currentQuestion > 0 && (
           <button
             onClick={() => {
@@ -797,7 +706,7 @@ export default function DemoForm() {
               setSelectedOptions([]);
             }}
             disabled={isAnimating}
-            className="w-full mt-8 py-4 px-6 bg-white/5 border-2 border-white/10 text-white/70 rounded-xl hover:bg-white/10 hover:border-white/20 hover:text-white transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-12 text-white/40 hover:text-white transition-colors text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed"
           >
             ← Back
           </button>
@@ -807,27 +716,3 @@ export default function DemoForm() {
   );
 }
 
-interface ResultCardProps {
-  title: string;
-  value: string;
-  icon: any;
-}
-
-function ResultCard({ title, value, icon }: ResultCardProps) {
-  return (
-    <div className="group relative p-6 bg-white/5 border-2 border-white/10 rounded-2xl hover:border-purple-500/40 hover:bg-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
-      {/* Gradient accent on hover */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-orange-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-      <div className="flex items-start gap-4">
-        <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-purple-500/20 to-orange-500/20 border border-purple-500/30 rounded-xl group-hover:scale-110 transition-transform duration-300">
-          <FontAwesomeIcon icon={icon} className="text-xl text-purple-400 group-hover:text-purple-300" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-xs text-white/50 uppercase tracking-wider font-bold mb-2">{title}</div>
-          <div className="text-white font-bold text-base break-words">{value}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
