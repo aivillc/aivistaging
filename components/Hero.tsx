@@ -332,9 +332,9 @@ function StatCard({ number, label, color }: StatCardProps) {
       <div className={`absolute -inset-1 bg-gradient-to-r ${gradientBorder} rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-all duration-700`} />
       
       {/* Card */}
-      <div className="relative px-10 py-7 bg-black/90 backdrop-blur-md border-2 border-white/10 rounded-2xl min-w-[180px] hover:border-white/30 transition-all duration-500 group-hover:transform group-hover:scale-105">
+      <div className="relative px-10 py-7 bg-black/90 backdrop-blur-md border-2 border-white/10 rounded-2xl min-w-[180px] hover:border-white/30 transition-all duration-500 group-hover:transform group-hover:scale-105 overflow-hidden">
         {/* Top gradient line */}
-        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientBorder} rounded-t-2xl`} />
+        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientBorder}`} />
         
         <div className="text-center">
           <div className={`text-5xl md:text-6xl font-black bg-gradient-to-br ${gradientText} text-transparent bg-clip-text mb-2 tracking-tight`}>
