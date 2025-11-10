@@ -247,17 +247,17 @@ function Feature({ text, highlight = false }: { text: string; highlight?: boolea
 function Tag({ text, gradient }: { text: string; gradient?: string }) {
   const gradientStyle = gradient === 'lightblue-teal'
     ? 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)'
-    : 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'; // blue-teal
+    : 'linear-gradient(90deg, #00cc99 0%, #3d5a80 100%)'; // blue-teal (reversed)
 
   const textColor = gradient === 'lightblue-teal' ? '#0f141c' : '#e0fbfc';
 
   return (
     <span
-      className="px-4 py-2 text-xs font-bold rounded-full border-2 transition-all hover:scale-105"
+      className="inline-block px-4 py-2 text-xs font-bold rounded-full transition-all hover:scale-105"
       style={{
         backgroundImage: gradientStyle,
         color: textColor,
-        borderColor: 'rgba(255, 255, 255, 0.2)'
+        border: '2px solid rgba(255, 255, 255, 0.2)'
       }}
     >
       {text}
