@@ -1,7 +1,8 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useRef } from 'react';
 
 interface TestimonialsProps {
   industry?: 'Financial' | 'Healthcare' | 'Law Firms' | 'Real Estate' | 'Logistics';
@@ -316,6 +317,19 @@ const testimonialsContent = {
 };
 
 export default function Testimonials({ industry }: TestimonialsProps = {}) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      const newScrollPosition = scrollContainerRef.current.scrollLeft + (direction === 'right' ? scrollAmount : -scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const content = industry ? testimonialsContent[industry] : {
     title: 'Trusted by Industry Leaders',
     subtitle: 'Industry Leaders',
@@ -397,20 +411,60 @@ export default function Testimonials({ industry }: TestimonialsProps = {}) {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {content.testimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              quote={testimonial.quote}
-              author={testimonial.author}
-              role={testimonial.role}
-              company={testimonial.company}
-              industry={testimonial.industry}
-              color={testimonial.color}
-            />
-          ))}
+        {/* Testimonials Carousel */}
+        <div className="relative mb-16">
+          {/* Navigation Buttons */}
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 -ml-6"
+            aria-label="Scroll left"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} className="text-lg" />
+          </button>
+          
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 -mr-6"
+            aria-label="Scroll right"
+          >
+            <FontAwesomeIcon icon={faChevronRight} className="text-lg" />
+          </button>
+
+          {/* Scrollable Container */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-8 overflow-x-auto scroll-smooth pb-4 px-1 scrollbar-hide"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
+            {content.testimonials.map((testimonial, index) => (
+              <div key={index} className="flex-shrink-0 w-[90%] md:w-[45%] lg:w-[31%]">
+                <TestimonialCard
+                  quote={testimonial.quote}
+                  author={testimonial.author}
+                  role={testimonial.role}
+                  company={testimonial.company}
+                  industry={testimonial.industry}
+                  color={testimonial.color}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="text-center mt-4 text-white/40 text-sm">
+            <span>← Drag or use arrows to see more →</span>
+          </div>
         </div>
+
+        <style jsx>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
@@ -463,12 +517,12 @@ function TestimonialCard({ quote, author, role, company, industry, color }: Test
   const glowColor = color === 'purple' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 107, 53, 0.2)';
 
   return (
-    <div className={`group relative p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border-2 ${borderColor} ${hoverBorder} rounded-2xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1`}
+    <div className={`group relative p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border-2 ${borderColor} ${hoverBorder} rounded-2xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden h-full`}
          style={{ boxShadow: `0 0 0 0 ${glowColor}`, transition: 'all 0.5s ease' }}
          onMouseEnter={(e) => e.currentTarget.style.boxShadow = `0 20px 60px ${glowColor}`}
          onMouseLeave={(e) => e.currentTarget.style.boxShadow = `0 0 0 0 ${glowColor}`}>
-      {/* Gradient accent bar */}
-      <div className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${gradient} rounded-l-2xl opacity-80 group-hover:w-2 transition-all duration-300`} />
+      {/* Gradient accent bar - properly aligned */}
+      <div className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${gradient} opacity-80 group-hover:w-2 transition-all duration-300`} />
       
       {/* Corner accent */}
       <div className={`absolute top-4 right-4 w-12 h-12 bg-gradient-to-br ${gradient} opacity-10 rounded-full blur-xl group-hover:opacity-20 transition-opacity duration-300`} />
