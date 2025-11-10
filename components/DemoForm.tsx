@@ -369,17 +369,18 @@ export default function DemoForm() {
   if (showContactForm) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="space-y-12">
-          <div>
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
-              Perfect{responses.userName ? `, ${responses.userName}` : ''}!
-            </h3>
-            <p className="text-white/40 text-lg font-light">
-              Share your contact information to receive your personalized solution.
-            </p>
-          </div>
+        <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+          <div className="space-y-12">
+            <div>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
+                Perfect{responses.userName ? `, ${responses.userName}` : ''}!
+              </h3>
+              <p className="text-white/40 text-lg font-light">
+                Share your contact information to receive your personalized solution.
+              </p>
+            </div>
 
-          <form onSubmit={handleContactSubmit} className="space-y-8">
+            <form onSubmit={handleContactSubmit} className="space-y-8">
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="block text-sm text-white/40 mb-3 font-light">
@@ -468,9 +469,10 @@ export default function DemoForm() {
             <div className="pt-4">
               <button
                 type="submit"
-                className="px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors"
+                className="relative px-8 py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(139,92,246,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
               >
-                Submit
+                <span className="relative z-10">Submit</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </button>
             </div>
 
@@ -486,6 +488,7 @@ export default function DemoForm() {
               ← Back
             </button>
           </form>
+          </div>
         </div>
       </div>
     );
@@ -494,16 +497,17 @@ export default function DemoForm() {
   if (showResults) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="space-y-16">
-          {/* Header */}
-          <div>
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 leading-tight">
-              Your Custom AI Solution
-            </h3>
-            <p className="text-white/40 text-lg font-light">
-              Based on your responses, here's your personalized automation strategy
-            </p>
-          </div>
+        <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+          <div className="space-y-16">
+            {/* Header */}
+            <div>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-6 leading-tight">
+                Your Custom AI Solution
+              </h3>
+              <p className="text-white/40 text-lg font-light">
+                Based on your responses, here's your personalized automation strategy
+              </p>
+            </div>
 
           {/* Results List */}
           <div className="space-y-8">
@@ -560,11 +564,12 @@ export default function DemoForm() {
             </div>
           </div>
         </div>
+        </div>
 
         {/* Thank You Popup Modal */}
         {showThankYouPopup && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fadeIn">
-            <div className="relative max-w-lg w-full bg-black border border-white/20 p-12 animate-scaleIn">
+            <div className="relative max-w-lg w-full bg-black border border-white/20 p-12 animate-scaleIn shadow-[0_0_40px_rgba(255,255,255,0.1)]">
               {/* Close button */}
               <button
                 onClick={() => setShowThankYouPopup(false)}
@@ -586,9 +591,10 @@ export default function DemoForm() {
                 </p>
                 <button
                   onClick={() => setShowThankYouPopup(false)}
-                  className="w-full py-3 px-8 bg-white text-black font-medium hover:bg-white/90 transition-colors"
+                  className="relative w-full py-3 px-8 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(139,92,246,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
                 >
-                  Close
+                  <span className="relative z-10">Close</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                 </button>
               </div>
             </div>
@@ -603,23 +609,25 @@ export default function DemoForm() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Progress Bar - Minimalist */}
-      <div className="mb-12">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm text-white/40 font-medium">{currentQuestion + 1} / {questions.length}</span>
-          <span className="text-sm text-white/40 font-medium">{Math.round(progress)}%</span>
+      {/* Background container with low opacity */}
+      <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+        {/* Progress Bar - Minimalist */}
+        <div className="mb-12">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm text-white/40 font-medium">{currentQuestion + 1} / {questions.length}</span>
+            <span className="text-sm text-white/40 font-medium">{Math.round(progress)}%</span>
+          </div>
+          <div className="h-px bg-white/10">
+            <div
+              className="h-full bg-white transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
-        <div className="h-px bg-white/10">
-          <div
-            className="h-full bg-white transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
 
-      <div className={`relative transition-opacity duration-300 ${
-        isAnimating ? 'opacity-40' : 'opacity-100'
-      }`}>
+        <div className={`relative transition-opacity duration-300 ${
+          isAnimating ? 'opacity-40' : 'opacity-100'
+        }`}>
 
         {/* Vertical Layout for First Question (Name Input) */}
         {currentQuestion === 0 ? (
@@ -643,9 +651,10 @@ export default function DemoForm() {
               <button
                 type="submit"
                 disabled={isAnimating || !textInput.trim()}
-                className="px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="relative px-8 py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(139,92,246,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                Continue
+                <span className="relative z-10">Continue</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </button>
             </form>
           </div>
@@ -661,23 +670,23 @@ export default function DemoForm() {
 
             {/* Right Side - Options */}
             <div className="lg:col-span-3">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {question.options?.map((option, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => handleOptionClick(option)}
                     disabled={isAnimating}
-                    className={`group w-full text-left px-6 py-4 border-b border-white/10 font-normal text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    className={`group w-full text-left px-6 py-4 border border-white/20 rounded-lg font-normal text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
                       selectedOptions.includes(option)
-                        ? 'text-white border-white'
-                        : 'text-white/60 hover:text-white hover:border-white/30'
+                        ? 'text-white border-white shadow-[0_0_20px_rgba(255,255,255,0.3)] bg-white/5'
+                        : 'text-white hover:text-white hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span>{option}</span>
                       {selectedOptions.includes(option) && (
-                        <div className="w-2 h-2 bg-white rounded-full" />
+                        <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
                       )}
                     </div>
                   </button>
@@ -689,9 +698,10 @@ export default function DemoForm() {
                 <button
                   onClick={handleMultiselectConfirm}
                   disabled={isAnimating}
-                  className="mt-8 px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="relative mt-8 px-8 py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(139,92,246,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  Continue
+                  <span className="relative z-10">Continue</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                 </button>
               )}
             </div>
@@ -711,6 +721,7 @@ export default function DemoForm() {
             ← Back
           </button>
         )}
+        </div>
       </div>
     </div>
   );
