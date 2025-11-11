@@ -44,15 +44,15 @@ export default function Features({ industry }: FeaturesProps = {}) {
   return (
     <section id="features" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-black">
       {/* Subtle grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(61,90,128,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(61,90,128,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(14,165,233,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
       <div className="relative max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-14 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4" style={{ color: '#e0fbfc' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4" style={{ color: '#e0f2fe' }}>
             {content.title}{' '}
             <span className="text-transparent bg-clip-text" style={{
-              backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+              backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
             }}>
               {content.subtitle}
             </span>
@@ -185,8 +185,8 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
   const [isHovered, setIsHovered] = useState(false);
 
   const gradientStyle = gradient === 'blue'
-    ? 'linear-gradient(135deg, #3d5a80 0%, #2d4560 100%)'
-    : 'linear-gradient(135deg, #00cc99 0%, #00b388 100%)';
+    ? 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)'
+    : 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)';
 
   return (
     <div
@@ -227,7 +227,7 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
             }`}
             style={{
               background: gradientStyle,
-              color: '#e0fbfc'
+              color: '#e0f2fe'
             }}
           >
             {icon}
@@ -242,7 +242,7 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text'
           } : {
-            color: '#e0fbfc'
+            color: '#e0f2fe'
           }}
         >
           {title}
@@ -266,7 +266,7 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
                   WebkitBackgroundClip: 'text',
                   transform: 'scale(1.25)'
                 } : {
-                  color: '#00cc99',
+                  color: '#14b8a6',
                   transform: 'scale(1)'
                 }}
               >✓</span>

@@ -39,8 +39,8 @@ export default function Navigation() {
       }`}
       style={{
         backgroundColor: isScrolled ? 'rgba(15, 20, 28, 0.98)' : 'rgba(15, 20, 28, 0.8)',
-        borderBottomColor: isScrolled ? 'rgba(61, 90, 128, 0.3)' : 'transparent',
-        boxShadow: isScrolled ? '0 8px 32px rgba(61, 90, 128, 0.15)' : 'none'
+        borderBottomColor: isScrolled ? 'rgba(14, 165, 233, 0.3)' : 'transparent',
+        boxShadow: isScrolled ? '0 8px 32px rgba(14, 165, 233, 0.15)' : 'none'
       }}
     >
       <div className="max-w-7xl mx-auto px-6 py-5">
@@ -55,7 +55,7 @@ export default function Navigation() {
               priority
               className="h-10 md:h-16 w-auto transition-all duration-500 hover:scale-105 cursor-pointer"
               style={{
-                filter: 'drop-shadow(0 0 12px rgba(61, 90, 128, 0.5))'
+                filter: 'drop-shadow(0 0 12px rgba(14, 165, 233, 0.5))'
               }}
             />
           </Link>
@@ -66,31 +66,31 @@ export default function Navigation() {
               href="#features"
               className="relative group py-2 transition-all duration-300"
               style={{ color: 'rgba(224, 251, 252, 0.7)' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#e0fbfc'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#e0f2fe'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)'}
             >
               <span className="text-sm font-semibold tracking-wide">Features</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)' }} />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)' }} />
             </a>
             <a
               href="#solutions"
               className="relative group py-2 transition-all duration-300"
               style={{ color: 'rgba(224, 251, 252, 0.7)' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#e0fbfc'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#e0f2fe'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)'}
             >
               <span className="text-sm font-semibold tracking-wide">Solutions</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)' }} />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)' }} />
             </a>
             <a
               href="#integrations"
               className="relative group py-2 transition-all duration-300"
               style={{ color: 'rgba(224, 251, 252, 0.7)' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#e0fbfc'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#e0f2fe'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)'}
             >
               <span className="text-sm font-semibold tracking-wide">Integrations</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)' }} />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)' }} />
             </a>
 
             {/* Use Cases Dropdown */}
@@ -102,7 +102,7 @@ export default function Navigation() {
               <button
                 className="relative flex items-center gap-2 py-2 transition-all duration-300 text-sm font-semibold tracking-wide"
                 style={{ color: 'rgba(224, 251, 252, 0.7)' }}
-                onMouseEnter={(e) => e.currentTarget.style.color = '#e0fbfc'}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#e0f2fe'}
                 onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)'}
               >
                 Use Cases
@@ -118,22 +118,22 @@ export default function Navigation() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                 </svg>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)' }} />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)' }} />
               </button>
 
               {/* Dropdown Menu */}
               <div className={`absolute top-full left-0 pt-3 w-52 transition-all duration-400 ease-out ${useCasesOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-3 pointer-events-none'}`}>
-                <div className="backdrop-blur-2xl rounded-xl shadow-lg overflow-hidden" style={{ backgroundColor: 'rgba(15, 20, 28, 0.98)', borderWidth: '1px', borderColor: 'rgba(61, 90, 128, 0.3)', boxShadow: '0 16px 48px rgba(0, 0, 0, 0.6)' }}>
+                <div className="backdrop-blur-2xl rounded-xl shadow-lg overflow-hidden" style={{ backgroundColor: 'rgba(15, 20, 28, 0.98)', borderWidth: '1px', borderColor: 'rgba(14, 165, 233, 0.3)', boxShadow: '0 16px 48px rgba(0, 0, 0, 0.6)' }}>
                 <Link
                   href="/financial"
                   className="block px-5 py-3.5 transition-all duration-300 text-sm font-medium group"
                   style={{
                     color: 'rgba(224, 251, 252, 0.75)',
-                    borderBottom: '1px solid rgba(61, 90, 128, 0.1)'
+                    borderBottom: '1px solid rgba(14, 165, 233, 0.1)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#e0fbfc';
-                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(61, 90, 128, 0.2) 0%, transparent 100%)';
+                    e.currentTarget.style.color = '#e0f2fe';
+                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(224, 251, 252, 0.75)';
@@ -141,7 +141,7 @@ export default function Navigation() {
                   }}
                 >
                   <span className="flex items-center gap-3">
-                    <FontAwesomeIcon icon={faChartLine} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faChartLine} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#14b8a6' }} />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">Financial</span>
                   </span>
                 </Link>
@@ -150,11 +150,11 @@ export default function Navigation() {
                   className="block px-5 py-3.5 transition-all duration-300 text-sm font-medium group"
                   style={{
                     color: 'rgba(224, 251, 252, 0.75)',
-                    borderBottom: '1px solid rgba(61, 90, 128, 0.1)'
+                    borderBottom: '1px solid rgba(14, 165, 233, 0.1)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#e0fbfc';
-                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(61, 90, 128, 0.2) 0%, transparent 100%)';
+                    e.currentTarget.style.color = '#e0f2fe';
+                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(224, 251, 252, 0.75)';
@@ -162,7 +162,7 @@ export default function Navigation() {
                   }}
                 >
                   <span className="flex items-center gap-3">
-                    <FontAwesomeIcon icon={faHospital} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faHospital} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#14b8a6' }} />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">Healthcare</span>
                   </span>
                 </Link>
@@ -171,11 +171,11 @@ export default function Navigation() {
                   className="block px-5 py-3.5 transition-all duration-300 text-sm font-medium group"
                   style={{
                     color: 'rgba(224, 251, 252, 0.75)',
-                    borderBottom: '1px solid rgba(61, 90, 128, 0.1)'
+                    borderBottom: '1px solid rgba(14, 165, 233, 0.1)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#e0fbfc';
-                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(61, 90, 128, 0.2) 0%, transparent 100%)';
+                    e.currentTarget.style.color = '#e0f2fe';
+                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(224, 251, 252, 0.75)';
@@ -183,7 +183,7 @@ export default function Navigation() {
                   }}
                 >
                   <span className="flex items-center gap-3">
-                    <FontAwesomeIcon icon={faGavel} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faGavel} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#14b8a6' }} />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">Law Firms</span>
                   </span>
                 </Link>
@@ -192,11 +192,11 @@ export default function Navigation() {
                   className="block px-5 py-3.5 transition-all duration-300 text-sm font-medium group"
                   style={{
                     color: 'rgba(224, 251, 252, 0.75)',
-                    borderBottom: '1px solid rgba(61, 90, 128, 0.1)'
+                    borderBottom: '1px solid rgba(14, 165, 233, 0.1)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#e0fbfc';
-                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(61, 90, 128, 0.2) 0%, transparent 100%)';
+                    e.currentTarget.style.color = '#e0f2fe';
+                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(224, 251, 252, 0.75)';
@@ -204,7 +204,7 @@ export default function Navigation() {
                   }}
                 >
                   <span className="flex items-center gap-3">
-                    <FontAwesomeIcon icon={faTruck} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faTruck} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#14b8a6' }} />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">Logistics</span>
                   </span>
                 </Link>
@@ -215,8 +215,8 @@ export default function Navigation() {
                     color: 'rgba(224, 251, 252, 0.75)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#e0fbfc';
-                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(61, 90, 128, 0.2) 0%, transparent 100%)';
+                    e.currentTarget.style.color = '#e0f2fe';
+                    e.currentTarget.style.background = 'linear-gradient(90deg, rgba(14, 165, 233, 0.2) 0%, transparent 100%)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(224, 251, 252, 0.75)';
@@ -224,7 +224,7 @@ export default function Navigation() {
                   }}
                 >
                   <span className="flex items-center gap-3">
-                    <FontAwesomeIcon icon={faHouse} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faHouse} className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style={{ color: '#14b8a6' }} />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">Real Estate</span>
                   </span>
                 </Link>
@@ -236,26 +236,26 @@ export default function Navigation() {
               href="#about"
               className="relative group py-2 transition-all duration-300"
               style={{ color: 'rgba(224, 251, 252, 0.7)' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#e0fbfc'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#e0f2fe'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)'}
             >
               <span className="text-sm font-semibold tracking-wide">About Us</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)' }} />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)' }} />
             </a>
 
             <button
               onClick={() => window.location.href = '#demo-form'}
               className="relative px-7 py-3 text-sm font-bold rounded-xl transition-all duration-400 hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
               style={{
-                background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)',
-                color: '#e0fbfc',
-                boxShadow: '0 8px 30px rgba(61, 90, 128, 0.3)'
+                background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
+                color: '#e0f2fe',
+                boxShadow: '0 8px 30px rgba(14, 165, 233, 0.3)'
               }}
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 204, 153, 0.5)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(61, 90, 128, 0.3)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(14, 165, 233, 0.3)'}
             >
               <span className="relative z-10">Contact</span>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ background: 'linear-gradient(90deg, #00cc99 0%, #3d5a80 100%)' }} />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400" style={{ background: 'linear-gradient(90deg, #14b8a6 0%, #0ea5e9 100%)' }} />
             </button>
           </div>
 
@@ -263,9 +263,9 @@ export default function Navigation() {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden transition-all duration-300 hover:scale-110"
-            style={{ color: '#e0fbfc' }}
+            style={{ color: '#e0f2fe' }}
             onMouseEnter={(e) => e.currentTarget.style.color = '#98c1d9'}
-            onMouseLeave={(e) => e.currentTarget.style.color = '#e0fbfc'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#e0f2fe'}
           >
             <svg
               className="w-7 h-7"
@@ -296,8 +296,8 @@ export default function Navigation() {
               className="block px-4 py-4 rounded-lg transition-all text-base font-semibold"
               style={{ color: 'rgba(224, 251, 252, 0.8)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#e0fbfc';
-                e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                e.currentTarget.style.color = '#e0f2fe';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'rgba(224, 251, 252, 0.8)';
@@ -312,8 +312,8 @@ export default function Navigation() {
               className="block px-4 py-4 rounded-lg transition-all text-base font-semibold"
               style={{ color: 'rgba(224, 251, 252, 0.8)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#e0fbfc';
-                e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                e.currentTarget.style.color = '#e0f2fe';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'rgba(224, 251, 252, 0.8)';
@@ -328,8 +328,8 @@ export default function Navigation() {
               className="block px-4 py-4 rounded-lg transition-all text-base font-semibold"
               style={{ color: 'rgba(224, 251, 252, 0.8)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#e0fbfc';
-                e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                e.currentTarget.style.color = '#e0f2fe';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'rgba(224, 251, 252, 0.8)';
@@ -346,8 +346,8 @@ export default function Navigation() {
                 className="w-full flex items-center justify-between px-4 py-4 rounded-lg transition-all text-base font-semibold"
                 style={{ color: 'rgba(224, 251, 252, 0.8)', backgroundColor: 'transparent' }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#e0fbfc';
-                  e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                  e.currentTarget.style.color = '#e0f2fe';
+                  e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = 'rgba(224, 251, 252, 0.8)';
@@ -372,15 +372,15 @@ export default function Navigation() {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
                     style={{ color: 'rgba(224, 251, 252, 0.7)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#e0fbfc';
-                      e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                      e.currentTarget.style.color = '#e0f2fe';
+                      e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)';
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <FontAwesomeIcon icon={faChartLine} className="w-4 h-4" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faChartLine} className="w-4 h-4" style={{ color: '#14b8a6' }} />
                     <span>Financial</span>
                   </Link>
                   <Link
@@ -389,15 +389,15 @@ export default function Navigation() {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
                     style={{ color: 'rgba(224, 251, 252, 0.7)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#e0fbfc';
-                      e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                      e.currentTarget.style.color = '#e0f2fe';
+                      e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)';
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <FontAwesomeIcon icon={faHospital} className="w-4 h-4" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faHospital} className="w-4 h-4" style={{ color: '#14b8a6' }} />
                     <span>Healthcare</span>
                   </Link>
                   <Link
@@ -406,15 +406,15 @@ export default function Navigation() {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
                     style={{ color: 'rgba(224, 251, 252, 0.7)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#e0fbfc';
-                      e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                      e.currentTarget.style.color = '#e0f2fe';
+                      e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)';
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <FontAwesomeIcon icon={faGavel} className="w-4 h-4" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faGavel} className="w-4 h-4" style={{ color: '#14b8a6' }} />
                     <span>Law Firms</span>
                   </Link>
                   <Link
@@ -423,15 +423,15 @@ export default function Navigation() {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
                     style={{ color: 'rgba(224, 251, 252, 0.7)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#e0fbfc';
-                      e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                      e.currentTarget.style.color = '#e0f2fe';
+                      e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)';
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <FontAwesomeIcon icon={faTruck} className="w-4 h-4" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faTruck} className="w-4 h-4" style={{ color: '#14b8a6' }} />
                     <span>Logistics</span>
                   </Link>
                   <Link
@@ -440,15 +440,15 @@ export default function Navigation() {
                     className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all"
                     style={{ color: 'rgba(224, 251, 252, 0.7)' }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#e0fbfc';
-                      e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                      e.currentTarget.style.color = '#e0f2fe';
+                      e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = 'rgba(224, 251, 252, 0.7)';
                       e.currentTarget.style.backgroundColor = 'transparent';
                     }}
                   >
-                    <FontAwesomeIcon icon={faHouse} className="w-4 h-4" style={{ color: '#00cc99' }} />
+                    <FontAwesomeIcon icon={faHouse} className="w-4 h-4" style={{ color: '#14b8a6' }} />
                     <span>Real Estate</span>
                   </Link>
                 </div>
@@ -461,8 +461,8 @@ export default function Navigation() {
               className="block px-4 py-4 rounded-lg transition-all text-base font-semibold"
               style={{ color: 'rgba(224, 251, 252, 0.8)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#e0fbfc';
-                e.currentTarget.style.backgroundColor = 'rgba(61, 90, 128, 0.1)';
+                e.currentTarget.style.color = '#e0f2fe';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'rgba(224, 251, 252, 0.8)';
@@ -479,12 +479,12 @@ export default function Navigation() {
               }}
               className="w-full mt-4 py-4 px-6 font-bold rounded-xl transition-all uppercase tracking-wider"
               style={{
-                background: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)',
-                color: '#e0fbfc',
-                boxShadow: '0 8px 30px rgba(61, 90, 128, 0.3)'
+                background: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
+                color: '#e0f2fe',
+                boxShadow: '0 8px 30px rgba(14, 165, 233, 0.3)'
               }}
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 204, 153, 0.5)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(61, 90, 128, 0.3)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(14, 165, 233, 0.3)'}
             >
               Contact
             </button>

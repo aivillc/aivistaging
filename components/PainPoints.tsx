@@ -91,7 +91,7 @@ export default function PainPoints({ industry }: PainPointsProps = {}) {
           <h2 className="text-4xl md:text-5xl font-black text-black mb-4">
             {content.title}{' '}
             <span className="text-transparent bg-clip-text" style={{
-              backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+              backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
             }}>
               {content.subtitle}
             </span>
@@ -116,7 +116,7 @@ export default function PainPoints({ industry }: PainPointsProps = {}) {
 
         {/* Urgency CTA */}
         <div className="max-w-3xl mx-auto text-center p-8 rounded-2xl shadow-2xl" style={{
-          backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+          backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
         }}>
           <p className="text-2xl font-bold mb-2" style={{ color: '#e0fbfc' }}>
             {content.ctaText}
@@ -141,8 +141,8 @@ function PainPointCard({ title, stat, solution, color }: PainPointCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const gradientStyle = color === 'purple'
-    ? 'linear-gradient(135deg, #3d5a80 0%, #2d4560 100%)'
-    : 'linear-gradient(135deg, #00cc99 0%, #00b388 100%)';
+    ? 'linear-gradient(135deg, #0ea5e9 0%, #2d4560 100%)'
+    : 'linear-gradient(135deg, #14b8a6 0%, #00b388 100%)';
 
   const glowColor = color === 'purple' ? 'rgba(61, 90, 128, 0.3)' : 'rgba(0, 204, 153, 0.3)';
   const overlayColor = color === 'purple' ? 'rgba(61, 90, 128, 0.05)' : 'rgba(0, 204, 153, 0.05)';

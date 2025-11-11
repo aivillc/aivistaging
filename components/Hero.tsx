@@ -92,9 +92,9 @@ export default function Hero({ industry }: HeroProps = {}) {
 
       {/* Diagonal moving gradient lines */}
       <div className="absolute inset-0 overflow-hidden opacity-30">
-        <div className="absolute w-full h-px top-1/4 animate-scan-horizontal" style={{ background: 'linear-gradient(90deg, transparent 0%, #3d5a80 50%, transparent 100%)' }} />
-        <div className="absolute w-full h-px top-1/2 animate-scan-horizontal-reverse" style={{ background: 'linear-gradient(90deg, transparent 0%, #00cc99 50%, transparent 100%)' }} />
-        <div className="absolute w-full h-px top-3/4 animate-scan-horizontal-slow" style={{ background: 'linear-gradient(90deg, transparent 0%, #3d5a80 50%, transparent 100%)' }} />
+        <div className="absolute w-full h-px top-1/4 animate-scan-horizontal" style={{ background: 'linear-gradient(90deg, transparent 0%, #0ea5e9 50%, transparent 100%)' }} />
+        <div className="absolute w-full h-px top-1/2 animate-scan-horizontal-reverse" style={{ background: 'linear-gradient(90deg, transparent 0%, #14b8a6 50%, transparent 100%)' }} />
+        <div className="absolute w-full h-px top-3/4 animate-scan-horizontal-slow" style={{ background: 'linear-gradient(90deg, transparent 0%, #0ea5e9 50%, transparent 100%)' }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto w-full pt-[15vh]">
@@ -104,7 +104,7 @@ export default function Hero({ industry }: HeroProps = {}) {
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.1] mb-10 tracking-tight" style={{ color: '#e0fbfc' }}>
               <span className="inline-block animate-fadeInUp">{current.title}</span>{' '}
               <span className="inline-block text-transparent bg-clip-text animate-gradient-x bg-[length:200%_auto]" style={{
-                backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 50%, #3d5a80 100%)',
+                backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 50%, #0ea5e9 100%)',
                 filter: 'drop-shadow(0 0 30px rgba(61, 90, 128, 0.5))'
               }}>
                 Revenue
@@ -120,7 +120,7 @@ export default function Hero({ industry }: HeroProps = {}) {
               {current.description}
               <br className="hidden md:block" />
               <span className="font-bold px-3 py-1 rounded-lg border" style={{
-                color: '#00cc99',
+                color: '#14b8a6',
                 backgroundColor: 'rgba(0, 204, 153, 0.1)',
                 borderColor: 'rgba(0, 204, 153, 0.3)'
               }}>{current.stat}</span>

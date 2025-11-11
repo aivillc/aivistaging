@@ -16,7 +16,7 @@ export default function Solutions() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-black mb-6">
             Choose Your{' '}
             <span className="text-transparent bg-clip-text" style={{
-              backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+              backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
             }}>
               Implementation Path
             </span>
@@ -39,12 +39,12 @@ export default function Solutions() {
               <div className="relative">
                 <div
                   className="absolute inset-0 rounded-full blur-md opacity-50 animate-pulse"
-                  style={{ backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)' }}
+                  style={{ backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #14b8a6 100%)' }}
                 />
                 <div
                   className="relative px-6 py-2 text-xs font-black rounded-full shadow-xl uppercase tracking-wider"
                   style={{
-                    backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)',
+                    backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #14b8a6 100%)',
                     color: '#0f141c'
                   }}
                 >
@@ -58,7 +58,7 @@ export default function Solutions() {
               className={`absolute -inset-1 rounded-3xl blur-xl transition-all duration-500 ${
                 hoveredCard === 'saas' ? 'opacity-30' : 'opacity-0'
               }`}
-              style={{ backgroundImage: 'linear-gradient(135deg, #98c1d9 0%, #00cc99 100%)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #98c1d9 0%, #14b8a6 100%)' }}
             />
 
             <div className="relative h-full p-8 bg-white border-2 border-gray-200 rounded-3xl transition-all duration-500 shadow-lg hover:shadow-2xl overflow-hidden" style={{
@@ -67,13 +67,13 @@ export default function Solutions() {
 
               {/* Animated Border Gradient */}
               <div className="absolute top-0 left-0 w-full h-1" style={{
-                backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)'
+                backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #14b8a6 100%)'
               }} />
               <div
                 className={`absolute top-0 left-0 w-1 transition-all duration-500 ${
                   hoveredCard === 'saas' ? 'h-full' : 'h-0'
                 }`}
-                style={{ backgroundImage: 'linear-gradient(180deg, #98c1d9 0%, #00cc99 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(180deg, #98c1d9 0%, #14b8a6 100%)' }}
               />
 
               {/* Floating Icon */}
@@ -81,7 +81,7 @@ export default function Solutions() {
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
                   style={{
-                    backgroundImage: 'linear-gradient(135deg, #98c1d9 0%, #00cc99 100%)',
+                    backgroundImage: 'linear-gradient(135deg, #98c1d9 0%, #14b8a6 100%)',
                     color: '#0f141c'
                   }}
                 >
@@ -117,7 +117,7 @@ export default function Solutions() {
               <button
                 className="w-full py-4 px-6 font-black rounded-xl transition-all transform hover:scale-[1.02] shadow-lg uppercase tracking-wider text-sm"
                 style={{
-                  backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)',
+                  backgroundImage: 'linear-gradient(90deg, #98c1d9 0%, #14b8a6 100%)',
                   color: '#0f141c'
                 }}
               >
@@ -137,7 +137,7 @@ export default function Solutions() {
               <div
                 className="px-6 py-2 text-xs font-black rounded-full uppercase tracking-wider shadow-xl"
                 style={{
-                  backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)',
+                  backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
                   color: '#e0fbfc'
                 }}
               >
@@ -150,21 +150,21 @@ export default function Solutions() {
               className={`absolute -inset-1 rounded-3xl blur-xl transition-all duration-500 ${
                 hoveredCard === 'managed' ? 'opacity-30' : 'opacity-10'
               }`}
-              style={{ backgroundImage: 'linear-gradient(135deg, #3d5a80 0%, #00cc99 100%)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%)' }}
             />
 
             <div className="relative h-full p-8 bg-white border-2 rounded-3xl transition-all duration-500 shadow-xl hover:shadow-2xl overflow-hidden" style={{
-              borderColor: hoveredCard === 'managed' ? '#3d5a80' : 'rgba(61, 90, 128, 0.3)'
+              borderColor: hoveredCard === 'managed' ? '#0ea5e9' : 'rgba(61, 90, 128, 0.3)'
             }}>
               {/* Animated Border Gradient */}
               <div className="absolute top-0 left-0 w-full h-1" style={{
-                backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+                backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
               }} />
               <div
                 className={`absolute top-0 left-0 w-1 transition-all duration-500 ${
                   hoveredCard === 'managed' ? 'h-full' : 'h-0'
                 }`}
-                style={{ backgroundImage: 'linear-gradient(180deg, #3d5a80 0%, #00cc99 100%)' }}
+                style={{ backgroundImage: 'linear-gradient(180deg, #0ea5e9 0%, #14b8a6 100%)' }}
               />
 
               {/* Floating Icon */}
@@ -172,7 +172,7 @@ export default function Solutions() {
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
                   style={{
-                    backgroundImage: 'linear-gradient(135deg, #3d5a80 0%, #00cc99 100%)',
+                    backgroundImage: 'linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%)',
                     color: '#e0fbfc'
                   }}
                 >
@@ -211,7 +211,7 @@ export default function Solutions() {
                 }}
                 className="w-full py-4 px-6 font-black rounded-xl transition-all transform hover:scale-[1.02] shadow-xl uppercase tracking-wider text-sm"
                 style={{
-                  backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)',
+                  backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
                   color: '#e0fbfc'
                 }}
               >
@@ -227,8 +227,8 @@ export default function Solutions() {
 
 function Feature({ text, highlight = false }: { text: string; highlight?: boolean }) {
   const gradientStyle = highlight
-    ? 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
-    : 'linear-gradient(90deg, #00cc99 0%, #98c1d9 100%)';
+    ? 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
+    : 'linear-gradient(90deg, #14b8a6 0%, #98c1d9 100%)';
 
   return (
     <div className="flex items-center gap-3 group">
@@ -246,8 +246,8 @@ function Feature({ text, highlight = false }: { text: string; highlight?: boolea
 
 function Tag({ text, gradient }: { text: string; gradient?: string }) {
   const gradientStyle = gradient === 'lightblue-teal'
-    ? 'linear-gradient(90deg, #98c1d9 0%, #00cc99 100%)'
-    : 'linear-gradient(90deg, #00cc99 0%, #3d5a80 100%)'; // blue-teal (reversed)
+    ? 'linear-gradient(90deg, #98c1d9 0%, #14b8a6 100%)'
+    : 'linear-gradient(90deg, #14b8a6 0%, #0ea5e9 100%)'; // blue-teal (reversed)
 
   const textColor = gradient === 'lightblue-teal' ? '#0f141c' : '#e0fbfc';
 

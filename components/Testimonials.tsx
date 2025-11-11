@@ -420,15 +420,15 @@ export default function Testimonials({ industry }: TestimonialsProps = {}) {
   return (
     <section className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-black">
       {/* Subtle grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(61,90,128,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(61,90,128,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(14,165,233,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.02)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-14 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4" style={{ color: '#e0fbfc' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4" style={{ color: '#e0f2fe' }}>
             Trusted by{' '}
             <span className="text-transparent bg-clip-text" style={{
-              backgroundImage: 'linear-gradient(90deg, #3d5a80 0%, #00cc99 100%)'
+              backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)'
             }}>
               {content.subtitle}
             </span>
@@ -523,16 +523,16 @@ interface TestimonialCardProps {
 
 function TestimonialCard({ quote, author, role, company, industry, color }: TestimonialCardProps) {
   const gradientStyle = color === 'purple'
-    ? 'linear-gradient(90deg, #3d5a80 0%, #2d4560 100%)'
-    : 'linear-gradient(90deg, #00cc99 0%, #00b388 100%)';
+    ? 'linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%)'
+    : 'linear-gradient(90deg, #14b8a6 0%, #0d9488 100%)';
   const borderColor = color === 'purple' ? 'rgba(61, 90, 128, 0.3)' : 'rgba(0, 204, 153, 0.3)';
   const hoverBorderColor = color === 'purple' ? 'rgba(61, 90, 128, 0.5)' : 'rgba(0, 204, 153, 0.5)';
-  const badgeColor = color === 'purple' ? '#3d5a80' : '#00cc99';
+  const badgeColor = color === 'purple' ? '#0ea5e9' : '#14b8a6';
   const avatarBg = color === 'purple'
     ? 'linear-gradient(135deg, rgba(61, 90, 128, 0.2) 0%, rgba(61, 90, 128, 0.3) 100%)'
     : 'linear-gradient(135deg, rgba(0, 204, 153, 0.2) 0%, rgba(0, 204, 153, 0.3) 100%)';
   const avatarBorder = color === 'purple' ? 'rgba(61, 90, 128, 0.3)' : 'rgba(0, 204, 153, 0.3)';
-  const avatarHoverBorder = color === 'purple' ? '#3d5a80' : '#00cc99';
+  const avatarHoverBorder = color === 'purple' ? '#0ea5e9' : '#14b8a6';
 
   return (
     <div
@@ -553,7 +553,7 @@ function TestimonialCard({ quote, author, role, company, industry, color }: Test
             style={{
               background: avatarBg,
               borderColor: avatarBorder,
-              color: '#e0fbfc'
+              color: '#e0f2fe'
             }}
             onMouseEnter={(e) => e.currentTarget.style.borderColor = avatarHoverBorder}
             onMouseLeave={(e) => e.currentTarget.style.borderColor = avatarBorder}
@@ -582,8 +582,8 @@ interface StatCardProps {
 
 function StatCard({ number, label, color }: StatCardProps) {
   const gradientStyle = color === 'purple'
-    ? 'linear-gradient(90deg, #3d5a80 0%, #2d4560 100%)'
-    : 'linear-gradient(90deg, #00cc99 0%, #00b388 100%)';
+    ? 'linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%)'
+    : 'linear-gradient(90deg, #14b8a6 0%, #0d9488 100%)';
 
   return (
     <div

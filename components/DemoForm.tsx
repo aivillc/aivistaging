@@ -480,10 +480,10 @@ export default function DemoForm() {
             <div className="pt-4">
               <button
                 type="submit"
-                className="relative px-8 py-3 bg-gradient-to-r from-[#3d5a80] to-[#00cc99] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(61,90,128,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
+                className="relative px-8 py-3 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
               >
                 <span className="relative z-10">Submit</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00cc99] to-[#3d5a80] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6] to-[#0ea5e9] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </button>
             </div>
 
@@ -602,10 +602,10 @@ export default function DemoForm() {
                 </p>
                 <button
                   onClick={() => setShowThankYouPopup(false)}
-                  className="relative w-full py-3 px-8 bg-gradient-to-r from-[#3d5a80] to-[#00cc99] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(61,90,128,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
+                  className="relative w-full py-3 px-8 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group"
                 >
                   <span className="relative z-10">Close</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00cc99] to-[#3d5a80] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6] to-[#0ea5e9] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                 </button>
               </div>
             </div>
@@ -657,10 +657,10 @@ export default function DemoForm() {
               <button
                 type="submit"
                 disabled={isAnimating || !textInput.trim()}
-                className="relative px-8 py-3 bg-gradient-to-r from-[#3d5a80] to-[#00cc99] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(61,90,128,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
+                className="relative px-8 py-3 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10">Continue</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00cc99] to-[#3d5a80] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6] to-[#0ea5e9] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </button>
             </form>
           </div>
@@ -704,10 +704,10 @@ export default function DemoForm() {
                 <button
                   onClick={handleMultiselectConfirm}
                   disabled={isAnimating}
-                  className="relative mt-8 px-8 py-3 bg-gradient-to-r from-[#3d5a80] to-[#00cc99] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(61,90,128,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="relative mt-8 px-8 py-3 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-white font-bold rounded-xl transition-all duration-400 hover:shadow-[0_8px_30px_rgba(14,165,233,0.5)] hover:-translate-y-1 uppercase tracking-wider overflow-hidden group disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   <span className="relative z-10">Continue</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00cc99] to-[#3d5a80] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#14b8a6] to-[#0ea5e9] opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                 </button>
               )}
             </div>
