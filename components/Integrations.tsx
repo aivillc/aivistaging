@@ -1,5 +1,9 @@
 'use client';
 
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 interface CRMCarouselCardProps {
   name: string;
   category: string;
@@ -31,6 +35,51 @@ function CRMCarouselCard({ name, category }: CRMCarouselCardProps) {
 }
 
 export default function Integrations() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    companyName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    integrationName: '',
+    currentSystem: '',
+    useCase: '',
+    timeline: '',
+    additionalDetails: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    console.log('Custom Integration Request:', formData);
+    alert('Thank you! We\'ll contact you shortly to discuss your custom integration needs.');
+
+    // Reset form and close modal
+    setFormData({
+      companyName: '',
+      contactName: '',
+      email: '',
+      phone: '',
+      integrationName: '',
+      currentSystem: '',
+      useCase: '',
+      timeline: '',
+      additionalDetails: ''
+    });
+    setIsModalOpen(false);
+    setIsSubmitting(false);
+  };
+
   return (
     <section id="integrations" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-black">
       {/* Subtle grid overlay */}
@@ -188,14 +237,235 @@ export default function Integrations() {
           <p className="text-base sm:text-lg md:text-xl mb-8 max-w-2xl mx-auto" style={{ color: 'rgba(224, 251, 252, 0.7)' }}>
             We build custom integrations for our managed service clients. Our API-first architecture can connect to virtually any system.
           </p>
-          <button className="px-6 sm:px-8 py-3 sm:py-4 font-black rounded-lg transition-all transform hover:scale-105 shadow-2xl uppercase tracking-wider text-sm sm:text-base" style={{
-            backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
-            color: '#e0f2fe'
-          }}>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 sm:px-8 py-3 sm:py-4 font-black rounded-lg transition-all transform hover:scale-105 shadow-2xl uppercase tracking-wider text-sm sm:text-base"
+            style={{
+              backgroundImage: 'linear-gradient(90deg, #0ea5e9 0%, #14b8a6 100%)',
+              color: '#e0f2fe'
+            }}
+          >
             Request Custom Integration
           </button>
         </div>
       </div>
+
+      {/* Custom Integration Request Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={() => setIsModalOpen(false)}
+          />
+
+          {/* Modal Content */}
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-black to-gray-900 border-2 border-[#0ea5e9]/30 rounded-3xl shadow-2xl animate-scaleIn">
+            {/* Modal Header */}
+            <div className="sticky top-0 z-10 p-6 border-b border-[#0ea5e9]/30 bg-gradient-to-r from-[#0ea5e9]/10 to-[#14b8a6]/10 backdrop-blur-xl rounded-t-3xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black text-white mb-2">
+                    Request Custom Integration
+                  </h3>
+                  <p className="text-white/60 text-sm">
+                    Tell us about your integration needs and we'll build it for you
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#0ea5e9]/50 transition-all"
+                >
+                  <FontAwesomeIcon icon={faTimes} className="text-white text-lg" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              {/* Company Information */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] flex items-center justify-center text-sm font-black">1</span>
+                  Company Information
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-white/70 text-sm font-medium mb-2">
+                      Company Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                      placeholder="Your Company"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white/70 text-sm font-medium mb-2">
+                      Contact Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="contactName"
+                      value={formData.contactName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                      placeholder="John Doe"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white/70 text-sm font-medium mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                      placeholder="john@company.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white/70 text-sm font-medium mb-2">
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Integration Details */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] flex items-center justify-center text-sm font-black">2</span>
+                  Integration Details
+                </h4>
+
+                <div>
+                  <label className="block text-white/70 text-sm font-medium mb-2">
+                    What system do you need to integrate? *
+                  </label>
+                  <input
+                    type="text"
+                    name="integrationName"
+                    value={formData.integrationName}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                    placeholder="e.g., SAP, Oracle, Custom ERP"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/70 text-sm font-medium mb-2">
+                    Current System/Platform
+                  </label>
+                  <input
+                    type="text"
+                    name="currentSystem"
+                    value={formData.currentSystem}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                    placeholder="e.g., Salesforce, HubSpot"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/70 text-sm font-medium mb-2">
+                    Use Case *
+                  </label>
+                  <textarea
+                    name="useCase"
+                    value={formData.useCase}
+                    onChange={handleInputChange}
+                    required
+                    rows={3}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all resize-none"
+                    placeholder="Describe how you want to use this integration..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/70 text-sm font-medium mb-2">
+                    Timeline *
+                  </label>
+                  <select
+                    name="timeline"
+                    value={formData.timeline}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all"
+                  >
+                    <option value="" className="bg-gray-900">Select timeline</option>
+                    <option value="urgent" className="bg-gray-900">Urgent (1-2 weeks)</option>
+                    <option value="soon" className="bg-gray-900">Soon (1 month)</option>
+                    <option value="flexible" className="bg-gray-900">Flexible (2-3 months)</option>
+                    <option value="planning" className="bg-gray-900">Planning phase</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Additional Details */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] flex items-center justify-center text-sm font-black">3</span>
+                  Additional Details
+                </h4>
+
+                <div>
+                  <label className="block text-white/70 text-sm font-medium mb-2">
+                    Any additional requirements or technical details?
+                  </label>
+                  <textarea
+                    name="additionalDetails"
+                    value={formData.additionalDetails}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-[#0ea5e9]/20 transition-all resize-none"
+                    placeholder="API requirements, data format preferences, security considerations..."
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex gap-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-bold rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] hover:shadow-[0_8px_30px_rgba(14,165,233,0.4)] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black rounded-xl transition-all hover:scale-105 disabled:scale-100"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Request'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
