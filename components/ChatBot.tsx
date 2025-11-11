@@ -730,8 +730,8 @@ export default function ChatBot() {
               <div className="flex-1">
                 <h3 className="text-white font-bold text-lg">AIVI</h3>
                 <div className="flex items-center gap-1">
-                  <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-500'} animate-pulse`} />
-                  <p className="text-white/50 text-xs">{isConnected ? 'Connected' : 'Demo Mode'}</p>
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <p className="text-white/50 text-xs">Online</p>
                   {agentConnected && (
                     <>
                       <span className="text-white/30 mx-1">•</span>
