@@ -65,7 +65,7 @@ export default function AboutUs() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         {/* Hero Section */}
-        <div className="text-center mb-20 md:mb-28">
+        <div className="text-center mb-20 md:mb-28 pt-16 md:pt-20">
           <div className="inline-block mb-6 animate-fadeInUp">
             <div className="px-6 py-3 bg-gradient-to-r from-[rgba(14,165,233,0.1)] to-[rgba(20,184,166,0.1)] border-2 border-[rgba(14,165,233,0.2)] rounded-full shadow-[0_4px_20px_rgba(14,165,233,0.1)]">
               <span className="text-sm font-bold bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-transparent bg-clip-text uppercase tracking-widest">
@@ -87,27 +87,31 @@ export default function AboutUs() {
           </p>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 md:mb-28">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="relative group p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-[#0ea5e9]/50 transition-all duration-500 hover:scale-105"
-              style={{
-                animationDelay: `${index * 100}ms`
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0ea5e9]/5 to-[#14b8a6]/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative">
-                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-transparent bg-clip-text mb-2">
-                  {stat.value}
+        {/* Stats Section - Light Background */}
+        <div className="relative -mx-4 sm:-mx-6 px-4 sm:px-6 py-20 md:py-28 mb-20 md:mb-28 bg-gradient-to-br from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="relative group p-8 bg-white backdrop-blur-xl border border-gray-200 rounded-2xl hover:border-[#0ea5e9]/50 transition-all duration-500 hover:scale-105 shadow-lg"
+                  style={{
+                    animationDelay: `${index * 100}ms`
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0ea5e9]/5 to-[#14b8a6]/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="relative">
+                    <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-transparent bg-clip-text mb-2">
+                      {stat.value}
+                    </div>
+                    <div className="text-gray-600 text-sm md:text-base font-medium">
+                      {stat.label}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-white/60 text-sm md:text-base font-medium">
-                  {stat.label}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Story Section */}
@@ -163,38 +167,40 @@ export default function AboutUs() {
           </div>
         </div>
 
-        {/* Values Section */}
-        <div className="mb-20 md:mb-28">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
-              Our{' '}
-              <span className="bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-transparent bg-clip-text">
-                Values
-              </span>
-            </h2>
-            <p className="text-xl text-white/60 max-w-3xl mx-auto">
-              The principles that guide everything we do
-            </p>
-          </div>
+        {/* Values Section - Light Background */}
+        <div className="relative -mx-4 sm:-mx-6 px-4 sm:px-6 py-20 md:py-28 mb-20 md:mb-28 bg-gradient-to-br from-white to-gray-50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+                Our{' '}
+                <span className="bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] text-transparent bg-clip-text">
+                  Values
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                The principles that guide everything we do
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {values.map((value, index) => (
-              <div
-                key={index}
-                className="group relative p-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-[#0ea5e9]/50 transition-all duration-500 hover:scale-[1.02]"
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br from-[#0ea5e9]/5 to-[#14b8a6]/5 rounded-2xl transition-opacity duration-500 ${hoveredCard === index ? 'opacity-100' : 'opacity-0'}`} />
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                    <FontAwesomeIcon icon={value.icon} className="text-white text-2xl" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {values.map((value, index) => (
+                <div
+                  key={index}
+                  className="group relative p-8 bg-white backdrop-blur-xl border border-gray-200 rounded-2xl hover:border-[#0ea5e9]/50 transition-all duration-500 hover:scale-[1.02] shadow-lg"
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br from-[#0ea5e9]/5 to-[#14b8a6]/5 rounded-2xl transition-opacity duration-500 ${hoveredCard === index ? 'opacity-100' : 'opacity-0'}`} />
+                  <div className="relative">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <FontAwesomeIcon icon={value.icon} className="text-white text-2xl" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">{value.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{value.description}</p>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{value.title}</h3>
-                  <p className="text-white/60 leading-relaxed">{value.description}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 

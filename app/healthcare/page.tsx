@@ -21,7 +21,7 @@ export default function HealthcarePage() {
     <main className="min-h-screen bg-black">
       <TronHeader />
       <Navigation />
-      <Hero industry="Healthcare" />
+      <Hero />
       <Dashboard industry="Healthcare" />
       <Features industry="Healthcare" />
       <Solutions />

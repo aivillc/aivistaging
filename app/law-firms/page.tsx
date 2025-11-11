@@ -14,7 +14,7 @@ export default function LawFirmsPage() {
     <main className="min-h-screen bg-white">
       <TronHeader />
       <Navigation />
-      <Hero industry="Law Firms" />
+      <Hero />
       <Dashboard industry="Law Firms" />
       <Features industry="Law Firms" />
       <Solutions />

@@ -14,7 +14,7 @@ export default function RealEstatePage() {
     <main className="min-h-screen bg-white">
       <TronHeader />
       <Navigation />
-      <Hero industry="Real Estate" />
+      <Hero />
       <Dashboard industry="Real Estate" />
       <Features industry="Real Estate" />
       <Solutions />

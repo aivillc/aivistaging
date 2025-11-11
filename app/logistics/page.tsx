@@ -14,7 +14,7 @@ export default function LogisticsPage() {
     <main className="min-h-screen bg-white">
       <TronHeader />
       <Navigation />
-      <Hero industry="Logistics" />
+      <Hero />
       <Dashboard industry="Logistics" />
       <Features industry="Logistics" />
       <Solutions />

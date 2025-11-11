@@ -16,7 +16,9 @@
       "Bash(git fetch:*)",
       "Bash(git restore:*)",
       "Bash(git tag:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(gh auth status:*)",
+      "Bash(gh auth login:*)"
     ],
     "deny": [],
     "ask": []

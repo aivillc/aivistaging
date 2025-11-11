@@ -14,7 +14,7 @@ export default function FinancialPage() {
     <main className="min-h-screen bg-white">
       <TronHeader />
       <Navigation />
-      <Hero industry="Financial" />
+      <Hero />
       <Dashboard industry="Financial" />
       <Features industry="Financial" />
       <Solutions />
