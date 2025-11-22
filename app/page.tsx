@@ -5,6 +5,7 @@ import PainPoints from '@/components/PainPoints';
 import Features from '@/components/Features';
 import Solutions from '@/components/Solutions';
 import Integrations from '@/components/Integrations';
+import PricingPackages from '@/components/PricingPackages';
 import Dashboard from '@/components/Dashboard';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
@@ -19,6 +20,7 @@ export default function Home() {
       <Features />
       <Solutions />
       {/* <Integrations /> */}
+      <PricingPackages />
       <Dashboard />
       <Testimonials />
       <Footer />

@@ -9,7 +9,7 @@ export default function Solutions() {
   const [hoveredCard, setHoveredCard] = useState<'saas' | 'managed' | null>(null);
 
   return (
-    <section id="solutions" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-white overflow-hidden">
+    <section id="solutions" className="relative py-16 sm:py-20 md:py-24 px-4 sm:px-6 bg-white overflow-hidden" style={{ display: 'none' }}>
       <div className="relative max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16 md:mb-20">

@@ -36,6 +36,14 @@
   /* Theme Variables */
   --background: var(--main-dark);
   --foreground: var(--accent-light);
+
+  /* Apollo Design Tokens */
+  --apollo-sand-10: #faf9f7;
+  --apollo-sand-40: #e8e4dd;
+  --apollo-sand-60: #d1c9bb;
+  --apollo-text-header: #1a1a1a;
+  --apollo-text-body: #4a4a4a;
+  --apollo-bg-white: #ffffff;
 }
 
 @theme inline {
@@ -65,6 +73,10 @@
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* AIVI v2 Fonts */
+  --font-inter: var(--font-inter);
+  --font-work-sans: var(--font-work-sans);
 }
 
 html {
@@ -90,9 +102,16 @@ body {
 
 /* Modern Typography Enhancements */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  font-family: var(--font-work-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
   line-height: 1.2;
+}
+
+/* Body text - lighter weight for better readability */
+p, span, div, li, label, input, textarea {
+  font-weight: 300;
+  letter-spacing: 0.01em;
 }
 
 h1 {
@@ -183,6 +202,17 @@ button:active, a:active {
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -220,6 +250,10 @@ button:active, a:active {
 
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.5s ease-out;
 }
 
 .animate-slideInLeft {

@@ -380,7 +380,7 @@ export default function DemoForm() {
   if (showContactForm) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="relative bg-white/10 backdrop-blur-xl border-2 border-white/25 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.3),0_0_100px_rgba(20,184,166,0.2)]">
+        <div className="relative bg-white/20 backdrop-blur-xl border-2 border-white/30 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.4),0_0_100px_rgba(20,184,166,0.3)]">
           <div className="space-y-12">
             <div>
               <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-white mb-4 leading-tight">
@@ -508,7 +508,7 @@ export default function DemoForm() {
   if (showResults) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="relative bg-white/10 backdrop-blur-xl border-2 border-white/25 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.3),0_0_100px_rgba(20,184,166,0.2)]">
+        <div className="relative bg-white/20 backdrop-blur-xl border-2 border-white/30 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.4),0_0_100px_rgba(20,184,166,0.3)]">
           <div className="space-y-16">
             {/* Header */}
             <div>
@@ -621,7 +621,7 @@ export default function DemoForm() {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Background container with enhanced visibility */}
-      <div className="relative bg-white/10 backdrop-blur-xl border-2 border-white/25 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.3),0_0_100px_rgba(20,184,166,0.2)]">
+      <div className="relative bg-white/20 backdrop-blur-xl border-2 border-white/30 rounded-xl md:rounded-2xl p-6 sm:p-8 md:p-12 shadow-[0_0_60px_rgba(14,165,233,0.4),0_0_100px_rgba(20,184,166,0.3)]">
         {/* Progress Bar */}
         <div className="mb-12">
           <div className="h-px bg-white/10">

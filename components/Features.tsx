@@ -188,6 +188,9 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
     ? 'linear-gradient(135deg, #0ea5e9 0%, #2d4560 100%)'
     : 'linear-gradient(135deg, #14b8a6 0%, #00b388 100%)';
 
+  const glowColor = gradient === 'blue' ? 'rgba(61, 90, 128, 0.3)' : 'rgba(0, 204, 153, 0.3)';
+  const overlayColor = gradient === 'blue' ? 'rgba(61, 90, 128, 0.05)' : 'rgba(0, 204, 153, 0.05)';
+
   return (
     <div
       className="group relative"
@@ -277,6 +280,14 @@ function FeatureCard({ title, description, features, icon, gradient }: FeatureCa
             ))}
           </ul>
         </div>
+
+        {/* Background gradient overlay on hover */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl pointer-events-none"
+          style={{
+            background: `linear-gradient(135deg, ${overlayColor} 0%, transparent 100%)`
+          }}
+        />
       </div>
     </div>
   );

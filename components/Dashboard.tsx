@@ -210,29 +210,6 @@ export default function Dashboard({ industry }: DashboardProps = {}) {
           </div>
         </div>
 
-        {/* Dashboard Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <DashboardFeature
-            title="Lead Scoring"
-            description="AI-powered lead qualification and prioritization"
-            color="purple"
-          />
-          <DashboardFeature
-            title="Call Coaching"
-            description="Real-time feedback and coaching for human agents"
-            color="orange"
-          />
-          <DashboardFeature
-            title="Transfer Analytics"
-            description="Track when and why AI transfers to humans"
-            color="purple"
-          />
-          <DashboardFeature
-            title="A/B Testing"
-            description="Optimize messaging and timing automatically"
-            color="orange"
-          />
-        </div>
       </div>
     </section>
   );
