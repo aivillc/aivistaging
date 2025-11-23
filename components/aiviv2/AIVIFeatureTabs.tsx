@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 const features = [
   {
@@ -87,91 +87,14 @@ const features = [
 
 export default function AIVIFeatureTabs() {
   const [activeTab, setActiveTab] = useState('outbound');
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const navHeight = 72; // Account for fixed navigation height
-
-      // Lock when section reaches bottom of navigation
-      if (rect.top <= navHeight && rect.bottom > windowHeight) {
-        setIsScrollLocked(true);
-      } else {
-        setIsScrollLocked(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!isScrollLocked) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      const currentIndex = features.findIndex(f => f.id === activeTab);
-
-      if (e.deltaY > 0) {
-        // Scrolling down
-        if (currentIndex < features.length - 1) {
-          e.preventDefault();
-          const nextTab = features[currentIndex + 1];
-          setActiveTab(nextTab.id);
-        } else {
-          // On last tab, unlock and allow scroll
-          setIsScrollLocked(false);
-        }
-      } else {
-        // Scrolling up
-        if (currentIndex > 0) {
-          e.preventDefault();
-          const prevTab = features[currentIndex - 1];
-          setActiveTab(prevTab.id);
-        } else {
-          // On first tab, unlock and allow scroll
-          setIsScrollLocked(false);
-        }
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [isScrollLocked, activeTab]);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    if (isScrollLocked) {
-      // Lock section in viewport below navigation
-      sectionRef.current.style.position = 'fixed';
-      sectionRef.current.style.top = '72px';
-      sectionRef.current.style.left = '0';
-      sectionRef.current.style.right = '0';
-      sectionRef.current.style.zIndex = '50';
-    } else {
-      // Reset to normal flow
-      sectionRef.current.style.position = 'relative';
-      sectionRef.current.style.top = '';
-      sectionRef.current.style.left = '';
-      sectionRef.current.style.right = '';
-      sectionRef.current.style.zIndex = '';
-    }
-  }, [isScrollLocked]);
 
   const activeFeature = features.find((f) => f.id === activeTab) || features[0];
 
   return (
-    <section ref={sectionRef} className="w-full bg-[#E8E5E0] px-6 py-6">
+    <section className="w-full bg-[#E8E5E0] px-6 py-6">
       <div className="w-full max-w-[calc(100%-48px)] mx-auto bg-white rounded-3xl shadow-lg p-12 lg:p-16 min-h-screen">
         {/* Section Header */}
-        <div className="text-center mb-16 mt-12">
+        <div className="text-center mb-8 mt-12">
           <h2 className="text-[48px] leading-[1.2] font-normal text-[#000000] mb-4 max-w-[800px] mx-auto">
             Everything you need, from finding leads to winning deals
           </h2>
@@ -180,83 +103,84 @@ export default function AIVIFeatureTabs() {
           </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-[280px_1fr] gap-12 items-start">
-          {/* Left Column - Vertical Tab Navigation */}
-          <div className="flex flex-col gap-3">
-            {features.map((feature) => (
-              <button
-                key={feature.id}
-                onClick={() => setActiveTab(feature.id)}
-                className={`w-full text-left py-5 px-6 rounded-xl transition-all duration-300 ${
-                  activeTab === feature.id
-                    ? `${feature.activeColor} text-[#000000] shadow-lg`
-                    : 'bg-[#F5F5F5] text-[#666666] hover:bg-[#E8E8E8]'
-                }`}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  {feature.icon}
-                  <span className="text-[13px] font-semibold uppercase tracking-[0.5px]">
-                    {feature.title}
-                  </span>
-                </div>
-                <p className="text-[13px] leading-[1.4] opacity-80">
-                  {feature.description}
-                </p>
+        {/* Horizontal Tab Navigation */}
+        <div className="flex gap-2 mb-12 overflow-x-auto pb-2">
+          {features.map((feature) => (
+            <button
+              key={feature.id}
+              onClick={() => setActiveTab(feature.id)}
+              className={`flex-1 px-4 py-2.5 rounded-lg transition-all duration-300 whitespace-nowrap ${
+                activeTab === feature.id
+                  ? `${feature.activeColor} text-[#000000] shadow-md`
+                  : 'bg-[#F5F5F5] text-[#666666] hover:bg-[#E8E8E8]'
+              }`}
+            >
+              <span className="text-[13px] font-semibold uppercase tracking-[0.5px]">
+                {feature.title}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Main Content Grid - Two Columns */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Column - Content */}
+          <div
+            key={activeTab}
+            className="space-y-8 animate-[fadeInUp_0.5s_ease-out]"
+          >
+            <h3 className="text-[42px] leading-[1.25] font-normal text-[#000000]">
+              {activeFeature.mainTitle}
+            </h3>
+
+            {/* CTA Buttons */}
+            <div className="flex gap-3 flex-wrap">
+              <button className="px-6 py-3 bg-[#000000] text-white text-[15px] font-semibold rounded-md hover:bg-[#222222] transition-colors">
+                Get started for free
               </button>
-            ))}
-          </div>
-
-          {/* Right Column - Content */}
-          <div className="space-y-12">
-            {/* Text Content */}
-            <div>
-              <h3 className="text-[42px] leading-[1.25] font-normal text-[#000000] mb-8">
-                {activeFeature.mainTitle}
-              </h3>
-
-              {/* CTA Buttons */}
-              <div className="flex gap-3 mb-12 flex-wrap">
-                <button className="px-6 py-3 bg-[#000000] text-white text-[15px] font-semibold rounded-md hover:bg-[#222222] transition-colors">
-                  Get started for free
-                </button>
-                <button className="px-6 py-3 bg-white border border-[#000000] text-[#000000] text-[15px] font-semibold rounded-md hover:bg-[#F5F5F5] transition-colors">
-                  Learn more
-                </button>
-              </div>
-
-              {/* Feature List */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {activeFeature.features.map((item, index) => (
-                  <div key={index} className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-[#000000] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-[15px] leading-[1.5] text-[#333333]">{item}</span>
-                  </div>
-                ))}
-              </div>
+              <button className="px-6 py-3 bg-white border border-[#000000] text-[#000000] text-[15px] font-semibold rounded-md hover:bg-[#F5F5F5] transition-colors">
+                Learn more
+              </button>
             </div>
 
-            {/* Product Demo */}
-            <div className={`relative rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)] ${activeFeature.activeColor}`}>
-              <div className="aspect-[16/9] p-8 flex items-center justify-center">
-                <div className="w-full bg-white/20 backdrop-blur-sm rounded-xl p-6 space-y-4">
-                  <div className="h-4 bg-white/30 rounded w-3/4"></div>
-                  <div className="h-4 bg-white/30 rounded w-full"></div>
-                  <div className="h-4 bg-white/30 rounded w-5/6"></div>
-                  <div className="mt-6 space-y-3">
-                    <div className="h-12 bg-[#E5FF00] rounded-lg flex items-center justify-center">
-                      <span className="text-[14px] font-semibold text-[#000000]">{activeFeature.title} Dashboard</span>
-                    </div>
-                    <div className="h-10 bg-white/30 rounded-lg"></div>
-                    <div className="h-10 bg-white/30 rounded-lg"></div>
+            {/* Feature List */}
+            <div className="space-y-4">
+              {activeFeature.features.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex gap-3 items-start animate-[fadeInLeft_0.5s_ease-out]"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <svg className="w-5 h-5 text-[#000000] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="text-[15px] leading-[1.5] text-[#333333]">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column - Product Demo */}
+          <div
+            key={`demo-${activeTab}`}
+            className={`relative rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)] ${activeFeature.activeColor} animate-[fadeInRight_0.5s_ease-out]`}
+          >
+            <div className="aspect-[16/9] p-8 flex items-center justify-center">
+              <div className="w-full bg-white/20 backdrop-blur-sm rounded-xl p-6 space-y-4">
+                <div className="h-4 bg-white/30 rounded w-3/4"></div>
+                <div className="h-4 bg-white/30 rounded w-full"></div>
+                <div className="h-4 bg-white/30 rounded w-5/6"></div>
+                <div className="mt-6 space-y-3">
+                  <div className="h-12 bg-[#E5FF00] rounded-lg flex items-center justify-center">
+                    <span className="text-[14px] font-semibold text-[#000000]">{activeFeature.title} Dashboard</span>
                   </div>
+                  <div className="h-10 bg-white/30 rounded-lg"></div>
+                  <div className="h-10 bg-white/30 rounded-lg"></div>
                 </div>
               </div>
             </div>
