@@ -1,107 +1,107 @@
 'use client';
 
 const companies = [
-    'AUTODESK',
-    'Dolby',
-    'SMARTLING',
-    'Realis',
-    'ANTHROPIC',
-    'kandji',
-    'DocuSign',
-  ];
+  { name: 'AUTODESK', style: 'font-bold tracking-wide' },
+  { name: 'Dolby', style: 'font-bold' },
+  { name: 'SMARTLING', style: 'font-bold tracking-wide' },
+  { name: 'Realis', style: 'font-serif italic' },
+  { name: 'ANTHROPIC', style: 'font-bold tracking-wider' },
+  { name: 'kandji', style: 'font-bold' },
+  { name: 'DocuSign', style: 'font-bold' },
+];
 
-  const stats = [
-    { label: '73% of all successful transfers occur within 13 seconds of outreach', number: '73%' },
-    { label: 'We helped close twice as many loans per month', number: '2X' },
-    { label: 'We were 300% more productive than their contact center', number: '300%' },
-  ];
+const stats = [
+  { label: '73% of all successful transfers occur within 13 seconds of outreach', number: '73%', company: 'Meridian Financial' },
+  { label: 'We helped close twice as many loans per month', number: '2X', company: 'LoanPro' },
+  { label: 'We were 300% more productive than their contact center', number: '300%', company: 'TechVista' },
+];
 
 export default function AIVISocialProof() {
   return (
-    <section className="w-full bg-[#E8E5E0] px-3 sm:px-6 py-6">
-      <div className="w-full max-w-[calc(100%-24px)] sm:max-w-[calc(100%-48px)] mx-auto bg-white rounded-2xl sm:rounded-3xl shadow-lg p-6 sm:p-8 md:p-12 lg:p-16">
-        {/* Company Logos Bar */}
-        <div className="text-left mb-8 sm:mb-12 md:mb-16">
-          <p className="text-[10px] sm:text-[11px] font-bold tracking-[1.5px] text-[#666666] uppercase mb-6 sm:mb-8 animate-[fadeIn_0.6s_ease-out]">
+    <section className="w-full bg-[#E8E5E0] relative">
+      {/* Main Content Area */}
+      <div className="px-6 sm:px-12 md:px-16 lg:px-24 pt-16 pb-32 sm:pb-40 md:pb-48">
+        {/* Top Row: Label left, Company logos right */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-16 sm:mb-20 md:mb-24">
+          <p className="text-[11px] sm:text-[12px] font-medium tracking-[2px] text-[#666666] uppercase">
             JOIN OVER 500,000 COMPANIES USING AIVI
           </p>
-          <div className="relative overflow-hidden">
-            {/* Left blur gradient */}
-            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
 
-            {/* Right blur gradient */}
-            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+          {/* Company Logos */}
+          <div className="flex items-center gap-6 sm:gap-8 md:gap-10 flex-wrap">
+            {companies.map((company, index) => (
+              <span
+                key={index}
+                className={`text-[14px] sm:text-[16px] text-[#1a1a1a] ${company.style}`}
+              >
+                {company.name}
+              </span>
+            ))}
+          </div>
+        </div>
 
-            {/* Infinite scrolling container */}
-            <div className="flex items-center animate-[scroll_40s_linear_infinite]">
-              {/* Render multiple sets for seamless infinite loop */}
-              {[...Array(4)].map((_, setIndex) => (
-                companies.map((company, index) => (
-                  <div
-                    key={`set-${setIndex}-${index}`}
-                    className="h-6 sm:h-8 flex items-center justify-center text-[#666666] opacity-60 hover:opacity-100 transition-all duration-300 filter grayscale hover:grayscale-0 hover:scale-110 cursor-pointer flex-shrink-0 mx-4 sm:mx-8"
-                  >
-                    <span className={`text-[14px] sm:text-[18px] whitespace-nowrap ${company === 'Realis' ? 'font-serif italic' : 'font-bold'}`}>
-                      {company}
-                    </span>
-                  </div>
-                ))
-              ))}
+        {/* Testimonial with Author */}
+        <div className="grid lg:grid-cols-[1fr_auto] gap-12 lg:gap-24 mb-20 sm:mb-28 md:mb-36">
+          {/* Quote */}
+          <blockquote className="text-[28px] sm:text-[38px] md:text-[48px] lg:text-[56px] leading-[1.15] font-normal text-[#000000] tracking-[-0.02em]">
+            "Every rep is more productive with AIVI.<br />We booked 75% more meetings<br />while cutting manual work in half."
+          </blockquote>
+
+          {/* Author */}
+          <div className="flex flex-col justify-end lg:text-right">
+            <div className="text-[11px] sm:text-[12px] font-medium tracking-[1.5px] text-[#666666] uppercase mb-1">
+              ANDREW FRONING
+            </div>
+            <div className="text-[11px] sm:text-[12px] font-medium tracking-[1.5px] text-[#321ca3] uppercase mb-4">
+              BDR LEADER
+            </div>
+            <div className="text-[16px] sm:text-[18px] font-bold text-[#1a1a1a]">
+              CYERA
             </div>
           </div>
         </div>
 
-        <style jsx>{`
-          @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
-          }
-        `}</style>
-
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 md:gap-12 lg:gap-16 items-start">
-          {/* Left Column - Testimonial */}
-          <div className="text-left animate-[fadeInLeft_0.8s_ease-out]">
-            <blockquote className="text-[24px] sm:text-[32px] md:text-[38px] lg:text-[42px] leading-[1.25] font-normal text-[#000000] mb-6 sm:mb-8 relative">
-              <span className="absolute -top-4 sm:-top-6 -left-1 sm:-left-2 text-[50px] sm:text-[80px] text-[#321ca3] opacity-30 font-serif">"</span>
-              <span className="relative">
-                Contact rate increased 45% and lead to close rate increased by 23%. Saving us 30% in costs for every lead we closed.
-              </span>
-            </blockquote>
-          </div>
-
-          {/* Vertical Divider */}
-          <div className="hidden lg:block w-[1px] h-full bg-gradient-to-b from-transparent via-[#E0E0E0] to-transparent self-stretch min-h-[400px]" />
-
-          {/* Right Column - Stats Cards */}
-          <div className="grid grid-cols-1 gap-4 sm:gap-6">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="group relative bg-white rounded-xl p-6 sm:p-8 text-left shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:-translate-y-2 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all duration-300 cursor-pointer overflow-hidden"
-                style={{
-                  animation: `fadeInRight 0.6s ease-out ${index * 0.15}s both`,
-                }}
-              >
-                {/* Background gradient effect */}
-                <div className={`absolute inset-0 bg-gradient-to-br from-[#321ca3]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-
-                <div className="relative z-10">
-                  <div className="text-[42px] sm:text-[52px] lg:text-[56px] leading-[1] font-bold text-[#000000] mb-3 sm:mb-4 tracking-[-0.02em] group-hover:scale-110 transition-transform duration-300 origin-left">
-                    {stat.number}
-                  </div>
-                  <p className="text-[12px] sm:text-[13px] font-medium text-[#666666] leading-[1.4] group-hover:text-[#000000] transition-colors">
-                    {stat.label}
-                  </p>
-                </div>
+        {/* Stats Cards - 3 column */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {stats.map((stat, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-6 sm:p-8 min-h-[220px] sm:min-h-[260px] flex flex-col justify-between shadow-sm"
+            >
+              {/* Top row: Label left, Company right */}
+              <div className="flex items-start justify-between gap-4">
+                <p className="text-[13px] sm:text-[14px] font-normal text-[#9a8a7c] leading-[1.5] max-w-[180px]">
+                  {stat.label}
+                </p>
+                <span className="text-[14px] sm:text-[15px] font-bold text-[#1a1a1a] whitespace-nowrap flex-shrink-0">
+                  {stat.company}
+                </span>
               </div>
-            ))}
-          </div>
+
+              {/* Bottom: Large number */}
+              <div className="text-[70px] sm:text-[90px] lg:text-[110px] leading-[1] font-light text-[#000000] tracking-[-0.03em] mt-[15px]">
+                {stat.number}
+              </div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Asymmetrical Diagonal Divider - Beige to White transition */}
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden">
+        <svg
+          className="w-full h-[120px] sm:h-[160px] md:h-[200px]"
+          viewBox="0 0 1440 200"
+          preserveAspectRatio="none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* White fill for the diagonal shape */}
+          <path
+            d="M0 200L1440 200L1440 60L0 200Z"
+            fill="white"
+          />
+        </svg>
       </div>
     </section>
   );

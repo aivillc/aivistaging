@@ -9,7 +9,7 @@ export default function AIVIFooter() {
   const footerColumns = [
     {
       title: 'Get started',
-      links: ['Sign up for free', 'Pricing', 'Request a demo'],
+      links: ['Get started', 'Pricing', 'Request a demo'],
     },
     {
       title: 'Solutions',

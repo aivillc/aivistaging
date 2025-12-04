@@ -22,11 +22,11 @@ export default function AIVICTASection() {
           {/* Left Column - Text and Form */}
           <div className="space-y-6 sm:space-y-8">
             <h2 className="text-[32px] sm:text-[42px] md:text-[52px] lg:text-[58px] leading-[1.1] font-normal text-[#000000] tracking-[-0.015em]">
-              Why buy five tools when AIVI does it better?
+              Apple Call Screening Will Drop Your Contact Rate by 20% in 2026
             </h2>
 
             <p className="text-[15px] sm:text-[17px] leading-[1.6] text-[#666666] max-w-[500px] mb-8 sm:mb-12">
-              AIVI replaces your data provider, outreach platform, dialer, enrichment, and CRM—saving teams thousands each year.
+              With iOS26 released and adoption increasing, Apple&apos;s call screening will prevent unknown numbers reaching their customers even if a call has been requested. Our AI agent is able to recognise, converse with and reach the end customer in a dynamic manner. Making sure you reach your customers.
             </p>
 
             {/* Email Form */}
