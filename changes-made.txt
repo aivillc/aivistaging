@@ -2,7 +2,127 @@ AIVI STAGING - CHANGELOG
 ========================
 
 Current Version: v1.0.12
-Date: December 7, 2025
+Date: December 8, 2025
+
+================================================================================
+SITE-WIDE DEMO POPUP - CONTEXT IMPLEMENTATION (December 8, 2025)
+================================================================================
+
+PROMPT: "every 'Book Demo' button through all the /aiviv3 site should show this popup"
+
+CHANGES MADE:
+
+1. Created DemoPopupContext (NEW FILE)
+   - components/aiviv3/DemoPopupContext.tsx: React Context for site-wide popup state
+   - Provides isOpen, openDemoPopup(), and closeDemoPopup() functions
+   - useDemoPopup() hook for easy access from any component
+
+2. Updated Layout to Use Context Provider
+   - app/aiviv3/layout.tsx: Wrapped children with DemoPopupProvider
+   - DemoPopup component rendered at layout level (available on all pages)
+   - All /aiviv3 pages now have access to popup context
+
+3. Updated AIVINavigation Component
+   - Changed from prop-based callback to context-based
+   - Both desktop and mobile "Book a Demo" buttons use openDemoPopup()
+   - Removed onDemoClick prop in favor of context
+
+4. Updated Page Components:
+   - app/aiviv3/page.tsx: Simplified, removed local popup state (uses context)
+   - app/aiviv3/use-cases/page.tsx: Added useDemoPopup, updated "Book a Demo" button
+   - app/aiviv3/features/page.tsx: Added 'use client', useDemoPopup for both buttons
+   - app/aiviv3/solutions/page.tsx: Added 'use client', useDemoPopup, removed metadata
+
+5. Updated Shared Components:
+   - components/aiviv3/shared/IndustryHero.tsx: Uses useDemoPopup for "Book a Demo"
+   - components/aiviv3/shared/IndustryCTA.tsx: Uses useDemoPopup for "Get Started"
+   - These shared components are used across all industry solution pages
+
+6. Industry Pages Now Support Popup:
+   - /aiviv3/solutions/financial-services
+   - /aiviv3/solutions/healthcare
+   - /aiviv3/solutions/hospitality
+   - /aiviv3/solutions/legal
+   - /aiviv3/solutions/real-estate
+   - /aiviv3/solutions/retail
+
+================================================================================
+DEMO POPUP MODAL (December 8, 2025)
+================================================================================
+
+PROMPT: "In the main /aiviv3 homepage, I want a pop up to be shown when the user presses the 'Book A Demo' button on the top right. The popup design and feel needs to be modern, clean, sophisticated, premium, high quality, using the site's colors. Add a bunch of fields regarding our site, and when completed to send a payload to a test webhook for now, that will get changed later. When the popup is open, slightly blur the background"
+
+CHANGES MADE:
+
+1. Created DemoPopup Component (NEW FILE)
+   - components/aiviv3/DemoPopup.tsx: Modern, multi-step demo booking popup
+   - Premium design with gradient accents (orange to purple theme)
+   - 3-step form flow: Personal Info → Company Info → Scheduling
+   - Progress indicator with animated step transitions
+   
+2. Form Fields Include:
+   - Step 1: First Name, Last Name, Email, Phone
+   - Step 2: Company, Job Title, Company Size, Industry, Current Challenges (multi-select)
+   - Step 3: Preferred Date, Preferred Time, How Did You Hear, Additional Notes
+   
+3. Design Features:
+   - Backdrop blur effect when popup is open
+   - Gradient top bar (orange → purple)
+   - Animated popup entrance (scale + fade)
+   - Step-by-step animations on navigation
+   - Trust indicators at bottom (security, no spam, 30-min demo)
+   - Success state with checkmark animation
+   
+4. Technical Implementation:
+   - Body scroll lock when popup open
+   - Escape key to close
+   - Form validation per step
+   - Webhook submission (test URL for now)
+   - Form reset on close
+   
+5. Updated AIVINavigation Component
+   - Added optional onDemoClick callback prop
+   - Desktop "Book a Demo" button triggers popup when callback provided
+   - Mobile menu "Book a Demo" button also triggers popup
+   - Falls back to Link behavior when no callback provided
+   
+6. Updated Homepage (/aiviv3)
+   - Added 'use client' directive
+   - Added useState for popup state management
+   - Blur effect on main content when popup open
+   - DemoPopup component integrated
+
+================================================================================
+USE CASES PAGE SIDEBAR SPACING & SCROLL FIX (December 8, 2025)
+================================================================================
+
+PROMPT: "fix the spacing in the sidebar in Use Cases page (the sidebar needs to come a bit lower and more to the right, also aligned with the heading). Make sure the fixed sidebar doesn't overlap over the footer, it needs to stop on the same level of the CTA. The sidebar is in 2 different places, it's closer to the section once you start scrolling, and when it stops at the CTA it moves to the left. I need it to have equal margins on both sides, and also it needs to stop lower, right before the footer starts, with a margin of 50px from the footer. Can you make sure that the sidebar stopping aligns with the last section? It's currently a bunch of pixels lower than the section to the right"
+
+CHANGES MADE:
+
+1. Adjusted Fixed Sidebar Positioning
+   - app/aiviv3/use-cases/page.tsx: Updated sidebar positioning
+   - Top position: Fixed at 140px from top (moved lower on page)
+   - Left position: Consistent 48px from left edge (matches mx-12 spacing)
+   - Max height: calc(100vh - 156px) for proper overflow handling
+   - Sidebar now aligns with the main heading content area
+
+2. Consistent Sidebar Position (Fixed the jumping issue)
+   - sidebarLeftPosition constant: 48px used for both fixed and absolute states
+   - No more position shift when switching between fixed/absolute
+   - Equal margins maintained throughout scroll
+
+3. Sidebar Bottom Aligned with CTA Bottom
+   - ctaRef tracks the CTA section position
+   - Sidebar bottom now aligns exactly with CTA section bottom
+   - Calculation: stopPoint = ctaBottom - sidebarHeight
+   - Switches to absolute positioning when sidebar would pass CTA bottom
+   - Perfect visual alignment between sidebar and content
+
+4. Technical Implementation
+   - ctaRef tracks CTA element dimensions
+   - sidebarLeftPosition constant for consistent positioning
+   - Added window resize listener for responsive behavior
 
 ================================================================================
 MAJOR UI/UX IMPROVEMENTS & LEGAL PAGES (November 10, 2025) - Post v1.0.11

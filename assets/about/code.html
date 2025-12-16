@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Voice Agents for Retail &amp; E-Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6A3DE8",
+                        "background-light": "#F7F5F2",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        display: ["Sora", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "1rem",
+                        xl: "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        .gradient-bg {
+            background: linear-gradient(90deg, #F39C12 0%, #D85D74 35%, #9B59B6 70%, #6A3DE8 100%);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-200">
+<div class="relative overflow-hidden">
+<header class="absolute top-0 left-0 right-0 z-10 p-4">
+<div class="container mx-auto flex justify-between items-center px-4">
+<div class="flex items-center space-x-2">
+<img alt="AIVI logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9L2of210tDVr75jdQLdj65exs9LTh1GXmA5iIdH8uqIugKT1UPzdGxWaY0RkdH6hLygmHyHOc7akG8DRX0BB1xKPuic100gkHgG9hDMK7Hn4cftXcF5e-9Vf_oPdLSzJG7z9t1RQMY-4um4VU3KbEejBflCza1mk14EhXPYPgt8S3WcsGbryw8OGHHqo7_Abja2amT8kuYekRhDVggK73aRIIOfQ8Btl-Ve3FbWp277UQ6M7iZk1UOuXkaA836dG9t-ukBXNHWt7e"/>
+<span class="text-xl font-bold text-gray-800 dark:text-white">AIVI</span>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Use Cases</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Pricing</a>
+</nav>
+<div class="flex items-center space-x-4">
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Log In</a>
+<a class="bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:opacity-90 transition-opacity" href="#">Book a Demo</a>
+</div>
+</div>
+</header>
+<main class="pt-28 pb-16">
+<section class="container mx-auto text-center px-4">
+<h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+                    Building the Future of AI-<br/>Powered Engagement
+                </h1>
+<p class="mt-6 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Founded by innovators from Amazon, Apple, and Coca-Cola, our mission is to empower businesses to connect with their customers like never before and drive real results.
+                </p>
+<div class="mt-10 flex justify-center items-center space-x-4">
+<a class="bg-primary text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:opacity-90 transition-opacity" href="#">
+                        Get Started
+                    </a>
+<a class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white px-8 py-3 rounded-lg text-lg font-semibold border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" href="#">
+                        View Pricing
+                    </a>
+</div>
+</section>
+<section class="container mx-auto mt-20 px-4">
+<div class="p-2 rounded-xl gradient-bg shadow-2xl">
+<div class="bg-primary/20 dark:bg-gray-900/50 backdrop-blur-sm p-8 md:p-12 rounded-lg text-center">
+<h2 class="text-3xl font-bold text-white mb-8">The Results</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+<div>
+<p class="text-5xl font-bold">500+</p>
+<p class="text-sm uppercase tracking-wider mt-2 opacity-80">Businesses Impacted</p>
+</div>
+<div>
+<p class="text-5xl font-bold">10M+</p>
+<p class="text-sm uppercase tracking-wider mt-2 opacity-80">Happy Customers</p>
+</div>
+<div>
+<p class="text-5xl font-bold">391%</p>
+<p class="text-sm uppercase tracking-wider mt-2 opacity-80">ROI for Our Customers</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="container mx-auto text-center py-20 md:py-32 px-4">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-4xl font-bold text-gray-900 dark:text-white">Our Story</h2>
+<p class="mt-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Founded by veterans from Amazon, Apple, and Coca-Cola, our journey began with a simple observation: businesses were losing customers at an unprecedented revenue due to slow response times and inefficient customer engagement.
+                    </p>
+<p class="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        We knew AI could solve this, but existing solutions were complex, expensive to implement, or simply didn't deliver. We envisioned a world where powerful AI-driven communication was not just for large corporations, but simple enough for any business to deploy.
+                    </p>
+<p class="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Today, we're proud to help businesses of all sizes provide instant, personalized experiences, eliminate dominant leads, and drive measurable growth through AI-powered automation.
+                    </p>
+</div>
+</section>
+<section class="container mx-auto py-16 px-4">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 dark:text-white">Our Values</h2>
+<p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">The principles that guide everything we do.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+<div class="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-xl">
+<div class="flex items-center space-x-4">
+<div class="bg-primary/10 text-primary p-3 rounded-full">
+<span class="material-icons-outlined">rocket_launch</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Innovation First</h3>
+</div>
+<p class="mt-4 text-gray-600 dark:text-gray-400">We leverage the latest technology to deliver cutting-edge solutions that transform customer engagement.</p>
+</div>
+<div class="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-xl">
+<div class="flex items-center space-x-4">
+<div class="bg-primary/10 text-primary p-3 rounded-full">
+<span class="material-icons-outlined">favorite_border</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Customer Obsessed</h3>
+</div>
+<p class="mt-4 text-gray-600 dark:text-gray-400">Every feature we build reflects our commitment to delivering exceptional value and experiences.</p>
+</div>
+<div class="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-xl">
+<div class="flex items-center space-x-4">
+<div class="bg-primary/10 text-primary p-3 rounded-full">
+<span class="material-icons-outlined">smart_toy</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Intelligent Automation</h3>
+</div>
+<p class="mt-4 text-gray-600 dark:text-gray-400">Our goal isn't to replace human capabilities, but replace them. Our solutions empower teams to focus on what matters most.</p>
+</div>
+<div class="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-xl">
+<div class="flex items-center space-x-4">
+<div class="bg-primary/10 text-primary p-3 rounded-full">
+<span class="material-icons-outlined">verified_user</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white">Trust &amp; Transparency</h3>
+</div>
+<p class="mt-4 text-gray-600 dark:text-gray-400">We build lasting partnerships through honest communication, reliable technology, and proven results.</p>
+</div>
+</div>
+</section>
+<section class="container mx-auto py-20 md:py-32 px-4">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold text-gray-900 dark:text-white">How It Works</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="text-center p-6">
+<div class="flex justify-center items-center mx-auto mb-6 w-16 h-16 rounded-full bg-primary text-white text-2xl font-bold">1</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Leadership</h3>
+<p class="text-gray-600 dark:text-gray-400">Our leadership team brings a wealth of business experience to the table from a variety of industries.</p>
+</div>
+<div class="text-center p-6">
+<div class="flex justify-center items-center mx-auto mb-6 w-16 h-16 rounded-full bg-primary text-white text-2xl font-bold">2</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Engineering</h3>
+<p class="text-gray-600 dark:text-gray-400">Innovators at heart. We're driven to solve hard problems with elegant solutions that customers love.</p>
+</div>
+<div class="text-center p-6">
+<div class="flex justify-center items-center mx-auto mb-6 w-16 h-16 rounded-full bg-primary text-white text-2xl font-bold">3</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Customer Success</h3>
+<p class="text-gray-600 dark:text-gray-400">We are your trusted partner, providing personalized support and guidance at every step.</p>
+</div>
+<div class="text-center p-6">
+<div class="flex justify-center items-center mx-auto mb-6 w-16 h-16 rounded-full bg-primary text-white text-2xl font-bold">4</div>
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Our Vision</h3>
+<p class="text-gray-600 dark:text-gray-400">We achieve our vision by following a common set of values that we live and work by, every day.</p>
+</div>
+</div>
+</section>
+<section class="container mx-auto py-16 px-4">
+<div class="max-w-3xl mx-auto">
+<div class="text-center mb-12">
+<h2 class="text-4xl font-bold text-gray-900 dark:text-white">Frequently Asked Questions</h2>
+</div>
+<div class="space-y-4" x-data="{ open: null }">
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 1 ? null : 1" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">Who founded AIVI?</span>
+<span :class="{ 'rotate-45': open === 1 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 1">
+<p>AIVI was founded by a team of talented executives from Amazon, Apple, and Coca-Cola who saw a unique gap in how businesses engage with their customers. Our leadership brings decades of combined experience in technology, marketing, and business strategy.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 2 ? null : 2" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">What makes AIVI different from other AI platforms?</span>
+<span :class="{ 'rotate-45': open === 2 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 2">
+<p>Our platform is designed for simplicity, scalability, and measurable results. We focus on creating AI agents that not only understand customer intent but also drive conversations towards successful outcomes, directly impacting your bottom line.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 3 ? null : 3" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">How has AIVI been recognized in the industry?</span>
+<span :class="{ 'rotate-45': open === 3 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 3">
+<p>AIVI has been featured in several leading tech publications and has won awards for innovation in AI and customer experience. We are proud of the recognition and remain committed to pushing the boundaries of what's possible.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 4 ? null : 4" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">What are AIVI's core values?</span>
+<span :class="{ 'rotate-45': open === 4 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 4">
+<p>Our core values are Innovation First, Customer Obsession, Intelligent Automation, and Trust &amp; Transparency. These principles guide every decision we make and ensure we deliver the best possible solutions for our clients.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 5 ? null : 5" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">How does AIVI ensure data security and privacy?</span>
+<span :class="{ 'rotate-45': open === 5 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 5">
+<p>We take data security and privacy very seriously. Our platform is built with enterprise-grade security features and is compliant with major data protection regulations. We use end-to-end encryption and robust access controls to safeguard your data.</p>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+<button @click="open = open === 6 ? null : 6" class="w-full flex justify-between items-center text-left p-6">
+<span class="font-semibold text-gray-900 dark:text-white">What kind of results can customers expect?</span>
+<span :class="{ 'rotate-45': open === 6 }" class="material-icons-outlined text-primary transition-transform">add</span>
+</button>
+<div class="px-6 pb-6 text-gray-600 dark:text-gray-400" x-collapse="" x-show="open === 6">
+<p>Our customers typically see a significant return on investment, often exceeding 391%. This is achieved through increased sales, higher customer satisfaction, reduced operational costs, and improved lead conversion rates.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="container mx-auto px-4 py-16">
+<div class="gradient-bg rounded-xl p-10 md:p-16 text-center text-white shadow-2xl">
+<h2 class="text-4xl font-bold">Ready to Transform Your Business?</h2>
+<p class="mt-4 text-lg max-w-2xl mx-auto opacity-90">Join hundreds of businesses leveraging AIVI to create exceptional customer experiences and drive growth.</p>
+<div class="mt-10 flex justify-center items-center space-x-4">
+<a class="bg-white text-primary px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-200 transition-colors" href="#">
+                            Get Started Today
+                        </a>
+<a class="bg-white/20 text-white px-8 py-3 rounded-lg text-lg font-semibold border border-white/50 hover:bg-white/30 transition-colors" href="#">
+                            View Pricing
+                        </a>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-gray-900 text-gray-400">
+<div class="container mx-auto px-4 py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+<div class="col-span-1 lg:col-span-2">
+<div class="flex items-center space-x-2">
+<img alt="AIVI logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3ypwiPrYWnoktfazHxLV3coJN072QDEfO3i5737IqGEF-w8z3RfEV3yqxc_ppERmqaguRIJ4LXAUvON6puPmz16eKxEXuEOVJLiK02x80v169aoEaPgkJF2u-O--vdtA81FgWFSx8h1DFhtM123dA_wz2yFDQP_JgMFV4wt58FZUgPgfd8UJGervZ83sSTzmFchwUm9votCGlDD2FbF8MOlpnqSTPMtkTjHTMYeXRMniW8ITYCUNIrKYOoLK8KrYcEOzWLjDDIrt-"/>
+<span class="text-xl font-bold text-white">AIVI</span>
+</div>
+<p class="mt-4">AI voice agent service, boost sales, and streamline operations with intelligent voice automation.</p>
+<p class="mt-8 text-sm">© AIVI Corp. All Rights Reserved</p>
+</div>
+<div>
+<h3 class="text-white font-semibold tracking-wider uppercase">Product</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Home</a></li>
+<li><a class="hover:text-white transition-colors" href="#">About</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Features</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-semibold tracking-wider uppercase">Solutions</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Use Cases</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Industries</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-semibold tracking-wider uppercase">Resources</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Blog</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Help Center</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-semibold tracking-wider uppercase">Company</h3>
+<ul class="mt-4 space-y-2">
+<li><a class="hover:text-white transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-12 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+<div class="mb-4 md:mb-0">
+<h4 class="font-semibold text-white">Prospect anywhere</h4>
+<p class="text-sm">Get verified mobile and work numbers instantly and cleanly laid out while working.</p>
+<a class="text-primary hover:underline mt-2 inline-block" href="#">Start Chrome Extension</a>
+</div>
+<div>
+<h4 class="font-semibold text-white mb-2">Connect with us</h4>
+<div class="flex space-x-4">
+<a class="text-gray-400 hover:text-white" href="#"><img alt="Facebook icon" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhgc-ZkunlaUzbmy7IiY50LjKVV1OwCWVHSvChPBP87oxxQRIkO7lcdAhl5hkSoypewqsoaWU6igPApWIPG5GIRTP16RAdttxlGT7LEUESyYaGmWIrSakFWtGyd9XN5P7l6i7ON8OAV33JJaIrLnajWltjKgLhHJ13uw_nvzMVZ8_pT_U5OFO08CjcFvlSXNu_ZU6CgUxAZeWKpvroDOwu0LfR5yQAvnvyskeqpv6qUx_1TFzpK_LkPW-kOx4HrLwvxvkSCAyUNVN9"/></a>
+<a class="text-gray-400 hover:text-white" href="#"><img alt="Twitter icon" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaf3CU8GCfJqxS75sH0dviDPkV7YSsCbBlmREphq1iSzpjHCOm-msSxWSccoZ17VQVZPleAHGAix88QbZF21hcDefoUU4Gi2TSjmEDC3-VQ4SMYWDdkqliGhEC-L9ydLP5UrCJj_BERq-qJJF7rfdmgr5kd_j6HX7_V9LtY2fBq66SFQKHGKhbI0vTHnIagLJYezwYldpmL6sfuEGz_ls25pn0X4GVIKmDiRqTIWJEy6PIp4t72r0B3wAztm5rWkczPxlrohrTmirf"/></a>
+<a class="text-gray-400 hover:text-white" href="#"><img alt="LinkedIn icon" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfqIu5qQTP-tECgjMrpmnNVFqLfxch_1hn7Vo5NeinCnVBH87r9nBNdQXWaMOQZhztqJsydKgBAt_36_t-aYMB0W1J5QkExKF6na_GclRctykgReWC5mzio_2hpbgEg-vD3ZZAePl1g59yFvffqpFddMcXhRP4rhw9Q3BSiCjCU94-fBlQIUbaur-4bRxfm-EGl5kNEkITNSpxDcOH99PHH_U85nchfxVtF306NIgWSA3bVBseSKwTRMlA6fzNHkgx9IuLvvEvguC-"/></a>
+<a class="text-gray-400 hover:text-white" href="#"><img alt="Instagram icon" class="h-6 w-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDybHRH2mEkaMWB6Ty1MVAACGy5A3lqTgCPoFUxp7Bj_23iCUwUxxbHi0_LSuYwPwrdZtyfVAm78z8CS-Z-rYBm1NROHci6UmivWD6gOXHHmHHpa7Ewo8GWcraAi6gqMWCShdK6RnmsLgU5BNJR_D1tqiJlBi2Z8MQdHU9VRluBMIVBltQnP4V46j7Ii7qF8sAzW_DYIvW3CFJQrzKMV2sQzP9RjapDcSzlqQVmrzTvqsBDN5rnz9ycnkn7vpbgrvaO0tNy1S0Miu07"/></a>
+</div>
+</div>
+</div>
+<div class="mt-8 text-center text-sm">
+<p>© AIVI All rights reserved</p>
+</div>
+</div>
+</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</body></html>

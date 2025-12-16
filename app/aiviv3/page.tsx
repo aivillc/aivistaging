@@ -9,7 +9,7 @@ import AIVIFooter from '@/components/aiviv3/AIVIFooter';
 
 export default function AIVIv3Page() {
   return (
-    <div className="bg-[#E8E5E0] min-h-screen antialiased">
+    <div className="bg-[#E8E5E0] min-h-screen antialiased font-manrope">
       <AIVINavigation />
       <main id="main-content" className="pt-[72px]">
         <AIVIHero />

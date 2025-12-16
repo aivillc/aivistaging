@@ -1,87 +1,42 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
 
 export default function AIVIFooter() {
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-
   const footerColumns = [
     {
-      title: 'Get started',
+      title: 'Product',
       links: [
-        { label: 'Get started', href: '/get-started' },
-        { label: 'Pricing', href: '/pricing' },
-        { label: 'Request a demo', href: '/demo' },
+        { label: 'Features', href: '/aiviv3/features' },
+        { label: 'Pricing', href: '/aiviv3/pricing' },
+        { label: 'Integrations', href: '/aiviv3/integrations' },
+        { label: 'Use Cases', href: '/aiviv3/use-cases' },
       ],
     },
     {
       title: 'Solutions',
       links: [
-        { label: 'Outbound', href: '/solutions/outbound' },
-        { label: 'Inbound', href: '/solutions/inbound' },
-        { label: 'Data Enrichment', href: '/solutions/data-enrichment' },
-        { label: 'Deal Execution', href: '/solutions/deal-execution' },
-      ],
-    },
-    {
-      title: 'Platform',
-      links: [
-        { label: 'AIVI Data', href: '/platform/data' },
-        { label: 'AIVI AI', href: '/platform/ai' },
-        { label: 'Integrations', href: '/platform/integrations' },
-        { label: 'Chrome Extension', href: '/platform/chrome-extension' },
-        { label: 'Workflow Automation', href: '/platform/automation' },
-        { label: 'Security', href: '/platform/security' },
-      ],
-    },
-    {
-      title: 'Use Cases',
-      links: [
-        { label: 'B2B Database', href: '/use-cases/b2b-database' },
-        { label: 'Lead Scoring', href: '/use-cases/lead-scoring' },
-        { label: 'Inbound Lead Router', href: '/use-cases/inbound-router' },
-        { label: 'Sales Engagement', href: '/use-cases/sales-engagement' },
-        { label: 'Meetings Scheduler', href: '/use-cases/meetings' },
-        { label: 'Deal Management', href: '/use-cases/deal-management' },
-        { label: 'Conversation Intelligence', href: '/use-cases/conversation-intelligence' },
-        { label: 'Sales Analytics', href: '/use-cases/analytics' },
-        { label: 'Sales Coaching', href: '/use-cases/coaching' },
+        { label: 'Healthcare', href: '/aiviv3/solutions/healthcare' },
+        { label: 'Legal', href: '/aiviv3/solutions/legal' },
+        { label: 'Real Estate', href: '/aiviv3/solutions/real-estate' },
+        { label: 'Retail', href: '/aiviv3/solutions/retail' },
+        { label: 'Financial Services', href: '/aiviv3/solutions/financial-services' },
+        { label: 'Hospitality', href: '/aiviv3/solutions/hospitality' },
       ],
     },
     {
       title: 'Resources',
       links: [
-        { label: 'AIVI Academy', href: '/academy' },
-        { label: 'Magazine', href: '/magazine' },
-        { label: 'Insights', href: '/insights' },
-        { label: 'Partners', href: '/partners' },
-        { label: 'Knowledge Base', href: '/knowledge-base' },
-        { label: 'Webinars', href: '/webinars' },
-        { label: 'Success Stories', href: '/success-stories' },
-        { label: 'Privacy Center', href: '/privacy-center' },
-        { label: 'API Docs', href: '/api-docs' },
-        { label: 'Join Our Community', href: '/community' },
+        { label: 'Case Studies', href: '/aiviv3/resources' },
+        { label: 'Blog', href: '/aiviv3/blog' },
+        { label: 'Documentation', href: '/aiviv3/docs' },
       ],
     },
     {
       title: 'Company',
       links: [
-        { label: 'About AIVI', href: '/about' },
-        { label: 'Careers', href: '/careers' },
-        { label: 'Customer Reviews', href: '/reviews' },
-        { label: 'Contact Us', href: '/contact' },
-      ],
-    },
-    {
-      title: 'Roles',
-      links: [
-        { label: 'Sales Leaders', href: '/roles/sales-leaders' },
-        { label: 'Account Executives', href: '/roles/account-executives' },
-        { label: 'Sales Development', href: '/roles/sales-development' },
-        { label: 'Founders', href: '/roles/founders' },
-        { label: 'Marketing', href: '/roles/marketing' },
-        { label: 'Revenue Operations', href: '/roles/revenue-ops' },
+        { label: 'About', href: '/aiviv3/about' },
+        { label: 'Contact', href: '/aiviv3/contact' },
       ],
     },
   ];
@@ -96,107 +51,41 @@ export default function AIVIFooter() {
 
   return (
     <footer
-      className="w-full bg-gradient-to-b from-[#0A0A0A] to-[#000000] text-white relative overflow-hidden"
+      className="w-full bg-[#0A0A0A] text-white relative"
       role="contentinfo"
     >
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-5" aria-hidden="true">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-          backgroundSize: '32px 32px'
-        }} />
-      </div>
-
-      {/* Gradient overlay effects */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#f84608]/5 to-transparent blur-3xl rounded-full" aria-hidden="true" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#321ca3]/5 to-transparent blur-3xl rounded-full" aria-hidden="true" />
-
-      <div className="relative max-w-[1600px] mx-auto px-8 lg:px-16 py-20">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
-          {/* Left side - Large Logo */}
-          <div className="lg:col-span-4">
-            <a href="/" className="group cursor-pointer inline-block focus-brand-ring" aria-label="AIVI Home">
-              <div className="relative w-[400px] max-w-full transition-all duration-500 group-hover:scale-[1.02]">
-                <Image
-                  src="/aiviblack.png"
-                  alt="AIVI Logo"
-                  width={400}
-                  height={400}
-                  className="w-full h-auto brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#f84608]/0 via-[#321ca3]/10 to-[#f84608]/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" aria-hidden="true" />
-              </div>
+        <div className="pt-20 pb-16">
+          {/* Logo */}
+          <div className="mb-16 text-center">
+            <a href="/" className="inline-block" aria-label="AIVI Home">
+              <Image
+                src="/aiviblack.png"
+                alt="AIVI Logo"
+                width={120}
+                height={120}
+                className="w-[120px] h-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity duration-300"
+              />
             </a>
-
-            <div className="mt-8 space-y-3 opacity-60">
-              <p className="text-xs font-medium tracking-wide">&copy; 2025 AIVI. All rights reserved.</p>
-              <nav className="flex flex-col gap-2 text-xs" aria-label="Legal links">
-                <a
-                  href="/privacy"
-                  className="inline-block hover:text-[#f84608] transition-colors duration-300 hover:translate-x-1 transform w-fit focus-brand-ring"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="/terms"
-                  className="inline-block hover:text-[#f84608] transition-colors duration-300 hover:translate-x-1 transform w-fit focus-brand-ring"
-                >
-                  Terms of Service
-                </a>
-                <a
-                  href="/privacy#do-not-sell"
-                  className="inline-block hover:text-[#f84608] transition-colors duration-300 hover:translate-x-1 transform w-fit focus-brand-ring"
-                >
-                  Don&apos;t Sell My Info
-                </a>
-              </nav>
-            </div>
           </div>
 
-          {/* Right side - Navigation Links */}
-          <nav className="lg:col-span-8" aria-label="Footer navigation">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-10">
+          {/* Navigation Grid */}
+          <nav className="mb-20" aria-label="Footer navigation">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10 text-center">
               {footerColumns.map((column, index) => (
-                <div
-                  key={index}
-                  className="space-y-4 opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards]"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-white/90 mb-5">
+                <div key={index}>
+                  <h3 className="text-[14px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-6">
                     {column.title}
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <a
                           href={link.href}
-                          onMouseEnter={() => setHoveredLink(`${index}-${linkIndex}`)}
-                          onMouseLeave={() => setHoveredLink(null)}
-                          className="group text-xs text-white/60 hover:text-white transition-all duration-300 flex items-center gap-2 w-fit focus-brand-ring"
+                          className="text-[18px] text-white/60 hover:text-white transition-colors duration-200"
                         >
-                          <span className="relative">
-                            {link.label}
-                            <span
-                              className={`absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-[#f84608] to-[#321ca3] transition-all duration-300 ${
-                                hoveredLink === `${index}-${linkIndex}` ? 'w-full' : 'w-0'
-                              }`}
-                              aria-hidden="true"
-                            />
-                          </span>
-                          <svg
-                            className={`w-3 h-3 transform transition-all duration-300 ${
-                              hoveredLink === `${index}-${linkIndex}` ? 'translate-x-1 opacity-100' : 'translate-x-0 opacity-0'
-                            }`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
+                          {link.label}
                         </a>
                       </li>
                     ))}
@@ -205,72 +94,72 @@ export default function AIVIFooter() {
               ))}
             </div>
           </nav>
-        </div>
 
-        {/* Divider with gradient */}
-        <div className="relative h-[1px] mb-16" aria-hidden="true">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        </div>
+          {/* Divider */}
+          <div className="border-t border-white/10 mb-16" aria-hidden="true" />
 
-        {/* Bottom Section - CTA and Social */}
-        <div className="grid md:grid-cols-2 gap-12 items-start mb-16">
-          {/* Prospect Anywhere CTA */}
-          <div className="space-y-5">
-            <h3 className="text-sm font-bold tracking-wide">Prospect anywhere</h3>
-            <p className="text-xs text-white/70 leading-relaxed max-w-md">
-              Get verified emails and phone numbers and instantly reach out while working in your favorite tools.
-            </p>
-            <a
-              href="/chrome-extension"
-              className="group relative inline-flex px-6 py-3 bg-transparent border border-white/30 text-white text-xs font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:border-[#f84608] hover:shadow-[0_0_20px_rgba(248,70,8,0.3)] focus-brand-ring"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                AIVI Chrome Extension
-                <svg className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#f84608]/0 via-[#321ca3]/10 to-[#f84608]/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700" aria-hidden="true" />
-            </a>
-          </div>
-
-          {/* Social Links */}
-          <div className="space-y-5">
-            <h4 className="text-sm font-bold tracking-wide">Connect with us</h4>
-            <div className="flex items-center gap-4">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  aria-label={`Follow us on ${social.name}`}
-                  className="group relative w-10 h-10 flex items-center justify-center rounded-full border border-white/20 hover:border-[#f84608] transition-all duration-300 hover:shadow-[0_0_15px_rgba(248,70,8,0.3)] hover:-translate-y-1 focus-brand-ring"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+          {/* Newsletter and Social Section */}
+          <div className="grid md:grid-cols-2 gap-12 items-start mb-16">
+            {/* Newsletter Signup */}
+            <div>
+              <h3 className="text-sm font-medium tracking-wide mb-3">Stay Updated</h3>
+              <p className="text-[13px] text-white/50 leading-relaxed mb-6 max-w-sm">
+                Be the first to know about new features and updates.
+              </p>
+              <form className="flex gap-3 max-w-md" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-colors duration-200"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-3 bg-white text-black text-sm font-medium rounded-lg hover:bg-white/90 transition-colors duration-200"
                 >
-                  <svg className="w-4 h-4 text-white/60 group-hover:text-[#f84608] transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d={social.path} />
-                  </svg>
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#f84608]/0 to-[#321ca3]/20 opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" aria-hidden="true" />
-                </a>
-              ))}
+                  Subscribe
+                </button>
+              </form>
+            </div>
+
+            {/* Social Links */}
+            <div className="md:text-right">
+              <h4 className="text-sm font-medium tracking-wide mb-6">Connect</h4>
+              <div className="flex items-center gap-5 md:justify-end">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    aria-label={`Follow us on ${social.name}`}
+                    className="text-white/40 hover:text-white transition-colors duration-200"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d={social.path} />
+                    </svg>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Final divider */}
-        <div className="relative h-[1px] mb-8" aria-hidden="true">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        </div>
+          {/* Divider */}
+          <div className="border-t border-white/10 mb-8" aria-hidden="true" />
 
-        {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/40">
-          <div>
-            Powered by cutting-edge AI technology
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+          {/* Bottom Bar */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-white/40">
+            <div className="flex items-center gap-6">
+              <span>&copy; 2025 AIVI</span>
+              <nav className="flex items-center gap-4" aria-label="Legal">
+                <a href="/privacy" className="hover:text-white/60 transition-colors duration-200">Privacy</a>
+                <span className="text-white/20">·</span>
+                <a href="/terms" className="hover:text-white/60 transition-colors duration-200">Terms</a>
+                <span className="text-white/20">·</span>
+                <a href="/privacy#do-not-sell" className="hover:text-white/60 transition-colors duration-200">Do Not Sell</a>
+              </nav>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
               <span>All systems operational</span>
-            </span>
+            </div>
           </div>
         </div>
       </div>

@@ -237,7 +237,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#FF8C00]/20 to-[#8A2BE2]/20 flex items-center justify-center">
                 <FaCheckCircle className="w-10 h-10 text-[#FF8C00]" />
               </div>
-              <h2 className="text-[28px] sm:text-[32px] font-semibold text-[#1A1A1A] mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
+              <h2 className="text-[28px] sm:text-[32px] font-semibold text-[#1A1A1A] mb-4 font-manrope">
                 Thank You!
               </h2>
               <p className="text-[16px] text-[#666666] mb-8 max-w-md mx-auto leading-relaxed">
@@ -257,8 +257,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
               <div className="text-center mb-8">
                 <h2
                   id="demo-popup-title"
-                  className="text-[24px] sm:text-[28px] font-semibold text-[#1A1A1A] mb-2"
-                  style={{ fontFamily: 'Manrope, sans-serif' }}
+                  className="text-[24px] sm:text-[28px] font-semibold text-[#1A1A1A] mb-2 font-manrope"
                 >
                   Book Your Demo
                 </h2>

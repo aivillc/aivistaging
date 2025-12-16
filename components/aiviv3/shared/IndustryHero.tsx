@@ -6,8 +6,10 @@ import { useDemoPopup } from '../DemoPopupContext';
 interface IndustryHeroProps {
   headline: string;
   subheadline: string;
-  audioLabel: string;
+  audioLabel?: string;
   audioSrc?: string;
+  hideAudio?: boolean;
+  centerText?: boolean;
 }
 
 export default function IndustryHero({
@@ -15,27 +17,29 @@ export default function IndustryHero({
   subheadline,
   audioLabel,
   audioSrc,
+  hideAudio = false,
+  centerText = false,
 }: IndustryHeroProps) {
   const { openDemoPopup } = useDemoPopup();
 
   return (
-    <section className="w-full pt-[72px] relative overflow-hidden" style={{ fontFamily: 'Manrope, sans-serif' }}>
+    <section className="w-full pt-[72px] relative overflow-hidden font-manrope">
       {/* Light gradient background with rounded bottom corners - Pricing style */}
       <div className="relative rounded-b-2xl sm:rounded-b-3xl">
         <div className="bg-soft-gradient absolute inset-0 rounded-b-2xl sm:rounded-b-3xl"></div>
 
         <div className="w-full px-[5%] sm:px-[7%] lg:px-[10%] py-16 sm:py-20 md:py-24 relative z-10">
           <div className="w-full max-w-[calc(100%-24px)] sm:max-w-[calc(100%-48px)] mx-auto">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Left: Text Content */}
-              <div>
+            <div className={hideAudio ? 'flex flex-col items-center' : 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-center'}>
+              {/* Text Content */}
+              <div className={centerText ? 'text-center max-w-[900px]' : ''}>
                 <h1 className="text-[32px] sm:text-[42px] md:text-[52px] lg:text-[56px] leading-[1.1] font-normal text-[#1A1A1A] mb-4 sm:mb-6">
                   {headline}
                 </h1>
-                <p className="text-[16px] sm:text-[18px] md:text-[19px] leading-[1.6] text-[#666666] mb-6 sm:mb-8 max-w-[600px]">
+                <p className={`text-[16px] sm:text-[18px] md:text-[19px] leading-[1.6] text-[#666666] mb-6 sm:mb-8 ${centerText ? 'mx-auto' : 'max-w-[600px]'}`}>
                   {subheadline}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 ${centerText ? 'justify-center' : ''}`}>
                   <button
                     onClick={openDemoPopup}
                     className="group relative inline-flex items-center justify-center h-12 px-7 text-white text-[15px] font-semibold rounded-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300 focus-brand-ring bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2]"
@@ -52,10 +56,12 @@ export default function IndustryHero({
                 </div>
               </div>
 
-              {/* Right: Audio Player */}
-              <div className="lg:pl-8">
-                <AudioPlayer label={audioLabel} audioSrc={audioSrc} darkMode={false} />
-              </div>
+              {/* Right: Audio Player (conditionally rendered) */}
+              {!hideAudio && audioLabel && (
+                <div className="lg:pl-8">
+                  <AudioPlayer label={audioLabel} audioSrc={audioSrc} darkMode={false} />
+                </div>
+              )}
             </div>
           </div>
         </div>

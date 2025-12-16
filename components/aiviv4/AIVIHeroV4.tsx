@@ -1,0 +1,1282 @@
+'use client';
+
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { HiOutlineDesktopComputer } from 'react-icons/hi';
+import { BsChatDots } from 'react-icons/bs';
+import { FiMic } from 'react-icons/fi';
+import { TbCreditCard } from 'react-icons/tb';
+import { FaUserTie } from 'react-icons/fa';
+
+interface Particle {
+  x: number;
+  y: number;
+  baseX: number;
+  baseY: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  density: number;
+}
+
+export default function AIVIHeroV4() {
+  const [demoModalOpen, setDemoModalOpen] = useState(false);
+  const [audioOverlayOpen, setAudioOverlayOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
+  const [isListening, setIsListening] = useState(false);
+  const [terminalLines, setTerminalLines] = useState<{ html: string; className?: string }[]>([]);
+  const [welcomeText, setWelcomeText] = useState('');
+  const [counterValue, setCounterValue] = useState(0);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const audioCanvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const mouseRef = useRef<{ x: number | null; y: number | null; radius: number }>({ x: null, y: null, radius: 150 });
+  const animationIdRef = useRef<number>(undefined);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const recognitionRef = useRef<any>(null);
+
+  // Initialize particles
+  const initParticles = useCallback((canvas: HTMLCanvasElement) => {
+    const particles: Particle[] = [];
+    const count = 150;
+    for (let i = 0; i < count; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      particles.push({
+        x,
+        y,
+        baseX: x,
+        baseY: y,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 2 + 1,
+        density: Math.random() * 30 + 1,
+      });
+    }
+    particlesRef.current = particles;
+  }, []);
+
+  // Neural canvas animation
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      const hero = canvas.parentElement;
+      if (hero) {
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+        initParticles(canvas);
+      }
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      // Check if mouse is within the hero section bounds
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        mouseRef.current.x = x;
+        mouseRef.current.y = y;
+      } else {
+        mouseRef.current.x = null;
+        mouseRef.current.y = null;
+      }
+    };
+
+    const handleMouseOut = () => {
+      mouseRef.current.x = null;
+      mouseRef.current.y = null;
+    };
+
+    // Use window-level events to capture mouse movement even when over other elements
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseout', handleMouseOut);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const mouse = mouseRef.current;
+      const particles = particlesRef.current;
+
+      // Draw mouse glow
+      if (mouse.x !== null && mouse.y !== null) {
+        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+        gradient.addColorStop(0, 'rgba(100, 200, 255, 0.15)');
+        gradient.addColorStop(0.5, 'rgba(139, 0, 255, 0.05)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+
+      // Update and draw particles
+      particles.forEach((p) => {
+        // Mouse interaction
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const forceX = dx / dist;
+            const forceY = dy / dist;
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.x -= forceX * force * p.density * 0.5;
+            p.y -= forceY * force * p.density * 0.5;
+          }
+        }
+
+        // Normal movement
+        p.x += p.vx;
+        p.y += p.vy;
+        p.x += (p.baseX - p.x) * 0.01;
+        p.y += (p.baseY - p.y) * 0.01;
+
+        // Bounce off edges
+        if (p.x < 0 || p.x > canvas.width) {
+          p.vx *= -1;
+          p.baseX = p.x;
+        }
+        if (p.y < 0 || p.y > canvas.height) {
+          p.vy *= -1;
+          p.baseY = p.y;
+        }
+
+        // Draw particle
+        let brightness = 0.6;
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            brightness = 1 - (dist / mouse.radius) * 0.4;
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(100, 200, 255, ${0.4 * brightness})`;
+        ctx.fill();
+      });
+
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 140) {
+            let opacity = 0.15 * (1 - dist / 140);
+
+            if (mouse.x !== null && mouse.y !== null) {
+              const midX = (particles[i].x + particles[j].x) / 2;
+              const midY = (particles[i].y + particles[j].y) / 2;
+              const mouseDist = Math.sqrt((mouse.x - midX) ** 2 + (mouse.y - midY) ** 2);
+              if (mouseDist < mouse.radius) {
+                opacity *= 1 + (1 - mouseDist / mouse.radius) * 2;
+              }
+            }
+
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
+            ctx.lineWidth = 0.6;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationIdRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseout', handleMouseOut);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+    };
+  }, [initParticles]);
+
+  // Live counter with localStorage persistence
+  useEffect(() => {
+    const STORAGE_KEY = 'aivi_conversation_count';
+    const BASE_COUNT = 1213234;
+    const LAUNCH_DATE = new Date('2025-12-13').getTime();
+    const PER_DAY = 5000;
+    const PER_MS = PER_DAY / 86400000;
+
+    const calculateCount = () => {
+      const now = Date.now();
+      const elapsed = now - LAUNCH_DATE;
+      return Math.floor(BASE_COUNT + Math.max(0, elapsed * PER_MS));
+    };
+
+    // Get stored value or calculate fresh (client-side only)
+    let currentCount = calculateCount();
+
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        const storedData = stored ? JSON.parse(stored) : null;
+
+        // If stored value exists and is recent (within 1 hour), use it as base
+        if (storedData && Date.now() - storedData.timestamp < 3600000) {
+          currentCount = Math.max(storedData.count, currentCount);
+        }
+      } catch {
+        // Ignore localStorage errors
+      }
+    }
+
+    setCounterValue(currentCount);
+
+    const interval = setInterval(() => {
+      setCounterValue(prev => {
+        const newCount = prev + Math.floor(Math.random() * 3) + 1;
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+              count: newCount,
+              timestamp: Date.now()
+            }));
+          } catch {
+            // Ignore localStorage errors
+          }
+        }
+        return newCount;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Add terminal line helper
+  const addTerminalLine = useCallback((html: string, className?: string) => {
+    setTerminalLines((prev) => [...prev, { html, className }]);
+  }, []);
+
+  // AI Response templates
+  const getAIResponse = (name: string) => {
+    const responses = [
+      `Thanks ${name}, I can help you with that. Our AI-powered system typically doubles contact rates within the first month.`,
+      `Great question, ${name}. AIVI engages leads in under 3 seconds across SMS, voice, and email simultaneously.`,
+      `I understand, ${name}. Let me connect you with one of our specialists who can walk you through a custom demo.`,
+      `Absolutely, ${name}. Our clients in financial services see an average of $1.2M additional monthly revenue.`,
+      `That's a common concern, ${name}. AIVI integrates seamlessly with your existing CRM and dialer systems.`,
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  };
+
+  // Run demo sequence
+  const runDemoSequence = useCallback(
+    async (name: string, phone: string, email: string) => {
+      const firstName = name.split(' ')[0];
+      setTerminalLines([]);
+      setWelcomeText(`▶ Live demo started with ${firstName}`);
+
+      await new Promise((r) => setTimeout(r, 800));
+
+      // Microphone check
+      addTerminalLine(
+        `<span class="status-icon pending"></span><span class="line-text">Requesting microphone access...</span>`
+      );
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        analyserRef.current = audioContextRef.current.createAnalyser();
+        const microphone = audioContextRef.current.createMediaStreamSource(stream);
+        microphone.connect(analyserRef.current);
+        analyserRef.current.fftSize = 256;
+        setIsListening(true);
+
+        setTimeout(() => {
+          addTerminalLine(
+            `<span class="status-icon success">✓</span><span class="line-text">Microphone connected <span class="success-text">(listening)</span></span>`
+          );
+        }, 400);
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+          const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+          recognitionRef.current = new SpeechRecognition();
+          recognitionRef.current.continuous = true;
+          recognitionRef.current.interimResults = true;
+          recognitionRef.current.lang = 'en-US';
+
+          recognitionRef.current.onresult = (event: any) => {
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              if (event.results[i].isFinal) {
+                const transcript = event.results[i][0].transcript;
+                addTerminalLine(
+                  `<span class="status-icon listening">🎤</span><span class="line-text">"${transcript}"</span>`,
+                  'user-speech'
+                );
+
+                // AI response
+                setTimeout(() => {
+                  addTerminalLine(
+                    `<span class="status-icon ai">AI</span><span class="line-text">"${getAIResponse(firstName)}"</span>`,
+                    'ai-response'
+                  );
+                }, 1500 + Math.random() * 1000);
+              }
+            }
+          };
+
+          recognitionRef.current.start();
+          setTimeout(() => {
+            addTerminalLine(
+              `<span class="status-icon success">✓</span><span class="line-text">Voice recognition <span class="success-text">active</span> - speak to AIVI</span>`
+            );
+          }, 800);
+        }
+      } catch {
+        setTimeout(() => {
+          addTerminalLine(
+            `<span class="status-icon error">✕</span><span class="line-text">Microphone access <span class="error-text">denied</span></span>`
+          );
+        }, 400);
+      }
+
+      // SMS
+      await new Promise((r) => setTimeout(r, 1200));
+      addTerminalLine(
+        `<span class="status-icon pending"></span><span class="line-text">Sending SMS to <span class="highlight">${firstName}</span> at <span class="highlight">${phone}</span>...</span>`
+      );
+
+      await new Promise((r) => setTimeout(r, 2000));
+      setTerminalLines((prev) =>
+        prev.map((line, i) =>
+          i === prev.length - 1
+            ? {
+                ...line,
+                html: `<span class="status-icon success">✓</span><span class="line-text">SMS sent to <span class="highlight">${firstName}</span> <span class="success-text">(delivered)</span></span>`,
+              }
+            : line
+        )
+      );
+
+      // Call
+      await new Promise((r) => setTimeout(r, 800));
+      addTerminalLine(
+        `<span class="status-icon calling">📞</span><span class="line-text">Calling <span class="highlight">${firstName}</span> at <span class="highlight">${phone}</span>...</span>`
+      );
+
+      await new Promise((r) => setTimeout(r, 2500));
+      setTerminalLines((prev) =>
+        prev.map((line, i) =>
+          i === prev.length - 1
+            ? {
+                ...line,
+                html: `<span class="status-icon success">✓</span><span class="line-text">Call to <span class="highlight">${firstName}</span> <span class="success-text">(connected)</span></span>`,
+              }
+            : line
+        )
+      );
+
+      // Email
+      await new Promise((r) => setTimeout(r, 800));
+      addTerminalLine(
+        `<span class="status-icon pending"></span><span class="line-text">Sending email to <span class="highlight">${email}</span>...</span>`
+      );
+
+      await new Promise((r) => setTimeout(r, 1800));
+      setTerminalLines((prev) =>
+        prev.map((line, i) =>
+          i === prev.length - 1
+            ? {
+                ...line,
+                html: `<span class="status-icon success">✓</span><span class="line-text">Email about doubling contact rates <span class="success-text">(sent)</span></span>`,
+              }
+            : line
+        )
+      );
+
+      // Final status
+      await new Promise((r) => setTimeout(r, 1000));
+      addTerminalLine(
+        `<span class="status-icon success">⚡</span><span class="line-text success-text">All channels engaged in under 4 seconds</span>`
+      );
+
+      // Schedule appointment
+      const appointmentDate = new Date();
+      appointmentDate.setDate(appointmentDate.getDate() + 3);
+      const formattedDate = appointmentDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      });
+
+      await new Promise((r) => setTimeout(r, 1200));
+      addTerminalLine(
+        `<span class="status-icon success">📅</span><span class="line-text">Appointment scheduled with AI Expert for <span class="highlight">${formattedDate} at 1:30 PM</span></span>`
+      );
+
+      // Conversation prompt
+      await new Promise((r) => setTimeout(r, 1500));
+      addTerminalLine(
+        `<span class="status-icon listening">🎙️</span><span class="line-text">Speak now to interact with AIVI...</span>`
+      );
+    },
+    [addTerminalLine]
+  );
+
+  // Audio visualization
+  useEffect(() => {
+    if (!audioOverlayOpen || !audioCanvasRef.current) return;
+
+    const canvas = audioCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    const centerX = 150;
+    const centerY = 150;
+
+    const draw = () => {
+      if (!audioOverlayOpen) return;
+      animId = requestAnimationFrame(draw);
+
+      ctx.clearRect(0, 0, 300, 300);
+
+      if (analyserRef.current && isListening) {
+        const bufferLength = analyserRef.current.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyserRef.current.getByteFrequencyData(dataArray);
+
+        const avgVolume = dataArray.reduce((a, b) => a + b) / bufferLength;
+
+        const nodeCount = 8;
+        const nodes: { x: number; y: number; size: number }[] = [];
+        for (let i = 0; i < nodeCount; i++) {
+          const angle = (i / nodeCount) * Math.PI * 2 - Math.PI / 2;
+          const radius = 90 + (dataArray[i * 12] / 255) * 25;
+          nodes.push({
+            x: centerX + Math.cos(angle) * radius,
+            y: centerY + Math.sin(angle) * radius,
+            size: 3 + (dataArray[i * 12] / 255) * 4,
+          });
+        }
+
+        // Draw connections
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const opacity = 0.08 + (dataArray[(i + j) * 5] / 255) * 0.2;
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(139, 0, 255, ${opacity})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+
+          const centerOpacity = 0.15 + (dataArray[i * 8] / 255) * 0.25;
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(0, 153, 255, ${centerOpacity})`;
+          ctx.lineWidth = 1.5;
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(centerX, centerY);
+          ctx.stroke();
+        }
+
+        // Draw nodes
+        nodes.forEach((node, i) => {
+          const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size * 2);
+          gradient.addColorStop(0, `rgba(139, 0, 255, ${0.6 + (dataArray[i * 12] / 255) * 0.2})`);
+          gradient.addColorStop(1, 'rgba(139, 0, 255, 0)');
+
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(100, 200, 255, ${0.5 + (dataArray[i * 12] / 255) * 0.3})`;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, node.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        });
+
+        // Outer ring
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 75 + avgVolume * 0.15, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(139, 0, 255, ${0.15 + (avgVolume / 255) * 0.2})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else {
+        // Fallback animation
+        const t = Date.now() * 0.001;
+        for (let i = 0; i < 8; i++) {
+          const angle = (i / 8) * Math.PI * 2 + t;
+          const radius = 90 + Math.sin(t * 1.5 + i) * 15;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
+
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(100, 200, 255, ${0.4 + Math.sin(t + i) * 0.2})`;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(139, 0, 255, 0.2)';
+          ctx.moveTo(x, y);
+          ctx.lineTo(centerX, centerY);
+          ctx.stroke();
+        }
+      }
+    };
+
+    draw();
+
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+    };
+  }, [audioOverlayOpen, isListening]);
+
+  // Handle form submit
+  const handleSubmit = () => {
+    if (formData.name && formData.phone && formData.email) {
+      // POST to webhook
+      fetch('/api/aivi-demo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+        }),
+      }).catch((error) => console.error('Webhook error:', error));
+
+      setDemoModalOpen(false);
+      setAudioOverlayOpen(true);
+      runDemoSequence(formData.name, formData.phone, formData.email);
+    }
+  };
+
+  // Close audio overlay
+  const closeAudioOverlay = () => {
+    setIsListening(false);
+    setAudioOverlayOpen(false);
+    if (audioContextRef.current) audioContextRef.current.close();
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+  };
+
+  return (
+    <>
+      {/* Interactive/animation styles - layout styles are in globals.css to prevent flash on refresh */}
+      <style jsx global>{`
+        /* Hover effects for vertical columns */
+        .v-column::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(180deg, rgba(139, 0, 255, 0) 0%, rgba(139, 0, 255, 0.05) 50%, rgba(139, 0, 255, 0) 100%);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          pointer-events: none;
+        }
+
+        .v-column:hover::before { opacity: 1; }
+
+        .v-column:hover {
+          background: linear-gradient(180deg, rgba(139, 0, 255, 0.08) 0%, rgba(0, 153, 255, 0.12) 50%, rgba(139, 0, 255, 0.08) 100%);
+          border-color: rgba(139, 0, 255, 0.4);
+          box-shadow: inset 0 0 80px rgba(139, 0, 255, 0.15);
+        }
+
+        .v-column:hover .phase-label {
+          opacity: 1;
+          color: rgba(139, 0, 255, 0.8);
+        }
+
+        /* Flow step hover effects */
+        .flow-step:hover .step-circle {
+          transform: scale(1.1);
+          border-color: rgba(139, 0, 255, 0.8);
+          box-shadow: 0 0 40px rgba(139, 0, 255, 0.4);
+        }
+
+        /* Microphone styles (animated border, glow, hover) and demo modal layout moved to globals.css */
+
+        .demo-submit {
+          width: 100%;
+          background: linear-gradient(135deg, #8b00ff 0%, #0099ff 100%);
+          border: none;
+          padding: 14px 24px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .demo-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(139, 0, 255, 0.4);
+        }
+
+        .status-indicator {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          width: 16px;
+          height: 16px;
+          background: #00ff88;
+          border-radius: 50%;
+          border: 2px solid rgba(0, 0, 0, 0.8);
+          animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+
+        .results-preview {
+          margin-top: 60px;
+          text-align: center;
+        }
+
+        .results-title {
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.5);
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 20px;
+        }
+
+        .live-counter { margin-bottom: 30px; text-align: center; }
+
+        .counter-number {
+          font-size: 48px;
+          font-weight: 700;
+          background: linear-gradient(135deg, #ff8c00 0%, #ff4500 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 8px;
+        }
+
+        .counter-label {
+          font-size: 14px;
+          color: rgba(255, 255, 255, 0.6);
+          letter-spacing: 0.5px;
+        }
+
+        .counter-live {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 8px;
+          font-size: 11px;
+          color: #00ff88;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .live-dot {
+          width: 8px;
+          height: 8px;
+          background: #00ff88;
+          border-radius: 50%;
+          animation: blink 1.5s ease-in-out infinite;
+        }
+
+        .results-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        .result-card {
+          background: rgba(10, 10, 26, 0.6);
+          border: 1px solid rgba(139, 0, 255, 0.2);
+          border-radius: 12px;
+          padding: 20px;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+        }
+
+        .result-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(139, 0, 255, 0.5);
+          box-shadow: 0 8px 24px rgba(139, 0, 255, 0.2);
+        }
+
+        .result-number {
+          font-size: 28px;
+          font-weight: 700;
+          background: linear-gradient(135deg, #00ff88 0%, #0099ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 6px;
+        }
+
+        .result-label {
+          font-size: 11px;
+          color: rgba(255, 255, 255, 0.5);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        /* Audio Overlay */
+        .audio-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.95);
+          z-index: 2000;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        .audio-overlay.active { display: flex; }
+
+        .demo-container {
+          display: flex;
+          gap: 60px;
+          align-items: center;
+        }
+
+        .status-terminal {
+          width: 450px;
+          background: linear-gradient(135deg, rgba(20, 20, 35, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+          border: 1px solid rgba(139, 0, 255, 0.3);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 0 60px rgba(139, 0, 255, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+          background: linear-gradient(90deg, rgba(139, 0, 255, 0.2) 0%, rgba(0, 153, 255, 0.2) 100%);
+          padding: 12px 16px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          border-bottom: 1px solid rgba(139, 0, 255, 0.2);
+        }
+
+        .terminal-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .terminal-dots span {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .terminal-dots span:first-child { background: #ff5f57; }
+        .terminal-dots span:nth-child(2) { background: #ffbd2e; }
+        .terminal-dots span:last-child { background: #28ca41; }
+
+        .terminal-title {
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.7);
+          letter-spacing: 1px;
+        }
+
+        .terminal-body {
+          padding: 20px;
+          min-height: 320px;
+          max-height: 400px;
+          overflow-y: auto;
+          font-family: 'SF Mono', 'Fira Code', monospace;
+          font-size: 13px;
+          line-height: 1.8;
+        }
+
+        .terminal-line {
+          margin-bottom: 8px;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          animation: lineAppear 0.4s ease forwards;
+        }
+
+        @keyframes lineAppear {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-line.welcome {
+          color: #00ff88;
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 16px;
+        }
+
+        .terminal-line .status-icon {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+
+        .terminal-line .status-icon.pending {
+          border: 2px solid rgba(255, 140, 0, 0.5);
+          animation: spinIcon 1s linear infinite;
+        }
+
+        .terminal-line .status-icon.success {
+          background: rgba(0, 255, 136, 0.2);
+          border: 2px solid #00ff88;
+          color: #00ff88;
+        }
+
+        .terminal-line .status-icon.error {
+          background: rgba(255, 68, 68, 0.2);
+          border: 2px solid #ff4444;
+          color: #ff4444;
+        }
+
+        .terminal-line .status-icon.calling {
+          background: rgba(0, 153, 255, 0.2);
+          border: 2px solid #0099ff;
+          animation: pulseIcon 1s ease-in-out infinite;
+        }
+
+        .terminal-line .status-icon.listening {
+          background: rgba(139, 0, 255, 0.2);
+          border: 2px solid #8b00ff;
+          animation: pulseIcon 1.5s ease-in-out infinite;
+        }
+
+        .terminal-line .status-icon.ai {
+          background: linear-gradient(135deg, rgba(139, 0, 255, 0.3), rgba(0, 153, 255, 0.3));
+          border: 2px solid #0099ff;
+          color: #0099ff;
+        }
+
+        @keyframes spinIcon { to { transform: rotate(360deg); } }
+
+        @keyframes pulseIcon {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .terminal-line .line-text {
+          color: rgba(255, 255, 255, 0.8);
+          flex: 1;
+        }
+
+        .terminal-line .highlight { color: #0099ff; font-weight: 600; }
+        .terminal-line .success-text { color: #00ff88; font-weight: 600; }
+        .terminal-line .error-text { color: #ff4444; }
+
+        .terminal-line.user-speech .line-text {
+          color: rgba(255, 255, 255, 0.9);
+          font-style: italic;
+        }
+
+        .terminal-line.ai-response .line-text { color: #0099ff; }
+
+        .audio-visualizer {
+          position: relative;
+          width: 300px;
+          height: 300px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        #audioCanvas {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .mic-center {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100px;
+          height: 100px;
+          background: linear-gradient(135deg, rgba(139, 0, 255, 0.3) 0%, rgba(0, 153, 255, 0.3) 100%);
+          border: 2px solid rgba(139, 0, 255, 0.6);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 40px;
+          box-shadow: 0 0 60px rgba(139, 0, 255, 0.5);
+        }
+
+        .end-demo-btn {
+          position: absolute;
+          bottom: -60px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+          border: none;
+          color: #fff;
+          padding: 12px 24px;
+          border-radius: 30px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .end-demo-btn:hover {
+          transform: translateX(-50%) translateY(-2px);
+          box-shadow: 0 8px 30px rgba(255, 68, 68, 0.5);
+        }
+
+        .user-info-display {
+          position: absolute;
+          bottom: 40px;
+          text-align: center;
+        }
+
+        .user-info-display .user-name {
+          font-size: 24px;
+          font-weight: 600;
+          color: #fff;
+          margin-bottom: 8px;
+        }
+
+        .user-info-display .user-details {
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 1024px) {
+          .results-grid { grid-template-columns: repeat(2, 1fr); }
+          .v-column .phase-label { font-size: 8px; }
+        }
+
+        @media (max-width: 900px) {
+          .demo-container { flex-direction: column; gap: 30px; }
+          .status-terminal { width: 90%; max-width: 400px; }
+        }
+
+        @media (max-width: 768px) {
+          .results-grid { grid-template-columns: 1fr; }
+          /* demo-modal and form-fields responsive styles moved to globals.css */
+        }
+      `}</style>
+
+      <section className="hero-section-v4">
+        <canvas ref={canvasRef} id="neuralCanvas" />
+
+        {/* 7 Vertical Columns with bottom fade */}
+        <div className="vertical-columns" style={{ maskImage: 'linear-gradient(to bottom, black 0%, black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 70%, transparent 100%)' }}>
+          <div className="v-column"></div>
+          <div className="v-column">
+            <span className="phase-label">Lead Submits</span>
+          </div>
+          <div className="v-column">
+            <span className="phase-label">Instant SMS</span>
+          </div>
+          <div className="v-column">
+            <span className="phase-label">AI Voice</span>
+          </div>
+          <div className="v-column">
+            <span className="phase-label">Credit Pull</span>
+          </div>
+          <div className="v-column">
+            <span className="phase-label">Agent Transfer</span>
+          </div>
+          <div className="v-column"></div>
+        </div>
+
+        <div className="hero-content-v4">
+          <div className="eyebrow">Experience AI Orchestration Live</div>
+
+          <h1 className="hero-headline-v4">
+            Turn 45% Contact Rates Into 65%
+            <br />
+            Add $1.2M+ Monthly Revenue Without Hiring
+          </h1>
+
+          <p className="hero-subheadline">
+            AIVI reaches leads in 3 seconds via SMS, voice, and email—credit pulled, qualified, and
+            transferred to your closers before competitors call back.
+          </p>
+
+          <div className="orchestration-flow">
+            <div className="flow-step">
+              <div className="step-circle">
+                <HiOutlineDesktopComputer size={40} color="#64c8ff" />
+              </div>
+              <div className="step-label">Lead Submits</div>
+              <div className="step-detail">Form completed</div>
+            </div>
+            <div className="flow-connector">
+              <span className="connector-dot"></span>
+            </div>
+            <div className="flow-step">
+              <div className="step-circle" style={{ position: 'relative' }}>
+                <BsChatDots size={40} color="#64c8ff" />
+                <div className="status-indicator"></div>
+              </div>
+              <div className="step-label">Instant SMS</div>
+              <div className="step-detail">3-second response</div>
+            </div>
+            <div className="flow-connector">
+              <span className="connector-dot"></span>
+            </div>
+            <div className="flow-step step-microphone">
+              <div
+                className="step-circle"
+                onClick={() => setDemoModalOpen(true)}
+              >
+                <div className="mic-glow"></div>
+                <FiMic size={48} color="#fff" />
+              </div>
+              <div className="step-label">Try AIVI</div>
+              <div className="step-detail">Live qualification</div>
+              <button className="mic-cta" onClick={() => setDemoModalOpen(true)}>
+                Experience It Yourself →
+              </button>
+
+              <div
+                className="demo-modal-backdrop"
+                style={{
+                  display: demoModalOpen ? 'block' : 'none',
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 999,
+                }}
+                onClick={() => setDemoModalOpen(false)}
+              />
+              <div className={`demo-modal ${demoModalOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
+                <div className="demo-form">
+                  <div className="form-header">
+                    <div className="form-title">Your Personalized Demo</div>
+                    <div className="form-subtitle">See AIVI handle your lead in real-time</div>
+                  </div>
+                  <div className="form-fields">
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        placeholder=" "
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        required
+                      />
+                      <label>Your Name</label>
+                    </div>
+                    <div className="input-group">
+                      <input
+                        type="tel"
+                        placeholder=" "
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        required
+                      />
+                      <label>Phone Number</label>
+                    </div>
+                    <div className="input-group">
+                      <input
+                        type="email"
+                        placeholder=" "
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        required
+                      />
+                      <label>Email Address</label>
+                    </div>
+                  </div>
+                  <button className="demo-submit" onClick={handleSubmit}>
+                    <span>Activate Live Demo</span>
+                    <svg width="20" height="20" viewBox="0 0 40 40">
+                      <defs>
+                        <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#fff" stopOpacity="0.9" />
+                          <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.7" />
+                        </linearGradient>
+                      </defs>
+                      <polygon
+                        points="20,2 26,6 26,14 20,18 14,14 14,6"
+                        fill="none"
+                        stroke="url(#hexGrad)"
+                        strokeWidth="1.5"
+                      />
+                      <polygon
+                        points="10,10 16,14 16,22 10,26 4,22 4,14"
+                        fill="none"
+                        stroke="url(#hexGrad)"
+                        strokeWidth="1.5"
+                      />
+                      <polygon
+                        points="30,10 36,14 36,22 30,26 24,22 24,14"
+                        fill="none"
+                        stroke="url(#hexGrad)"
+                        strokeWidth="1.5"
+                      />
+                      <polygon
+                        points="20,18 26,22 26,30 20,34 14,30 14,22"
+                        fill="none"
+                        stroke="url(#hexGrad)"
+                        strokeWidth="1.5"
+                      />
+                      <circle cx="20" cy="10" r="2" fill="#fff" />
+                      <circle cx="10" cy="18" r="1.5" fill="#a78bfa" />
+                      <circle cx="30" cy="18" r="1.5" fill="#a78bfa" />
+                      <circle cx="20" cy="26" r="2" fill="#fff" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="flow-connector">
+              <span className="connector-dot"></span>
+            </div>
+            <div className="flow-step">
+              <div className="step-circle" style={{ position: 'relative' }}>
+                <TbCreditCard size={40} color="#00ff88" />
+                <div className="status-indicator"></div>
+              </div>
+              <div className="step-label">Credit Pulled</div>
+              <div className="step-detail">Soft pull + verify</div>
+            </div>
+            <div className="flow-connector">
+              <span className="connector-dot"></span>
+            </div>
+            <div className="flow-step">
+              <div className="step-circle">
+                <FaUserTie size={40} color="#64c8ff" />
+              </div>
+              <div className="step-label">Top Agent</div>
+              <div className="step-detail">Warm transfer</div>
+            </div>
+          </div>
+
+          <div className="results-preview-simple">
+              {/* Main Counter with Animated Digits */}
+              <div className="counter-display">
+                {counterValue.toLocaleString().split('').map((char, i) => (
+                  <span
+                    key={i}
+                    className={char === ',' ? 'counter-comma' : 'counter-digit'}
+                    style={{ animationDelay: `${i * 0.05}s` }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+
+              <div className="counter-label-simple">AI-Powered Conversations Completed</div>
+
+              {/* Live Indicator */}
+              <div className="counter-live-simple">
+                <span className="live-dot-simple"></span>
+                <span className="live-text-simple">LIVE</span>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      {/* Audio Visualization Overlay */}
+      <div className={`audio-overlay ${audioOverlayOpen ? 'active' : ''}`}>
+        <div className="demo-container">
+          {/* Left: Status Terminal */}
+          <div className="status-terminal">
+            <div className="terminal-header">
+              <div className="terminal-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div className="terminal-title">AIVI Live Demo</div>
+            </div>
+            <div className="terminal-body">
+              <div className="terminal-line welcome">{welcomeText}</div>
+              {terminalLines.map((line, index) => (
+                <div
+                  key={index}
+                  className={`terminal-line ${line.className || ''}`}
+                  dangerouslySetInnerHTML={{ __html: line.html }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Audio Visualizer */}
+          <div className="audio-visualizer">
+            <canvas ref={audioCanvasRef} id="audioCanvas" width="300" height="300" />
+            <div className="mic-center">🎙️</div>
+            <button className="end-demo-btn" onClick={closeAudioOverlay}>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              >
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                <line x1="1" y1="1" x2="23" y2="23" stroke="#ff4444" strokeWidth="3" />
+              </svg>
+              <span>End Demo</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="user-info-display">
+          <div className="user-name">{formData.name}</div>
+          <div className="user-details">
+            {formData.phone} • {formData.email}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

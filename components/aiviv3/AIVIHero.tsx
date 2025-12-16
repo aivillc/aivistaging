@@ -14,7 +14,6 @@ export default function AIVIHero() {
     industry: '',
     teamSize: '',
   });
-  const [showCookieBanner, setShowCookieBanner] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -258,45 +257,6 @@ export default function AIVIHero() {
                   </svg>
                 )}
               </button>
-
-              {/* Cookie Consent Banner */}
-              {showCookieBanner && (
-                <div
-                  className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-[0_4px_24px_rgba(0,0,0,0.15)] max-w-[calc(100%-16px)] sm:max-w-[400px] transition-all duration-300"
-                  role="dialog"
-                  aria-label="Cookie consent"
-                >
-                  <p className="text-[11px] sm:text-[12px] leading-[1.5] text-[#333333] mb-2 sm:mb-3">
-                    We use cookies to enhance your experience. By clicking &quot;Accept&quot;, you consent to our use of cookies.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2">
-                    <button
-                      onClick={() => setShowCookieBanner(false)}
-                      className="flex-1 min-w-[70px] px-2 sm:px-3 py-1.5 bg-transparent border border-[#DDDDDD] text-[#000000] text-[11px] sm:text-[12px] rounded-md hover:bg-[#F9F9F9] hover:border-[#999999] transition-all duration-200 focus-brand-ring"
-                    >
-                      Preferences
-                    </button>
-                    <button
-                      onClick={() => setShowCookieBanner(false)}
-                      className="flex-1 min-w-[70px] px-2 sm:px-3 py-1.5 bg-transparent border border-[#DDDDDD] text-[#000000] text-[11px] sm:text-[12px] rounded-md hover:bg-[#F9F9F9] hover:border-[#999999] transition-all duration-200 focus-brand-ring"
-                    >
-                      Reject
-                    </button>
-                    <button
-                      onClick={() => setShowCookieBanner(false)}
-                      className="flex-1 min-w-[70px] px-2 sm:px-3 py-1.5 bg-[#000000] text-white text-[11px] sm:text-[12px] rounded-md hover:bg-[#222222] transition-all duration-200 focus-brand-ring"
-                    >
-                      Accept
-                    </button>
-                  </div>
-                  <a href="/privacy" className="text-[11px] sm:text-[12px] text-[#666666] underline hover:text-[#000000] flex items-center gap-1 w-fit transition-colors focus-brand-ring">
-                    <svg className="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
-                    </svg>
-                    Privacy Policy
-                  </a>
-                </div>
-              )}
             </div>
           </div>
         </div>

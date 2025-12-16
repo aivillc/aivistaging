@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIVI - Experience AI Orchestration Live</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 20px 40px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b00ff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #8b00ff;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, #8b00ff 0%, #0099ff 100%);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 0, 255, 0.4);
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 120px 20px 60px;
+            background: #000;
+        }
+
+        /* 7 Vertical Rectangle Columns */
+        .vertical-columns {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            z-index: 3;
+        }
+
+        .v-column {
+            flex: 1;
+            height: 100%;
+            border-left: 1px solid rgba(139, 0, 255, 0.1);
+            border-right: 1px solid rgba(139, 0, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .v-column:first-child {
+            border-left: none;
+        }
+
+        .v-column:last-child {
+            border-right: none;
+        }
+
+        .v-column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, 
+                rgba(139, 0, 255, 0) 0%, 
+                rgba(139, 0, 255, 0.05) 50%, 
+                rgba(139, 0, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .v-column:hover::before {
+            opacity: 1;
+        }
+
+        .v-column:hover {
+            background: linear-gradient(180deg, 
+                rgba(139, 0, 255, 0.08) 0%, 
+                rgba(0, 153, 255, 0.12) 50%, 
+                rgba(139, 0, 255, 0.08) 100%);
+            border-color: rgba(139, 0, 255, 0.4);
+            box-shadow: inset 0 0 80px rgba(139, 0, 255, 0.15);
+        }
+
+        /* Phase labels for columns 2-6 (the 5 phases) */
+        .v-column .phase-label {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(139, 0, 255, 0.3);
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .v-column:hover .phase-label {
+            opacity: 1;
+            color: rgba(139, 0, 255, 0.8);
+        }
+
+        #neuralCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .hero-content * {
+            pointer-events: auto;
+        }
+
+        .eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8b00ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-headline {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .hero-subheadline {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .orchestration-flow {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 24px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(10, 10, 26, 0.8);
+            border: 2px solid rgba(139, 0, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .flow-step:hover .step-circle {
+            transform: scale(1.1);
+            border-color: rgba(139, 0, 255, 0.8);
+            box-shadow: 0 0 40px rgba(139, 0, 255, 0.4);
+        }
+
+        .flow-step.step-microphone {
+            position: relative;
+            z-index: 50;
+        }
+
+        .step-microphone .step-circle {
+            width: 120px;
+            height: 120px;
+            font-size: 48px;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(10, 10, 26, 0.9) 100%);
+            border: 3px solid rgba(139, 0, 255, 0.6);
+            box-shadow: 0 0 40px rgba(139, 0, 255, 0.4);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mic-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 0, 255, 0.4) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.4; }
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .step-microphone .step-label {
+            color: #8b00ff;
+            font-size: 12px;
+        }
+
+        .step-detail {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            max-width: 100px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: rgba(139, 0, 255, 0.4);
+            margin-top: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .flow-arrow.active {
+            color: rgba(255, 140, 0, 0.9);
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
+            transform: translateX(6px) scale(1.2);
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); opacity: 0.4; }
+            50% { transform: translateX(6px); opacity: 1; }
+        }
+
+        .mic-cta {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(139, 0, 255, 0.8);
+            border: 1px solid rgba(139, 0, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mic-cta:hover {
+            background: rgba(139, 0, 255, 0.1);
+            border-color: rgba(139, 0, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .demo-modal {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            width: 700px;
+            background: rgba(10, 10, 20, 0.98);
+            border: 1px solid rgba(139, 0, 255, 0.4);
+            border-radius: 16px;
+            padding: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 0, 255, 0.3);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .demo-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .demo-form {
+            padding: 24px 32px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-fields {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-bottom: 2px solid rgba(139, 0, 255, 0.3);
+            padding: 16px 12px 8px;
+            font-size: 14px;
+            color: #fff;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            background: rgba(139, 0, 255, 0.1);
+            border-bottom-color: #8b00ff;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 8px;
+            font-size: 10px;
+            color: #8b00ff;
+            transform: translateY(0);
+        }
+
+        .input-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8b00ff, #0099ff);
+            transition: width 0.3s ease;
+        }
+
+        .input-group input:focus ~ .input-line {
+            width: 100%;
+        }
+
+        .demo-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #8b00ff 0%, #0099ff 100%);
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .demo-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 0, 255, 0.4);
+        }
+
+        .demo-submit:active {
+            transform: translateY(0);
+        }
+
+        .submit-icon-svg {
+            margin-left: 8px;
+        }
+
+        .submit-icon-svg .hex {
+            animation: hexPulse 2s ease-in-out infinite;
+        }
+
+        .submit-icon-svg .hex1 { animation-delay: 0s; }
+        .submit-icon-svg .hex2 { animation-delay: 0.3s; }
+        .submit-icon-svg .hex3 { animation-delay: 0.6s; }
+        .submit-icon-svg .hex4 { animation-delay: 0.9s; }
+
+        .submit-icon-svg .hex-dot {
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes hexPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Audio visualization overlay */
+        .audio-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .audio-overlay.active {
+            display: flex;
+        }
+
+        .demo-container {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Status Terminal */
+        .status-terminal {
+            width: 450px;
+            background: linear-gradient(135deg, rgba(20, 20, 35, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+            border: 1px solid rgba(139, 0, 255, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(139, 0, 255, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            background: linear-gradient(90deg, rgba(139, 0, 255, 0.2) 0%, rgba(0, 153, 255, 0.2) 100%);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(139, 0, 255, 0.2);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .terminal-dots span:first-child { background: #ff5f57; }
+        .terminal-dots span:nth-child(2) { background: #ffbd2e; }
+        .terminal-dots span:last-child { background: #28ca41; }
+
+        .terminal-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            min-height: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: rgba(139, 0, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .terminal-line {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: lineAppear 0.4s ease forwards;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        @keyframes lineAppear {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-line.welcome {
+            color: #00ff88;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .terminal-line .status-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .terminal-line .status-icon.pending {
+            border: 2px solid rgba(255, 140, 0, 0.5);
+            animation: spinIcon 1s linear infinite;
+        }
+
+        .terminal-line .status-icon.success {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .terminal-line .status-icon.error {
+            background: rgba(255, 68, 68, 0.2);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .terminal-line .status-icon.calling {
+            background: rgba(0, 153, 255, 0.2);
+            border: 2px solid #0099ff;
+            animation: pulseIcon 1s ease-in-out infinite;
+        }
+
+        .terminal-line .status-icon.listening {
+            background: rgba(139, 0, 255, 0.2);
+            border: 2px solid #8b00ff;
+            animation: pulseIcon 1.5s ease-in-out infinite;
+        }
+
+        .terminal-line .status-icon.ai {
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.3), rgba(0, 153, 255, 0.3));
+            border: 2px solid #0099ff;
+            color: #0099ff;
+        }
+
+        @keyframes spinIcon {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .terminal-line .line-text {
+            color: rgba(255, 255, 255, 0.8);
+            flex: 1;
+        }
+
+        .terminal-line .highlight {
+            color: #0099ff;
+            font-weight: 600;
+        }
+
+        .terminal-line .success-text {
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+        .terminal-line .error-text {
+            color: #ff4444;
+        }
+
+        .terminal-line.user-speech .line-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+        }
+
+        .terminal-line.ai-response .line-text {
+            color: #0099ff;
+        }
+
+        .transcript-container {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(139, 0, 255, 0.2);
+        }
+
+        .transcript-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .live-transcript {
+            min-height: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .live-transcript.active {
+            color: #fff;
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #0099ff;
+            border-radius: 50%;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        .audio-visualizer {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #audioCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mic-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.3) 0%, rgba(0, 153, 255, 0.3) 100%);
+            border: 2px solid rgba(139, 0, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 0 60px rgba(139, 0, 255, 0.5);
+        }
+
+        .end-demo-btn {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .end-demo-btn:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 68, 68, 0.5);
+        }
+
+        .user-info-display {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+        }
+
+        .user-info-display .user-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .user-info-display .user-details {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .demo-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .status-terminal {
+                width: 90%;
+                max-width: 400px;
+            }
+        }
+
+        .results-preview {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .live-counter {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8c00 0%, #ff4500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .counter-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .counter-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #00ff88;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .result-card {
+            background: rgba(10, 10, 26, 0.6);
+            border: 1px solid rgba(139, 0, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .result-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 0, 255, 0.5);
+            box-shadow: 0 8px 24px rgba(139, 0, 255, 0.2);
+        }
+
+        .result-number {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .result-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            background: #00ff88;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.8);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @media (max-width: 1024px) {
+            .results-grid { grid-template-columns: repeat(2, 1fr); }
+            .v-column .phase-label { font-size: 8px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-headline { font-size: 32px; }
+            .orchestration-flow { flex-direction: column; gap: 16px; }
+            .flow-arrow { transform: rotate(90deg); margin: 8px 0; }
+            .results-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .vertical-columns { display: none; }
+            .demo-modal { width: 90%; max-width: 320px; }
+            .form-fields { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">AIVI</div>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="https://calendar.app.google/CUobgKJa1AZh95tTA" target="_blank" class="nav-cta">Schedule Demo</a>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <canvas id="neuralCanvas"></canvas>
+        
+        <!-- 7 Vertical Columns -->
+        <div class="vertical-columns">
+            <div class="v-column"></div>
+            <div class="v-column"><span class="phase-label">1. Lead Submits</span></div>
+            <div class="v-column"><span class="phase-label">2. Instant SMS</span></div>
+            <div class="v-column"><span class="phase-label">3. AI Voice</span></div>
+            <div class="v-column"><span class="phase-label">4. Credit Pull</span></div>
+            <div class="v-column"><span class="phase-label">5. Agent Transfer</span></div>
+            <div class="v-column"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="eyebrow">Experience AI Orchestration Live</div>
+            
+            <h1 class="hero-headline">
+                Turn 45% Contact Rates Into 65%<br>
+                Add $1.2M+ Monthly Revenue Without Hiring
+            </h1>
+            
+            <p class="hero-subheadline">
+                AIVI reaches leads in 3 seconds via SMS, voice, and email—credit pulled, qualified, and transferred to your closers before competitors call back.
+            </p>
+
+            <div class="orchestration-flow">
+                <div class="flow-step">
+                    <div class="step-circle">💻</div>
+                    <div class="step-label">1. Lead Submits</div>
+                    <div class="step-detail">Form completed</div>
+                </div>
+                <div class="flow-arrow" data-arrow="1">→</div>
+                <div class="flow-step">
+                    <div class="step-circle" style="position:relative;">📱<div class="status-indicator"></div></div>
+                    <div class="step-label">2. Instant SMS</div>
+                    <div class="step-detail">3-second response</div>
+                </div>
+                <div class="flow-arrow" data-arrow="2">→</div>
+                <div class="flow-step step-microphone">
+                    <div class="step-circle"><div class="mic-glow"></div>🎙️</div>
+                    <div class="step-label">3. Try AIVI</div>
+                    <div class="step-detail">Live qualification</div>
+                    <div class="mic-cta" id="demoTrigger">Experience It Yourself →</div>
+                    
+                    <div class="demo-modal" id="demoModal">
+                        <div class="demo-form">
+                            <div class="form-header">
+                                <div class="form-title">Your Personalized Demo</div>
+                                <div class="form-subtitle">See AIVI handle your lead in real-time</div>
+                            </div>
+                            <div class="form-fields">
+                                <div class="input-group">
+                                    <input type="text" id="demoName" placeholder=" " required>
+                                    <label>Your Name</label>
+                                    <div class="input-line"></div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="tel" id="demoPhone" placeholder=" " required>
+                                    <label>Phone Number</label>
+                                    <div class="input-line"></div>
+                                </div>
+                                <div class="input-group">
+                                    <input type="email" id="demoEmail" placeholder=" " required>
+                                    <label>Email Address</label>
+                                    <div class="input-line"></div>
+                                </div>
+                            </div>
+                            <button class="demo-submit" id="demoSubmit">
+                                <span class="submit-text">Activate Live Demo</span>
+                                <svg class="submit-icon-svg" width="20" height="20" viewBox="0 0 40 40">
+                                    <defs>
+                                        <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#fff" stop-opacity="0.9"/>
+                                            <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.7"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon class="hex hex1" points="20,2 26,6 26,14 20,18 14,14 14,6" fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+                                    <polygon class="hex hex2" points="10,10 16,14 16,22 10,26 4,22 4,14" fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+                                    <polygon class="hex hex3" points="30,10 36,14 36,22 30,26 24,22 24,14" fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+                                    <polygon class="hex hex4" points="20,18 26,22 26,30 20,34 14,30 14,22" fill="none" stroke="url(#hexGrad)" stroke-width="1.5"/>
+                                    <circle class="hex-dot" cx="20" cy="10" r="2" fill="#fff"/>
+                                    <circle class="hex-dot" cx="10" cy="18" r="1.5" fill="#a78bfa"/>
+                                    <circle class="hex-dot" cx="30" cy="18" r="1.5" fill="#a78bfa"/>
+                                    <circle class="hex-dot" cx="20" cy="26" r="2" fill="#fff"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="step-circle" style="position:relative;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#creditGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <defs><linearGradient id="creditGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#0099ff"/></linearGradient></defs>
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    <div class="status-indicator"></div></div>
+                    <div class="step-label">4. Credit Pulled</div>
+                    <div class="step-detail">Soft pull + verify</div>
+                </div>
+                <div class="flow-arrow" data-arrow="4">→</div>
+                <div class="flow-step">
+                    <div class="step-circle">
+                        <div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);display:flex;align-items:center;justify-content:center;font-size:36px;">👤</div>
+                    </div>
+                    <div class="step-label">5. Top Agent</div>
+                    <div class="step-detail">Warm transfer</div>
+                </div>
+            </div>
+
+            <div class="results-preview">
+                <div class="results-title">Orchestration Results</div>
+                
+                <div class="live-counter">
+                    <div class="counter-number" id="liveCounter">1,121,000</div>
+                    <div class="counter-label">AI-Powered Conversations Completed</div>
+                    <div class="counter-live"><span class="live-dot"></span> Live</div>
+                </div>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-number">3 sec</div>
+                        <div class="result-label">Response Time</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">65%+</div>
+                        <div class="result-label">Contact Rate</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">90 sec</div>
+                        <div class="result-label">Full Qualification</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-number">$1.2M+</div>
+                        <div class="result-label">Monthly Lift</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audio Visualization Overlay -->
+    <div class="audio-overlay" id="audioOverlay">
+        <div class="demo-container">
+            <!-- Left: Status Terminal -->
+            <div class="status-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="terminal-title">AIVI Live Demo</div>
+                </div>
+                <div class="terminal-body" id="terminalBody">
+                    <div class="terminal-line welcome" id="welcomeLine"></div>
+                </div>
+            </div>
+            
+            <!-- Right: Audio Visualizer -->
+            <div class="audio-visualizer">
+                <canvas id="audioCanvas" width="300" height="300"></canvas>
+                <div class="mic-center">🎙️</div>
+                <button class="end-demo-btn" id="closeAudio">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                        <line x1="1" y1="1" x2="23" y2="23" stroke="#ff4444" stroke-width="3"/>
+                    </svg>
+                    <span>End Demo</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="user-info-display">
+            <div class="user-name" id="displayName"></div>
+            <div class="user-details" id="displayDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = document.querySelector('.hero-section').offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        window.addEventListener('load', resize);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.radius = Math.random() * 2 + 1;
+                this.density = Math.random() * 30 + 1;
+            }
+
+            update() {
+                // Mouse interaction
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    let forceX = dx / dist;
+                    let forceY = dy / dist;
+                    let maxDist = mouse.radius;
+                    let force = (maxDist - dist) / maxDist;
+
+                    if (dist < mouse.radius) {
+                        this.x -= forceX * force * this.density * 0.5;
+                        this.y -= forceY * force * this.density * 0.5;
+                    }
+                }
+
+                // Normal movement
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Slowly return to base
+                this.x += (this.baseX - this.x) * 0.01;
+                this.y += (this.baseY - this.y) * 0.01;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.vx *= -1;
+                    this.baseX = this.x;
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.vy *= -1;
+                    this.baseY = this.y;
+                }
+            }
+
+            draw() {
+                // Lighter colors - cyan/turquoise tones
+                let brightness = 0.6;
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < mouse.radius) {
+                        brightness = 1 - (dist / mouse.radius) * 0.4;
+                    }
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(100, 200, 255, ${0.4 * brightness})`;
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        const count = 150;
+        
+        function initParticles() {
+            particles.length = 0;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        initParticles();
+        window.addEventListener('resize', () => {
+            setTimeout(initParticles, 100);
+        });
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 140) {
+                        let opacity = 0.15 * (1 - dist / 140);
+                        
+                        // Brighter near mouse
+                        if (mouse.x != null && mouse.y != null) {
+                            let midX = (particles[i].x + particles[j].x) / 2;
+                            let midY = (particles[i].y + particles[j].y) / 2;
+                            let mouseDist = Math.sqrt((mouse.x - midX) ** 2 + (mouse.y - midY) ** 2);
+                            if (mouseDist < mouse.radius) {
+                                opacity *= 1 + (1 - mouseDist / mouse.radius) * 2;
+                            }
+                        }
+                        
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Draw glow around mouse
+        function drawMouseGlow() {
+            if (mouse.x != null && mouse.y != null) {
+                let gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+                gradient.addColorStop(0, 'rgba(100, 200, 255, 0.15)');
+                gradient.addColorStop(0.5, 'rgba(139, 0, 255, 0.05)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.beginPath();
+                ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawMouseGlow();
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            drawConnections();
+            
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Live counter with persistence
+        const counterEl = document.getElementById('liveCounter');
+        const baseCount = 1213234;
+        const launchDate = new Date('2025-12-13').getTime();
+        const perDay = 5000;
+        const perMs = perDay / 86400000;
+        
+        function getCount() {
+            const now = Date.now();
+            const elapsed = now - launchDate;
+            return baseCount + Math.max(0, elapsed * perMs);
+        }
+        
+        let counterValue = getCount();
+        
+        function updateCounter() {
+            counterValue = getCount() + (Math.random() * 2);
+            counterEl.textContent = Math.floor(counterValue).toLocaleString();
+        }
+        
+        updateCounter();
+        setInterval(updateCounter, 1000);
+
+        // Arrow mouse tracking
+        const arrows = document.querySelectorAll('.flow-arrow');
+        const heroSection = document.querySelector('.hero-section');
+        
+        heroSection.addEventListener('mousemove', (e) => {
+            const rect = heroSection.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const sectionWidth = rect.width / 5;
+            const activeIndex = Math.floor(x / sectionWidth);
+            
+            arrows.forEach((arrow, i) => {
+                if (i === activeIndex || i === activeIndex - 1) {
+                    arrow.classList.add('active');
+                } else {
+                    arrow.classList.remove('active');
+                }
+            });
+        });
+        
+        heroSection.addEventListener('mouseleave', () => {
+            arrows.forEach(arrow => arrow.classList.remove('active'));
+        });
+
+        // Demo modal toggle
+        const demoTrigger = document.getElementById('demoTrigger');
+        const demoModal = document.getElementById('demoModal');
+        const microphoneCircle = document.querySelector('.step-microphone .step-circle');
+        
+        function openDemoModal(e) {
+            e.stopPropagation();
+            demoModal.classList.add('active');
+        }
+        
+        demoTrigger.addEventListener('click', openDemoModal);
+        microphoneCircle.addEventListener('click', openDemoModal);
+        
+        document.addEventListener('click', (e) => {
+            if (!demoModal.contains(e.target) && e.target !== demoTrigger) {
+                demoModal.classList.remove('active');
+            }
+        });
+        
+        // Form submission with audio activation
+        const demoSubmit = document.getElementById('demoSubmit');
+        const audioOverlay = document.getElementById('audioOverlay');
+        const closeAudio = document.getElementById('closeAudio');
+        const audioCanvas = document.getElementById('audioCanvas');
+        const audioCtx2 = audioCanvas.getContext('2d');
+        const terminalBody = document.getElementById('terminalBody');
+        let audioContext, analyser, microphone, animationId;
+        let isListening = false;
+        let recognition = null;
+        let currentFirstName = '';
+
+        // AI Response templates
+        const aiResponses = [
+            "Thanks {name}, I can help you with that. Our AI-powered system typically doubles contact rates within the first month.",
+            "Great question, {name}. AIVI engages leads in under 3 seconds across SMS, voice, and email simultaneously.",
+            "I understand, {name}. Let me connect you with one of our specialists who can walk you through a custom demo.",
+            "Absolutely, {name}. Our clients in financial services see an average of $1.2M additional monthly revenue.",
+            "That's a common concern, {name}. AIVI integrates seamlessly with your existing CRM and dialer systems."
+        ];
+
+        function getAIResponse(name) {
+            const response = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+            return response.replace('{name}', name);
+        }
+
+        function initSpeechRecognition(firstName) {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                addTerminalLine(`
+                    <span class="status-icon error">✕</span>
+                    <span class="line-text">Speech recognition <span class="error-text">not supported</span> in this browser</span>
+                `, 500);
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            let finalTranscript = '';
+            let silenceTimeout = null;
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript = transcript;
+                        
+                        // Clear any existing silence timeout
+                        if (silenceTimeout) clearTimeout(silenceTimeout);
+                        
+                        // Add user speech to terminal
+                        addTerminalLine(`
+                            <span class="status-icon listening">🎤</span>
+                            <span class="line-text">"${finalTranscript}"</span>
+                        `, 0).then(line => line.classList.add('user-speech'));
+                        
+                        // Simulate AI thinking and responding
+                        silenceTimeout = setTimeout(() => {
+                            // Show typing indicator
+                            const typingLine = document.createElement('div');
+                            typingLine.className = 'terminal-line ai-response';
+                            typingLine.id = 'typingIndicator';
+                            typingLine.innerHTML = `
+                                <span class="status-icon ai">AI</span>
+                                <span class="line-text">AIVI is typing<span class="typing-indicator"><span></span><span></span><span></span></span></span>
+                            `;
+                            typingLine.style.opacity = '1';
+                            typingLine.style.transform = 'translateY(0)';
+                            terminalBody.appendChild(typingLine);
+                            terminalBody.scrollTop = terminalBody.scrollHeight;
+                            
+                            // Show AI response after delay
+                            setTimeout(() => {
+                                const typing = document.getElementById('typingIndicator');
+                                if (typing) typing.remove();
+                                
+                                addTerminalLine(`
+                                    <span class="status-icon ai">AI</span>
+                                    <span class="line-text">"${getAIResponse(firstName)}"</span>
+                                `, 0).then(line => {
+                                    line.classList.add('ai-response');
+                                    terminalBody.scrollTop = terminalBody.scrollHeight;
+                                });
+                            }, 1500 + Math.random() * 1000);
+                        }, 1200);
+                        
+                        finalTranscript = '';
+                    } else {
+                        interimTranscript = transcript;
+                    }
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.log('Speech recognition error:', event.error);
+                if (event.error === 'not-allowed') {
+                    addTerminalLine(`
+                        <span class="status-icon error">✕</span>
+                        <span class="line-text">Microphone permission <span class="error-text">denied</span></span>
+                    `, 0);
+                }
+            };
+
+            recognition.onend = () => {
+                // Restart if still listening
+                if (isListening && recognition) {
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.log('Recognition restart error:', e);
+                    }
+                }
+            };
+
+            try {
+                recognition.start();
+                addTerminalLine(`
+                    <span class="status-icon success">✓</span>
+                    <span class="line-text">Voice recognition <span class="success-text">active</span> - speak to AIVI</span>
+                `, 800);
+            } catch (e) {
+                console.log('Recognition start error:', e);
+            }
+        }
+
+        function addTerminalLine(html, delay = 0) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'terminal-line';
+                    line.innerHTML = html;
+                    terminalBody.appendChild(line);
+                    resolve(line);
+                }, delay);
+            });
+        }
+
+        function updateLineStatus(line, iconClass, iconContent = '') {
+            const icon = line.querySelector('.status-icon');
+            if (icon) {
+                icon.className = 'status-icon ' + iconClass;
+                icon.textContent = iconContent;
+            }
+        }
+
+        async function runDemoSequence(name, phone, email) {
+            const firstName = name.split(' ')[0];
+            currentFirstName = firstName;
+            
+            // Welcome
+            document.getElementById('welcomeLine').textContent = `▶ Live demo started with ${firstName}`;
+            
+            await new Promise(r => setTimeout(r, 800));
+            
+            // Microphone check
+            const micLine = await addTerminalLine(`
+                <span class="status-icon pending"></span>
+                <span class="line-text">Requesting microphone access...</span>
+            `, 400);
+            
+            // Try microphone
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+                isListening = true;
+                
+                updateLineStatus(micLine, 'success', '✓');
+                micLine.querySelector('.line-text').innerHTML = 'Microphone connected <span class="success-text">(listening)</span>';
+                visualizeAudio();
+                
+                // Initialize speech recognition
+                initSpeechRecognition(firstName);
+            } catch (err) {
+                updateLineStatus(micLine, 'error', '✕');
+                micLine.querySelector('.line-text').innerHTML = 'Microphone access <span class="error-text">denied</span>';
+                visualizeAudioFallback();
+            }
+            
+            // SMS
+            const smsLine = await addTerminalLine(`
+                <span class="status-icon pending"></span>
+                <span class="line-text">Sending SMS to <span class="highlight">${firstName}</span> at <span class="highlight">${phone}</span>...</span>
+            `, 1200);
+            
+            await new Promise(r => setTimeout(r, 2000));
+            updateLineStatus(smsLine, 'success', '✓');
+            smsLine.querySelector('.line-text').innerHTML = `SMS sent to <span class="highlight">${firstName}</span> <span class="success-text">(delivered)</span>`;
+            
+            // Call
+            const callLine = await addTerminalLine(`
+                <span class="status-icon calling">📞</span>
+                <span class="line-text">Calling <span class="highlight">${firstName}</span> at <span class="highlight">${phone}</span>...</span>
+            `, 800);
+            
+            await new Promise(r => setTimeout(r, 2500));
+            updateLineStatus(callLine, 'success', '✓');
+            callLine.querySelector('.line-text').innerHTML = `Call to <span class="highlight">${firstName}</span> <span class="success-text">(connected)</span>`;
+            
+            // Email
+            const emailLine = await addTerminalLine(`
+                <span class="status-icon pending"></span>
+                <span class="line-text">Sending email to <span class="highlight">${email}</span>...</span>
+            `, 800);
+            
+            await new Promise(r => setTimeout(r, 1800));
+            updateLineStatus(emailLine, 'success', '✓');
+            emailLine.querySelector('.line-text').innerHTML = `Email about doubling contact rates <span class="success-text">(sent)</span>`;
+            
+            // Final status
+            await addTerminalLine(`
+                <span class="status-icon success">⚡</span>
+                <span class="line-text success-text">All channels engaged in under 4 seconds</span>
+            `, 1000);
+            
+            // Schedule appointment
+            const appointmentDate = new Date();
+            appointmentDate.setDate(appointmentDate.getDate() + 3);
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            const formattedDate = appointmentDate.toLocaleDateString('en-US', options);
+            
+            await addTerminalLine(`
+                <span class="status-icon success">📅</span>
+                <span class="line-text">Appointment scheduled with AI Expert for <span class="highlight">${formattedDate} at 1:30 PM</span></span>
+            `, 1200);
+            
+            // Conversation prompt
+            await addTerminalLine(`
+                <span class="status-icon listening">🎙️</span>
+                <span class="line-text">Speak now to interact with AIVI...</span>
+            `, 1500);
+        }
+
+        demoSubmit.addEventListener('click', async () => {
+            const name = document.getElementById('demoName').value;
+            const phone = document.getElementById('demoPhone').value;
+            const email = document.getElementById('demoEmail').value;
+            
+            if (name && phone && email) {
+                demoSubmit.querySelector('.submit-text').textContent = 'Activating...';
+                
+                // Show user info
+                document.getElementById('displayName').textContent = name;
+                document.getElementById('displayDetails').textContent = phone + ' • ' + email;
+                
+                // Clear terminal
+                terminalBody.innerHTML = '<div class="terminal-line welcome" id="welcomeLine"></div>';
+                
+                setTimeout(async () => {
+                    demoModal.classList.remove('active');
+                    audioOverlay.classList.add('active');
+                    
+                    // Run the demo sequence
+                    runDemoSequence(name, phone, email);
+                    
+                    // Reset form
+                    demoSubmit.querySelector('.submit-text').textContent = 'Activate Live Demo';
+                    document.getElementById('demoName').value = '';
+                    document.getElementById('demoPhone').value = '';
+                    document.getElementById('demoEmail').value = '';
+                }, 800);
+            }
+        });
+
+        function visualizeAudio() {
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            const centerX = 150;
+            const centerY = 150;
+            
+            function draw() {
+                if (!isListening) return;
+                animationId = requestAnimationFrame(draw);
+                
+                analyser.getByteFrequencyData(dataArray);
+                audioCtx2.clearRect(0, 0, 300, 300);
+                
+                const avgVolume = dataArray.reduce((a, b) => a + b) / bufferLength;
+                
+                const nodeCount = 8;
+                const nodes = [];
+                for (let i = 0; i < nodeCount; i++) {
+                    const angle = (i / nodeCount) * Math.PI * 2 - Math.PI / 2;
+                    const radius = 90 + (dataArray[i * 12] / 255) * 25;
+                    nodes.push({
+                        x: centerX + Math.cos(angle) * radius,
+                        y: centerY + Math.sin(angle) * radius,
+                        size: 3 + (dataArray[i * 12] / 255) * 4
+                    });
+                }
+                
+                // Draw connections
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const opacity = 0.08 + (dataArray[(i + j) * 5] / 255) * 0.2;
+                        audioCtx2.beginPath();
+                        audioCtx2.strokeStyle = `rgba(139, 0, 255, ${opacity})`;
+                        audioCtx2.lineWidth = 1;
+                        audioCtx2.moveTo(nodes[i].x, nodes[i].y);
+                        audioCtx2.lineTo(nodes[j].x, nodes[j].y);
+                        audioCtx2.stroke();
+                    }
+                    
+                    const centerOpacity = 0.15 + (dataArray[i * 8] / 255) * 0.25;
+                    audioCtx2.beginPath();
+                    audioCtx2.strokeStyle = `rgba(0, 153, 255, ${centerOpacity})`;
+                    audioCtx2.lineWidth = 1.5;
+                    audioCtx2.moveTo(nodes[i].x, nodes[i].y);
+                    audioCtx2.lineTo(centerX, centerY);
+                    audioCtx2.stroke();
+                }
+                
+                // Draw nodes
+                nodes.forEach((node, i) => {
+                    const gradient = audioCtx2.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size * 2);
+                    gradient.addColorStop(0, `rgba(139, 0, 255, ${0.6 + (dataArray[i * 12] / 255) * 0.2})`);
+                    gradient.addColorStop(1, 'rgba(139, 0, 255, 0)');
+                    
+                    audioCtx2.beginPath();
+                    audioCtx2.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                    audioCtx2.fillStyle = `rgba(100, 200, 255, ${0.5 + (dataArray[i * 12] / 255) * 0.3})`;
+                    audioCtx2.fill();
+                    
+                    audioCtx2.beginPath();
+                    audioCtx2.arc(node.x, node.y, node.size * 2, 0, Math.PI * 2);
+                    audioCtx2.fillStyle = gradient;
+                    audioCtx2.fill();
+                });
+                
+                // Outer ring
+                audioCtx2.beginPath();
+                audioCtx2.arc(centerX, centerY, 75 + avgVolume * 0.15, 0, Math.PI * 2);
+                audioCtx2.strokeStyle = `rgba(139, 0, 255, ${0.15 + (avgVolume / 255) * 0.2})`;
+                audioCtx2.lineWidth = 2;
+                audioCtx2.stroke();
+            }
+            
+            draw();
+        }
+
+        function visualizeAudioFallback() {
+            let t = 0;
+            function draw() {
+                if (!audioOverlay.classList.contains('active')) return;
+                requestAnimationFrame(draw);
+                t += 0.008;
+                
+                audioCtx2.clearRect(0, 0, 300, 300);
+                const centerX = 150, centerY = 150;
+                
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2 + t;
+                    const radius = 90 + Math.sin(t * 1.5 + i) * 15;
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+                    
+                    audioCtx2.beginPath();
+                    audioCtx2.arc(x, y, 4, 0, Math.PI * 2);
+                    audioCtx2.fillStyle = `rgba(100, 200, 255, ${0.4 + Math.sin(t + i) * 0.2})`;
+                    audioCtx2.fill();
+                    
+                    audioCtx2.beginPath();
+                    audioCtx2.strokeStyle = `rgba(139, 0, 255, 0.2)`;
+                    audioCtx2.moveTo(x, y);
+                    audioCtx2.lineTo(centerX, centerY);
+                    audioCtx2.stroke();
+                }
+            }
+            draw();
+        }
+
+        closeAudio.addEventListener('click', () => {
+            isListening = false;
+            audioOverlay.classList.remove('active');
+            if (animationId) cancelAnimationFrame(animationId);
+            if (audioContext) audioContext.close();
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+        });
+    </script>
+</body>
+</html>

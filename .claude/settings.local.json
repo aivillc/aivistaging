@@ -29,7 +29,10 @@
       "Bash(mkdir:*)",
       "Bash(tree:*)",
       "Bash(if not exist \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\aiviv3\\use-cases\" mkdir \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\aiviv3\\use-cases\")",
-      "Bash(if exist \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\" rmdir /s /q \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\")"
+      "Bash(if exist \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\" rmdir /s /q \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\")",
+      "Bash(for file in app/aiviv3/resources/case-studies/*/page.tsx)",
+      "Bash(do sed:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []
