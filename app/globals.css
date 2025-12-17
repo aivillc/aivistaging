@@ -754,7 +754,6 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 70px 20px 60px;
   background: #000;
 }
 
@@ -792,9 +791,9 @@ button:focus-visible, a:focus-visible {
 
 .orchestration-flow {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align to top so arrows can position relative to circles */
   justify-content: center;
-  gap: 16px;
+  gap: 0; /* Remove gap - use margins instead for asymmetric spacing */
   margin: 50px 0;
   padding: 40px 60px;
   flex-wrap: wrap;
@@ -806,6 +805,26 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   gap: 12px;
   z-index: 10;
+  margin: 0 8px; /* 16px total gap between adjacent elements */
+}
+
+/* Connectors get same margin for consistent spacing */
+.flow-connector {
+  margin: 0 8px;
+}
+
+/* Reduce margin on connectors adjacent to microphone to compensate for its larger width */
+.orchestration-flow .flow-connector:nth-child(4) {
+  margin-right: -15px; /* Pull closer to microphone */
+}
+.orchestration-flow .flow-connector:nth-child(6) {
+  margin-left: -15px; /* Pull closer to microphone */
+}
+
+/* Also reduce margin on microphone step itself for symmetry */
+.orchestration-flow .flow-step:nth-child(5) {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .step-circle {
@@ -914,6 +933,8 @@ button:focus-visible, a:focus-visible {
 .orchestration-flow .flow-connector {
   animation: stepAppear 0.6s ease-out forwards;
   opacity: 0;
+  align-self: flex-start;
+  margin-top: 37px; /* Center with 90px+4px border step circles */
 }
 
 .orchestration-flow .flow-connector:nth-child(2) { animation-delay: 0.15s; }
@@ -929,65 +950,85 @@ button:focus-visible, a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-start;
-  margin-top: 75px;
   cursor: pointer;
 }
 
-/* Arrow SVG styling */
+/* Arrow SVG styling - breathing glow effect */
 .flow-connector .connector-arrow {
   width: 40px;
   height: 20px;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 0 6px rgba(139, 0, 255, 0.5)) drop-shadow(0 0 12px rgba(248, 70, 8, 0.3));
+  transition: all 0.4s ease;
+  animation: breatheGlow 3s ease-in-out infinite;
 }
 
+@keyframes breatheGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(139, 0, 255, 0.25))
+            drop-shadow(0 0 6px rgba(248, 70, 8, 0.12));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(139, 0, 255, 0.45))
+            drop-shadow(0 0 12px rgba(248, 70, 8, 0.25));
+  }
+}
+
+/* Static arrow line - no movement */
 .flow-connector .connector-arrow .arrow-line {
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
-  animation: arrowDraw 2s ease-in-out infinite;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
 }
 
+/* Arrow head with micro-pulse */
 .flow-connector .connector-arrow .arrow-head {
   transition: all 0.3s ease;
   transform-origin: center;
-  animation: arrowHeadPulse 2s ease-in-out infinite;
+  animation: microPulse 3s ease-in-out infinite;
 }
 
-@keyframes arrowDraw {
-  0% { stroke-dashoffset: 40; opacity: 0.6; }
-  50% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: -40; opacity: 0.6; }
+@keyframes microPulse {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
 }
 
-@keyframes arrowHeadPulse {
-  0%, 100% { opacity: 0.7; transform: translateX(0); }
-  50% { opacity: 1; transform: translateX(2px); }
-}
-
-/* Hover animation - enhanced glow */
+/* Hover animation - enhanced glow and faster pulse */
 .flow-connector:hover .connector-arrow {
-  filter: drop-shadow(0 0 10px rgba(139, 0, 255, 0.8)) drop-shadow(0 0 20px rgba(248, 70, 8, 0.6));
-  transform: scale(1.1);
+  animation: breatheGlowHover 1.5s ease-in-out infinite;
+}
+
+@keyframes breatheGlowHover {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(139, 0, 255, 0.4))
+            drop-shadow(0 0 10px rgba(248, 70, 8, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(139, 0, 255, 0.6))
+            drop-shadow(0 0 18px rgba(248, 70, 8, 0.35));
+  }
 }
 
 .flow-connector:hover .connector-arrow .arrow-line {
-  animation: arrowDrawFast 1s ease-in-out infinite;
+  opacity: 1;
 }
 
 .flow-connector:hover .connector-arrow .arrow-head {
-  animation: arrowHeadBounce 0.4s ease-in-out infinite;
+  animation: microPulseHover 1.5s ease-in-out infinite;
 }
 
-@keyframes arrowDrawFast {
-  0% { stroke-dashoffset: 40; opacity: 0.8; }
-  50% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: -40; opacity: 0.8; }
-}
-
-@keyframes arrowHeadBounce {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
+@keyframes microPulseHover {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 /* Keep old flow-arrow for backwards compatibility */
@@ -1170,6 +1211,7 @@ button:focus-visible, a:focus-visible {
 .flow-step.step-microphone {
   position: relative;
   z-index: 50;
+  margin-top: -30px; /* Raise microphone to give it more prominence */
 }
 
 .step-microphone .step-circle {
@@ -1273,8 +1315,13 @@ button:focus-visible, a:focus-visible {
 
   .orchestration-flow {
     flex-direction: column;
-    gap: 24px;
+    gap: 24px; /* Restore gap for mobile vertical layout */
     padding: 30px 20px;
+  }
+
+  .orchestration-flow .flow-step,
+  .orchestration-flow .flow-connector {
+    margin: 0; /* Reset horizontal margins on mobile */
   }
 
   .flow-connector {
@@ -1284,6 +1331,33 @@ button:focus-visible, a:focus-visible {
     transform: none;
   }
 
+  /* Vertical shimmer on mobile */
+  .flow-connector::before {
+    top: -30%;
+    left: 50%;
+    width: 300%;
+    height: 50%;
+    transform: translateX(-50%) skewY(-20deg);
+    animation: shimmerVertical 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmerVertical {
+    0% {
+      top: -50%;
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      top: 120%;
+      opacity: 0;
+    }
+  }
+
   .flow-connector .connector-arrow {
     transform: rotate(90deg);
     width: 40px;
@@ -1291,16 +1365,7 @@ button:focus-visible, a:focus-visible {
   }
 
   .flow-connector:hover .connector-arrow {
-    transform: rotate(90deg) scale(1.1);
-  }
-
-  .flow-connector:hover .connector-arrow .arrow-head {
-    animation: arrowPulseVertical 0.4s ease-in-out infinite;
-  }
-
-  @keyframes arrowPulseVertical {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(4px); }
+    transform: rotate(90deg);
   }
 
   .step-circle {

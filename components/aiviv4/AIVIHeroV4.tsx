@@ -1035,7 +1035,7 @@ export default function AIVIHeroV4() {
         }
       `}</style>
 
-      <section className="hero-section-v4">
+      <section className="hero-section-v4 py-20 sm:py-24 md:py-28 lg:py-32 px-6 sm:px-8 md:px-12 lg:px-16">
         <canvas ref={canvasRef} id="neuralCanvas" />
 
         <div className="hero-content-v4">

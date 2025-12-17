@@ -1,21 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { HiOutlineCurrencyDollar } from 'react-icons/hi2';
-import { BsGraphUpArrow, BsRocketTakeoff } from 'react-icons/bs';
+import { BsGraphUpArrow, BsRocketTakeoff, BsArrowLeftRight } from 'react-icons/bs';
 import { useRevenueLiftStyleSafe } from './RevenueLiftStyleContext';
 import { useLeadGateSafe } from './LeadGateContext';
-
-interface Particle {
-  x: number;
-  y: number;
-  baseX: number;
-  baseY: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  density: number;
-}
 
 export default function AIVICalculatorV4() {
   const [currentPackage, setCurrentPackage] = useState<'basic' | 'full'>('basic');
@@ -40,185 +29,6 @@ export default function AIVICalculatorV4() {
   const dragStartX = useRef(0);
   const bannerStartX = useRef(0);
   const bannerRef = useRef<HTMLDivElement>(null);
-
-  // Canvas refs for constellation animation
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
-  const mouseRef = useRef<{ x: number | null; y: number | null; radius: number }>({ x: null, y: null, radius: 150 });
-  const animationIdRef = useRef<number | undefined>(undefined);
-
-  // Initialize particles
-  const initParticles = useCallback((canvas: HTMLCanvasElement) => {
-    const particles: Particle[] = [];
-    const count = 300;
-    for (let i = 0; i < count; i++) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      particles.push({
-        x,
-        y,
-        baseX: x,
-        baseY: y,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        radius: Math.random() * 2 + 1,
-        density: Math.random() * 30 + 1,
-      });
-    }
-    particlesRef.current = particles;
-  }, []);
-
-  // Dark constellation canvas animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resize = () => {
-      const section = canvas.parentElement;
-      if (section) {
-        canvas.width = section.offsetWidth;
-        canvas.height = section.offsetHeight;
-        initParticles(canvas);
-      }
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        mouseRef.current.x = x;
-        mouseRef.current.y = y;
-      } else {
-        mouseRef.current.x = null;
-        mouseRef.current.y = null;
-      }
-    };
-
-    const handleMouseOut = () => {
-      mouseRef.current.x = null;
-      mouseRef.current.y = null;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseout', handleMouseOut);
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const mouse = mouseRef.current;
-      const particles = particlesRef.current;
-
-      // Draw mouse glow (dark/purple tint)
-      if (mouse.x !== null && mouse.y !== null) {
-        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
-        gradient.addColorStop(0, 'rgba(50, 28, 163, 0.12)');
-        gradient.addColorStop(0.5, 'rgba(248, 70, 8, 0.06)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-      }
-
-      // Update and draw particles
-      particles.forEach((p) => {
-        // Mouse interaction
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < mouse.radius) {
-            const forceX = dx / dist;
-            const forceY = dy / dist;
-            const force = (mouse.radius - dist) / mouse.radius;
-            p.x -= forceX * force * p.density * 0.4;
-            p.y -= forceY * force * p.density * 0.4;
-          }
-        }
-
-        // Normal movement
-        p.x += p.vx;
-        p.y += p.vy;
-        p.x += (p.baseX - p.x) * 0.008;
-        p.y += (p.baseY - p.y) * 0.008;
-
-        // Bounce off edges
-        if (p.x < 0 || p.x > canvas.width) {
-          p.vx *= -1;
-          p.baseX = p.x;
-        }
-        if (p.y < 0 || p.y > canvas.height) {
-          p.vy *= -1;
-          p.baseY = p.y;
-        }
-
-        // Draw particle (dark color)
-        let brightness = 0.5;
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < mouse.radius) {
-            brightness = 0.8 - (dist / mouse.radius) * 0.3;
-          }
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        // Dark particles with gradient feel (dark blue/purple)
-        ctx.fillStyle = `rgba(50, 28, 163, ${0.35 * brightness})`;
-        ctx.fill();
-      });
-
-      // Draw connections (dark lines)
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 120) {
-            let opacity = 0.1 * (1 - dist / 120);
-
-            if (mouse.x !== null && mouse.y !== null) {
-              const midX = (particles[i].x + particles[j].x) / 2;
-              const midY = (particles[i].y + particles[j].y) / 2;
-              const mouseDist = Math.sqrt((mouse.x - midX) ** 2 + (mouse.y - midY) ** 2);
-              if (mouseDist < mouse.radius) {
-                opacity *= 1 + (1 - mouseDist / mouse.radius) * 2;
-              }
-            }
-
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(50, 28, 163, ${opacity})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      animationIdRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseout', handleMouseOut);
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
-    };
-  }, [initParticles]);
 
   // Scroll detection for floating elements
   useEffect(() => {
@@ -352,23 +162,16 @@ export default function AIVICalculatorV4() {
     <section
       id="calculator-section"
       ref={sectionRef}
-      className="w-full relative overflow-x-clip px-6 sm:px-12 md:px-16 lg:px-24 py-20 sm:py-28 md:py-32"
-      style={{ background: 'linear-gradient(180deg, #cccdce 0%, #d8d9da 50%, #e5e6e7 100%)' }}
+      className="w-full relative overflow-x-clip px-6 sm:px-8 md:px-12 lg:px-16 py-20 sm:py-24 md:py-28 lg:py-32 bg-[#FAFAFA]"
     >
-      {/* Dark Constellation Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="calculator-constellation-canvas"
-      />
-
       {/* Decorative background elements */}
       <div
-        className="absolute top-20 right-10 w-[500px] h-[500px] rounded-full opacity-[0.06] pointer-events-none"
+        className="absolute top-20 right-10 w-[500px] h-[500px] rounded-full opacity-[0.03] pointer-events-none"
         style={{ background: 'radial-gradient(circle, #f84608 0%, transparent 70%)' }}
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-20 left-10 w-[400px] h-[400px] rounded-full opacity-[0.04] pointer-events-none"
+        className="absolute bottom-20 left-10 w-[400px] h-[400px] rounded-full opacity-[0.02] pointer-events-none"
         style={{ background: 'radial-gradient(circle, #321ca3 0%, transparent 70%)' }}
         aria-hidden="true"
       />
@@ -376,12 +179,13 @@ export default function AIVICalculatorV4() {
       <div className="max-w-[1400px] mx-auto relative z-10">
         {/* Premium Header */}
         <div className="text-center mb-16">
-          {/* Animated eyebrow badge */}
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-full bg-white/60 backdrop-blur-sm border border-white/80 shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-[#f84608] to-[#321ca3] animate-pulse" />
-            <span className="text-[11px] font-semibold tracking-[2px] uppercase text-[#f84608]">
+          {/* Style 3: Dual Line Embrace Eyebrow */}
+          <div className="inline-flex items-center gap-4 mb-6">
+            <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+            <span className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[#f84608]">
               ROI Calculator
             </span>
+            <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-[#f84608]" />
           </div>
 
           <h2 className="text-[40px] sm:text-[52px] md:text-[64px] font-normal text-[#0a0a0a] mb-5 leading-[1.05] tracking-[-0.03em]">
@@ -1086,10 +890,8 @@ export default function AIVICalculatorV4() {
             }}
           >
             {/* Drag Handle */}
-            <div className="flex flex-col gap-[3px] opacity-40 mr-1">
-              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
-              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
-              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
+            <div className="flex items-center justify-center opacity-50 mr-1">
+              <BsArrowLeftRight className="w-5 h-5 text-white/70" />
             </div>
 
             {/* Revenue Lift - Main Number */}

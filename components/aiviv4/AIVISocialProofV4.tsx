@@ -216,7 +216,7 @@ export default function AIVISocialProofV4() {
       <canvas ref={canvasRef} className="social-proof-canvas" />
 
       {/* Main Content Area */}
-      <div className="relative z-10 px-6 sm:px-12 md:px-16 lg:px-24 pt-16 pb-32 sm:pb-40 md:pb-48">
+      <div className="relative z-10 px-6 sm:px-8 md:px-12 lg:px-16 py-20 sm:py-24 md:py-28 lg:py-32">
         {/* Top Row: Trust Badge left, Company logos right */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 mb-16 sm:mb-20 md:mb-24">
           {/* Premium Trust Badge - Dark Theme */}
@@ -280,7 +280,7 @@ export default function AIVISocialProofV4() {
 
         {/* Premium Stats Cards - Glass Effect for Dark Theme */}
         <div
-          className="stats-grid-dark"
+          className="stats-grid-dark mb-16 sm:mb-20 md:mb-24"
           role="list"
           aria-label="Performance statistics"
         >

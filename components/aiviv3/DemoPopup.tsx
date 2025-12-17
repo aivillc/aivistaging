@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBuilding, FaBriefcase, FaUsers, FaComment, FaCheckCircle } from 'react-icons/fa';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBuilding, FaUsers, FaComment, FaCheckCircle } from 'react-icons/fa';
+import { updateSessionData } from '@/lib/sessionData';
+import { getGlobalSessionId } from '@/lib/globalSession';
 
 interface DemoPopupProps {
   isOpen: boolean;
@@ -14,7 +16,6 @@ interface FormData {
   email: string;
   phone: string;
   company: string;
-  jobTitle: string;
   companySize: string;
   industry: string;
   currentChallenges: string;
@@ -88,7 +89,6 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
     email: '',
     phone: '',
     company: '',
-    jobTitle: '',
     companySize: '',
     industry: '',
     currentChallenges: '',
@@ -101,6 +101,11 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [step, setStep] = useState(1);
+
+  // Session tracking refs
+  const sessionIdRef = useRef<string>(getGlobalSessionId());
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastSyncedDataRef = useRef<string>('');
 
   // Prevent body scroll when popup is open
   useEffect(() => {
@@ -125,42 +130,179 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // Save session data locally (no webhook POST)
+  const saveSessionDataLocally = useCallback((
+    currentFormData: FormData,
+    currentChallenges: string[]
+  ) => {
+    // Update local session storage only
+    updateSessionData(sessionIdRef.current, {
+      name: `${currentFormData.firstName} ${currentFormData.lastName}`.trim(),
+      email: currentFormData.email,
+      phone: currentFormData.phone,
+      businessName: currentFormData.company,
+      industry: currentFormData.industry,
+      challenge: currentChallenges.join(', '),
+      additionalNotes: currentFormData.additionalNotes,
+    });
+    console.log('💾 [DemoPopup] Session data saved locally');
+  }, []);
 
-  const handleChallengeToggle = (challenge: string) => {
-    setSelectedChallenges((prev) =>
-      prev.includes(challenge) ? prev.filter((c) => c !== challenge) : [...prev, challenge]
-    );
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
+  // POST session data to webhook (called after inactivity or on close)
+  const postSessionDataToWebhook = useCallback(async (
+    currentFormData: FormData,
+    currentChallenges: string[],
+    currentStep: number,
+    isFinal: boolean = false
+  ) => {
+    // Create payload
     const payload = {
-      ...formData,
-      currentChallenges: selectedChallenges.join(', '),
-      submittedAt: new Date().toISOString(),
+      ...currentFormData,
+      currentChallenges: currentChallenges,
+      sessionId: sessionIdRef.current,
+      timestamp: new Date().toISOString(),
       source: 'AIVI Demo Request Popup',
+      isPartial: !isFinal,
+      step: currentStep,
     };
 
+    // Check if data has changed to avoid duplicate POSTs
+    const payloadString = JSON.stringify(payload);
+    if (payloadString === lastSyncedDataRef.current) {
+      return;
+    }
+    lastSyncedDataRef.current = payloadString;
+
+    // POST to webhook
     try {
-      // Test webhook URL - replace with actual webhook later
-      const response = await fetch('https://webhook.site/test', {
+      await fetch('https://stage.aivi.io/webhook/aivileadcapture', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
+      console.log(`📤 [DemoPopup] Session data posted to webhook (${isFinal ? 'final' : 'inactivity'})`);
+    } catch (error) {
+      console.error('❌ [DemoPopup] Error sending to webhook:', error);
+    }
+  }, []);
 
-      // Even if webhook fails for now, show success (it's a test webhook)
+  // Reset inactivity timer - POST after 5 minutes of no activity
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    inactivityTimerRef.current = setTimeout(() => {
+      // Send to webhook after 5 minutes of inactivity
+      postSessionDataToWebhook(formData, selectedChallenges, step, false);
+    }, 5 * 60 * 1000); // 5 minutes
+  }, [postSessionDataToWebhook, formData, selectedChallenges, step]);
+
+  // Handle field blur - save locally and reset inactivity timer
+  const handleFieldBlur = useCallback(() => {
+    saveSessionDataLocally(formData, selectedChallenges);
+    resetInactivityTimer();
+  }, [saveSessionDataLocally, formData, selectedChallenges, resetInactivityTimer]);
+
+  // Cleanup on unmount or when popup closes
+  useEffect(() => {
+    return () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Send final sync when popup closes (if there's data)
+  useEffect(() => {
+    if (!isOpen && formData.email) {
+      postSessionDataToWebhook(formData, selectedChallenges, step, true);
+    }
+  }, [isOpen, formData, selectedChallenges, step, postSessionDataToWebhook]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChallengeToggle = (challenge: string) => {
+    setSelectedChallenges((prev) => {
+      const newChallenges = prev.includes(challenge)
+        ? prev.filter((c) => c !== challenge)
+        : [...prev, challenge];
+      // Save locally on challenge toggle (button click)
+      saveSessionDataLocally(formData, newChallenges);
+      resetInactivityTimer();
+      return newChallenges;
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Clear inactivity timer since form is being submitted
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+
+    const payload = {
+      ...formData,
+      currentChallenges: selectedChallenges,
+      sessionId: sessionIdRef.current,
+      submittedAt: new Date().toISOString(),
+      source: 'AIVI Demo Request Popup',
+      isPartial: false,
+      step: step,
+    };
+
+    try {
+      // Send to lead capture webhook
+      await fetch('https://stage.aivi.io/webhook/aivileadcapture', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      console.log('✅ [DemoPopup] Form submitted to webhook');
+
+      // Sync to HubSpot
+      try {
+        const hubspotResponse = await fetch('/api/hubspot/sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId: sessionIdRef.current,
+            includeConversation: false,
+            sessionData: {
+              name: `${formData.firstName} ${formData.lastName}`.trim(),
+              email: formData.email,
+              phone: formData.phone,
+              businessName: formData.company,
+              industry: formData.industry,
+              challenge: selectedChallenges.join(', '),
+              additionalNotes: formData.additionalNotes,
+            },
+          }),
+        });
+
+        if (hubspotResponse.ok) {
+          const data = await hubspotResponse.json();
+          if (data.success) {
+            console.log('✅ [HubSpot] Contact synced:', data);
+          }
+        }
+      } catch (hubspotError) {
+        console.error('❌ [HubSpot] Error syncing:', hubspotError);
+      }
+
       setIsSubmitted(true);
     } catch (error) {
-      console.error('Webhook error:', error);
+      console.error('❌ [DemoPopup] Webhook error:', error);
       // Still show success for demo purposes
       setIsSubmitted(true);
     } finally {
@@ -178,7 +320,6 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
         email: '',
         phone: '',
         company: '',
-        jobTitle: '',
         companySize: '',
         industry: '',
         currentChallenges: '',
@@ -193,8 +334,14 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
     }, 300);
   };
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
-  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+  const nextStep = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setStep((prev) => Math.min(prev + 1, 3));
+  };
+  const prevStep = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    setStep((prev) => Math.max(prev - 1, 1));
+  };
 
   const isStep1Valid = formData.firstName && formData.lastName && formData.email && formData.phone;
   const isStep2Valid = formData.company && formData.industry && formData.companySize;
@@ -305,6 +452,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           placeholder="First Name *"
                           value={formData.firstName}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           required
                           className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                         />
@@ -317,6 +465,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           placeholder="Last Name *"
                           value={formData.lastName}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           required
                           className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                         />
@@ -331,6 +480,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                         placeholder="Work Email *"
                         value={formData.email}
                         onChange={handleInputChange}
+                        onBlur={handleFieldBlur}
                         required
                         className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                       />
@@ -344,6 +494,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                         placeholder="Phone Number *"
                         value={formData.phone}
                         onChange={handleInputChange}
+                        onBlur={handleFieldBlur}
                         required
                         className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                       />
@@ -364,19 +515,8 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                         placeholder="Company Name *"
                         value={formData.company}
                         onChange={handleInputChange}
+                        onBlur={handleFieldBlur}
                         required
-                        className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
-                      />
-                    </div>
-
-                    <div className="relative">
-                      <FaBriefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999999]" />
-                      <input
-                        type="text"
-                        name="jobTitle"
-                        placeholder="Job Title"
-                        value={formData.jobTitle}
-                        onChange={handleInputChange}
                         className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                       />
                     </div>
@@ -388,6 +528,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           name="companySize"
                           value={formData.companySize}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           required
                           className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200 appearance-none cursor-pointer"
                         >
@@ -404,6 +545,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           name="industry"
                           value={formData.industry}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           required
                           className="w-full h-12 pl-11 pr-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200 appearance-none cursor-pointer"
                         >
@@ -417,20 +559,27 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                     </div>
 
                     <div>
-                      <p className="text-[14px] font-medium text-[#1A1A1A] mb-3">Current Challenges (select all that apply)</p>
-                      <div className="flex flex-wrap gap-2">
+                      <p className="text-[14px] font-medium text-[#1A1A1A] mb-4">Current Challenges (select all that apply)</p>
+                      <div className="flex flex-wrap gap-3">
                         {challengeOptions.map((challenge) => (
                           <button
                             key={challenge}
                             type="button"
                             onClick={() => handleChallengeToggle(challenge)}
-                            className={`px-4 py-2 rounded-full text-[13px] font-medium transition-all duration-200 ${
+                            className={`px-5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-300 border ${
                               selectedChallenges.includes(challenge)
-                                ? 'bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2] text-white'
-                                : 'bg-[#F5F5F5] text-[#666666] hover:bg-[#E8E5E0]'
+                                ? 'bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2] text-white border-transparent shadow-lg shadow-[#FF8C00]/20'
+                                : 'bg-white text-[#4a4a4a] border-[#E8E5E0] hover:border-[#FF8C00]/40 hover:bg-[#FFF8F5] hover:shadow-md'
                             }`}
                           >
-                            {challenge}
+                            <span className="flex items-center gap-2">
+                              {selectedChallenges.includes(challenge) && (
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                              {challenge}
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -451,6 +600,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           name="preferredDate"
                           value={formData.preferredDate}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           min={new Date().toISOString().split('T')[0]}
                           className="w-full h-12 px-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200"
                         />
@@ -461,6 +611,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                           name="preferredTime"
                           value={formData.preferredTime}
                           onChange={handleInputChange}
+                          onBlur={handleFieldBlur}
                           className="w-full h-12 px-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200 appearance-none cursor-pointer"
                         >
                           {timeSlots.map((slot) => (
@@ -478,6 +629,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                         name="howDidYouHear"
                         value={formData.howDidYouHear}
                         onChange={handleInputChange}
+                        onBlur={handleFieldBlur}
                         className="w-full h-12 px-4 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200 appearance-none cursor-pointer"
                       >
                         {hearAboutOptions.map((opt) => (
@@ -495,6 +647,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                         placeholder="Anything specific you'd like us to cover in the demo?"
                         value={formData.additionalNotes}
                         onChange={handleInputChange}
+                        onBlur={handleFieldBlur}
                         rows={4}
                         className="w-full pl-11 pr-4 py-3 bg-[#F5F5F5] border border-transparent rounded-xl text-[14px] text-[#1A1A1A] placeholder-[#999999] focus:outline-none focus:border-[#FF8C00] focus:bg-white transition-all duration-200 resize-none"
                       />
@@ -507,7 +660,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                   {step > 1 ? (
                     <button
                       type="button"
-                      onClick={prevStep}
+                      onClick={(e) => prevStep(e)}
                       className="h-12 px-6 text-[14px] font-medium text-[#666666] hover:text-[#1A1A1A] transition-colors duration-200"
                     >
                       ← Back
@@ -519,7 +672,7 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
                   {step < 3 ? (
                     <button
                       type="button"
-                      onClick={nextStep}
+                      onClick={(e) => nextStep(e)}
                       disabled={step === 1 ? !isStep1Valid : !isStep2Valid}
                       className="h-12 px-8 bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2] text-white text-[15px] font-semibold rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
                     >

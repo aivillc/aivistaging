@@ -16,7 +16,7 @@ export default function AIVICTASectionV4() {
 
   return (
     <section
-      className="w-full bg-[#FAFAFA] px-6 sm:px-12 md:px-16 lg:px-24 py-20 sm:py-28 md:py-32"
+      className="w-full relative bg-[#FAFAFA] px-6 sm:px-8 md:px-12 lg:px-16 py-20 sm:py-24 md:py-28 lg:py-32"
       aria-labelledby="cta-heading"
     >
       <div className="max-w-[1300px] mx-auto">
@@ -28,12 +28,13 @@ export default function AIVICTASectionV4() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left Column - Text and Form */}
             <div className="space-y-8">
-              {/* Label */}
-              <div className="inline-flex items-center gap-2">
-                <span className="w-8 h-[2px] bg-gradient-to-r from-[#f84608] to-[#321ca3]" />
-                <span className="text-[13px] font-medium text-[#f84608] uppercase tracking-[0.2em]">
+              {/* Style 3: Dual Line Embrace Eyebrow */}
+              <div className="inline-flex items-center gap-4">
+                <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                <span className="text-[12px] font-semibold tracking-[0.2em] uppercase text-[#f84608]">
                   Get Started Today
                 </span>
+                <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-[#f84608]" />
               </div>
 
               {/* Headline */}

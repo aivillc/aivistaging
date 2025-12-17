@@ -367,12 +367,12 @@ export default function AIVINavigationV4() {
               </div>
             )}
 
-            <Link
-              href="/login"
+            <a
+              href="https://www.app.aivi.io"
               className="text-[15px] font-medium text-white/80 px-5 py-2.5 rounded-md hover:text-white hover:bg-white/5 transition-all duration-300 focus-brand-ring"
             >
               Log in
-            </Link>
+            </a>
             <button
               onClick={openDemoPopup}
               className="group relative text-[15px] font-semibold text-white px-5 py-2.5 rounded-md overflow-hidden hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 focus-brand-ring bg-gradient-to-r from-[#f84608] to-[#321ca3]"
@@ -521,15 +521,15 @@ export default function AIVINavigationV4() {
             </div>
           ))}
           <div className="border-t border-white/10 my-2" />
-          <Link
-            href="/login"
+          <a
+            href="https://www.app.aivi.io"
             role="menuitem"
             className="block text-[15px] font-medium text-white/80 py-3 px-4 rounded-md hover:bg-white/5 transition-all duration-200 focus-brand-ring"
             onClick={() => setMobileMenuOpen(false)}
             tabIndex={mobileMenuOpen ? 0 : -1}
           >
             Log in
-          </Link>
+          </a>
           <button
             role="menuitem"
             className="block w-full text-[15px] font-semibold text-white py-3 px-4 rounded-md bg-gradient-to-r from-[#f84608] to-[#321ca3] hover:opacity-90 transition-all duration-200 focus-brand-ring text-center"

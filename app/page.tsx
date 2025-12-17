@@ -1,26 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
 import AIVIHeroV4 from '@/components/aiviv4/AIVIHeroV4';
 import AIVISocialProofV4 from '@/components/aiviv4/AIVISocialProofV4';
+import AIVIBenefitsV4 from '@/components/aiviv4/AIVIBenefitsV4';
 import AIVIFeatureTabsV4 from '@/components/aiviv4/AIVIFeatureTabsV4';
 import AIVICalculatorV4 from '@/components/aiviv4/AIVICalculatorV4';
 import AIVICTASectionV4 from '@/components/aiviv4/AIVICTASectionV4';
-import AIVIFAQV4 from '@/components/aiviv4/AIVIFAQV4';
 import AIVIFooter from '@/components/aiviv3/AIVIFooter';
 import { ROIButtonStyleProvider, useROIButtonStyle } from '@/components/aiviv4/ROIButtonStyleContext';
 import { RevenueLiftStyleProvider } from '@/components/aiviv4/RevenueLiftStyleContext';
 import { LeadGateProvider } from '@/components/aiviv4/LeadGateContext';
 import { useChatBotSafe } from '@/components/ChatBotContext';
+import { DemoPopupProvider } from '@/components/aiviv3/DemoPopupContext';
+import { CookieConsentProvider } from '@/components/aiviv3/CookieConsentContext';
+import CookieBanner from '@/components/aiviv3/CookieBanner';
 
 interface ROIFloatingButtonProps {
   isVisible: boolean;
   onScrollToCalculator: (e: React.MouseEvent) => void;
-  scrollbarThumbPosition: number; // Position of scrollbar thumb (0-100%)
+  roiTabRef: React.RefObject<HTMLAnchorElement | null>;
 }
 
-function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosition }: ROIFloatingButtonProps) {
+function ROIFloatingButton({ isVisible, onScrollToCalculator, roiTabRef }: ROIFloatingButtonProps) {
   const { style } = useROIButtonStyle();
   const chatBotContext = useChatBotSafe();
 
@@ -471,21 +474,16 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosi
   }
 
   // Style D: Scroll-Following Vertical Tab
-  // Button follows the scrollbar thumb position exactly
-  // Start at initial position, then follow scrollbar once it reaches that point
-  const initialPosition = 15; // Starting position in %
-  // Only start following once scrollbar reaches our initial position
-  const effectivePosition = scrollbarThumbPosition < initialPosition
-    ? initialPosition
-    : scrollbarThumbPosition;
+  // Position is updated directly via ref for 100% fluid movement
 
   return (
     <>
       <a
+        ref={roiTabRef}
         href="#calculator-section"
         onClick={onScrollToCalculator}
         className={`floating-roi-tab ${!isVisible ? 'floating-roi-hidden-d' : ''}`}
-        style={{ top: `${effectivePosition}%` }}
+        style={{ top: '15%' }}
         aria-label="Calculate your ROI"
       >
         <div className="tab-border-accent" />
@@ -499,8 +497,10 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosi
             <line x1="14" y1="14" x2="16" y2="14" />
             <line x1="8" y1="18" x2="16" y2="18" />
           </svg>
-          <span className="tab-label-short">ROI</span>
-          <span className="tab-label-full">Calculate ROI</span>
+          <div className="tab-labels">
+            <span className="tab-label-short">My ROI</span>
+            <span className="tab-label-full">See Your Impact</span>
+          </div>
         </div>
       </a>
       <style jsx>{`
@@ -512,66 +512,89 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosi
           align-items: stretch;
           border-radius: 12px 0 0 12px;
           background: #1a1a1a;
-          box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+          box-shadow: -6px 6px 24px rgba(139, 0, 255, 0.2), -4px 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08) inset, -8px 0 30px rgba(255, 255, 255, 0.08);
           cursor: pointer;
           text-decoration: none;
           overflow: hidden;
-          transition: top 0.15s ease-out, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-          animation: fadeSlideInD 0.5s ease-out 0.5s both;
+          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+          will-change: top, transform;
+          animation: fadeSlideInD 0.5s ease-out 0.5s both, attentionNudge 2.5s ease-in-out 2s infinite;
         }
         .floating-roi-tab:hover {
-          transform: translateX(-4px);
-          box-shadow: -8px 8px 32px rgba(139, 0, 255, 0.15), -4px 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+          transform: translateX(-6px);
+          box-shadow: -10px 10px 40px rgba(139, 0, 255, 0.25), -6px 6px 20px rgba(248, 70, 8, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) inset, -12px 0 40px rgba(255, 255, 255, 0.1);
+          animation-play-state: paused;
         }
         .tab-border-accent {
-          width: 3px;
+          width: 5px;
           background: linear-gradient(180deg, #8b00ff 0%, #f84608 100%);
           flex-shrink: 0;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          animation: borderGlow 8s ease-in-out infinite;
+          box-shadow: 0 0 12px rgba(139, 0, 255, 0.4);
+          animation: borderPulse 2.5s ease-in-out infinite;
         }
         .floating-roi-tab:hover .tab-border-accent {
-          width: 4px;
-          box-shadow: 0 0 12px rgba(139, 0, 255, 0.5);
+          width: 6px;
+          box-shadow: 0 0 20px rgba(139, 0, 255, 0.6), 0 0 30px rgba(248, 70, 8, 0.3);
         }
         .tab-content {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 8px;
-          padding: 14px 12px;
+          gap: 12px;
+          padding: 28px 14px;
+          position: relative;
+          min-height: 120px;
+          transition: min-height 0.3s ease;
         }
-        .tab-icon { width: 20px; height: 20px; color: rgba(255, 255, 255, 0.8); transition: all 0.3s ease; }
-        .floating-roi-tab:hover .tab-icon { color: white; }
+        .floating-roi-tab:hover .tab-content {
+          min-height: 200px;
+        }
+        .tab-icon { width: 22px; height: 22px; color: rgba(255, 255, 255, 0.95); transition: all 0.3s ease; }
+        .floating-roi-tab:hover .tab-icon { color: white; transform: scale(1.1); }
+        .tab-labels {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .tab-label-short {
           writing-mode: vertical-rl;
           text-orientation: mixed;
-          font-size: 11px;
-          font-weight: 600;
+          font-size: 12px;
+          font-weight: 700;
           letter-spacing: 2px;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.7);
-          transition: all 0.3s ease;
+          color: rgba(255, 255, 255, 0.95);
+          transition: opacity 0.3s ease;
         }
         .tab-label-full {
           writing-mode: vertical-rl;
           text-orientation: mixed;
-          font-size: 11px;
-          font-weight: 600;
+          font-size: 12px;
+          font-weight: 700;
           letter-spacing: 1.5px;
           text-transform: uppercase;
           color: white;
-          position: absolute;
           opacity: 0;
-          transform: translateX(10px);
-          transition: all 0.3s ease;
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          transition: opacity 0.3s ease;
           white-space: nowrap;
         }
-        .floating-roi-tab:hover .tab-label-short { opacity: 0; transform: translateX(-10px); }
-        .floating-roi-tab:hover .tab-label-full { opacity: 1; transform: translateX(0); }
-        @keyframes borderGlow {
-          0%, 100% { opacity: 0.85; box-shadow: none; }
-          50% { opacity: 1; box-shadow: 0 0 8px rgba(139, 0, 255, 0.3); }
+        .floating-roi-tab:hover .tab-label-short { opacity: 0; }
+        .floating-roi-tab:hover .tab-label-full { opacity: 1; }
+        @keyframes borderPulse {
+          0%, 100% { box-shadow: 0 0 12px rgba(139, 0, 255, 0.4); }
+          50% { box-shadow: 0 0 20px rgba(139, 0, 255, 0.6), 0 0 30px rgba(248, 70, 8, 0.3); }
+        }
+        @keyframes attentionNudge {
+          0%, 76%, 100% { transform: translateX(0); }
+          82% { transform: translateX(-8px); }
+          88% { transform: translateX(-4px); }
+          94% { transform: translateX(-6px); }
         }
         @keyframes fadeSlideInD {
           from { opacity: 0; transform: translateX(20px); }
@@ -581,6 +604,7 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosi
           opacity: 0 !important;
           transform: translateX(20px) !important;
           pointer-events: none !important;
+          animation: none !important;
         }
       `}</style>
     </>
@@ -589,9 +613,11 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, scrollbarThumbPosi
 
 function HomePageContent() {
   const [isFloatingBtnVisible, setIsFloatingBtnVisible] = useState(true);
-  const [scrollbarThumbPosition, setScrollbarThumbPosition] = useState(0);
+  const roiTabRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
+    const initialPosition = 15; // Starting position in %
+
     const handleScroll = () => {
       const calculatorSection = document.getElementById('calculator-section');
       if (calculatorSection) {
@@ -607,19 +633,23 @@ function HomePageContent() {
 
         // Calculate actual scrollbar thumb position (as percentage of viewport)
         const scrollY = window.scrollY;
-        // The scrollbar thumb position represents where the viewport is relative to the document
         const docHeight = document.documentElement.scrollHeight;
         const scrollableHeight = docHeight - windowHeight;
         const scrollPercent = scrollableHeight > 0 ? scrollY / scrollableHeight : 0;
 
         // Scrollbar track typically spans from ~5% to ~95% of viewport height
-        // Account for thumb size (thumb height is proportional to viewport/document ratio)
         const thumbHeightPercent = (windowHeight / docHeight) * 100;
-        const trackStart = 5; // % from top where scrollbar track starts
-        const trackEnd = 95 - thumbHeightPercent; // % from top where thumb can reach
+        const trackStart = 5;
+        const trackEnd = 95 - thumbHeightPercent;
         const thumbTop = trackStart + (scrollPercent * (trackEnd - trackStart));
 
-        setScrollbarThumbPosition(thumbTop);
+        // Only start following once scrollbar reaches initial position
+        const effectivePosition = thumbTop < initialPosition ? initialPosition : thumbTop;
+
+        // Update position directly via ref - no React state, 100% fluid
+        if (roiTabRef.current) {
+          roiTabRef.current.style.top = `${effectivePosition}%`;
+        }
       }
     };
 
@@ -646,14 +676,14 @@ function HomePageContent() {
         <AIVICTASectionV4 />
         <AIVIFeatureTabsV4 />
         <AIVICalculatorV4 />
-        <AIVIFAQV4 />
+        <AIVIBenefitsV4 />
       </main>
       <AIVIFooter />
 
       <ROIFloatingButton
         isVisible={isFloatingBtnVisible}
         onScrollToCalculator={handleScrollToCalculator}
-        scrollbarThumbPosition={scrollbarThumbPosition}
+        roiTabRef={roiTabRef}
       />
     </div>
   );
@@ -661,12 +691,17 @@ function HomePageContent() {
 
 export default function Home() {
   return (
-    <ROIButtonStyleProvider>
-      <RevenueLiftStyleProvider>
-        <LeadGateProvider>
-          <HomePageContent />
-        </LeadGateProvider>
-      </RevenueLiftStyleProvider>
-    </ROIButtonStyleProvider>
+    <CookieConsentProvider>
+      <DemoPopupProvider>
+        <ROIButtonStyleProvider>
+          <RevenueLiftStyleProvider>
+            <LeadGateProvider>
+              <HomePageContent />
+              <CookieBanner />
+            </LeadGateProvider>
+          </RevenueLiftStyleProvider>
+        </ROIButtonStyleProvider>
+      </DemoPopupProvider>
+    </CookieConsentProvider>
   );
 }

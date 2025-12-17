@@ -632,42 +632,10 @@ export default function ChatBot() {
     }
   };
 
-  const handleCloseChat = async () => {
-    if (confirm('Are you sure you want to close the chat? This will clear your conversation history.')) {
-      // HUBSPOT SYNC TRIGGER #4: Sync with full conversation before closing
-      console.log('👋 [HubSpot] Chat closing, syncing final conversation...');
-      await syncToHubSpot(true); // Include full conversation transcript
-      
-      // Clear session data
-      clearSessionData(sessionId);
-      
-      // Clear localStorage and global session
-      localStorage.removeItem('aivi_chat_state');
-      clearGlobalSession();
-      
-      // Generate new global session ID for fresh start
-      const newSessionId = getGlobalSessionId();
-      setSessionId(newSessionId);
-      
-      // Initialize new session data
-      updateSessionData(newSessionId, {});
-      
-      // Reset to initial state
-      setMessages([
-        {
-          id: 1,
-          text: "Hi! I'm AIVI, your AI assistant. How can I help you today?",
-          sender: 'bot',
-          timestamp: new Date(),
-        },
-      ]);
-      setIsOpen(false);
-      setIsTyping(false);
-      setSlackChannelId(null);
-      setAgentConnected(false);
-      
-      console.log('🤖 [ChatBot] Chat cleared and closed. New sessionId:', newSessionId);
-    }
+  const handleCloseChat = () => {
+    // Simply close the chat window - preserve session and messages
+    setIsOpen(false);
+    console.log('🤖 [ChatBot] Chat minimized. Session preserved.');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -682,19 +650,18 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Floating Chat Button - hidden when Option A ROI button is active */}
-      {!shouldHideFloatingButton && (
+      {/* Floating Chat Button - only show when chat is closed */}
+      {!isOpen && (
         <button
           onClick={() => {
             if (process.env.NODE_ENV === 'development') {
               console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
             }
-            setIsOpen(!isOpen);
+            setIsOpen(true);
           }}
-          className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+          className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-[#f84608] to-[#8b00ff] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
           aria-label="Open chat"
         >
-        {isOpen ? (
           <svg
             className="w-6 h-6 text-white"
             fill="none"
@@ -705,42 +672,26 @@ export default function ChatBot() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-        ) : (
-          <>
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            {/* Pulse animation ring */}
-            <div
-              className="absolute inset-0 rounded-full bg-[#0ea5e9] animate-ping opacity-30"
-            />
-          </>
-        )}
+          {/* Pulse animation ring */}
+          <div
+            className="absolute inset-0 rounded-full bg-[#f84608] animate-ping opacity-30"
+          />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div 
-          className="fixed bottom-28 right-6 w-[360px] h-[600px] bg-black/95 border-2 border-[#0ea5e9]/50 rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn"
+        <div
+          className="fixed bottom-6 right-6 w-[360px] h-[600px] bg-[#0a0a14]/98 border border-[#8b00ff]/40 rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn"
+          style={{ boxShadow: '0 0 40px rgba(139, 0, 255, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5)' }}
         >
           {/* Header */}
-          <div className="p-4 border-b border-[#0ea5e9]/30 rounded-t-2xl bg-gradient-to-r from-[#0ea5e9]/10 to-[#14b8a6]/10">
+          <div className="p-4 border-b border-[#8b00ff]/30 rounded-t-2xl bg-gradient-to-r from-[#f84608]/10 to-[#8b00ff]/10">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f84608] to-[#8b00ff] flex items-center justify-center">
                 <span className="text-white font-black text-lg">AI</span>
               </div>
               <div className="flex-1">
@@ -793,8 +744,8 @@ export default function ChatBot() {
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${
                     message.sender === 'user'
-                      ? 'bg-gradient-to-br from-[#14b8a6] to-[#0d9488] text-white'
-                      : 'bg-white/5 border border-[#0ea5e9]/30 text-white backdrop-blur-sm'
+                      ? 'bg-gradient-to-br from-[#f84608] to-[#8b00ff] text-white'
+                      : 'bg-white/5 border border-[#8b00ff]/30 text-white backdrop-blur-sm'
                   }`}
                 >
                   <p className="text-sm leading-relaxed">{message.text}</p>
@@ -815,11 +766,11 @@ export default function ChatBot() {
             ))}
             {isTyping && (
               <div className="flex justify-start animate-fadeIn">
-                <div className="bg-white/5 border border-[#0ea5e9]/30 text-white backdrop-blur-sm p-3 rounded-2xl">
+                <div className="bg-white/5 border border-[#8b00ff]/30 text-white backdrop-blur-sm p-3 rounded-2xl">
                   <div className="flex gap-1 items-center">
-                    <div className="w-2 h-2 bg-[#0ea5e9] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-[#0ea5e9] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-[#0ea5e9] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 bg-[#f84608] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-[#8b00ff] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-[#f84608] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -828,7 +779,7 @@ export default function ChatBot() {
           </div>
 
           {/* Input Area */}
-          <form onSubmit={handleSendMessage} className="p-4 border-t border-[#0ea5e9]/30 bg-black/50">
+          <form onSubmit={handleSendMessage} className="p-4 border-t border-[#8b00ff]/30 bg-black/50">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -836,12 +787,12 @@ export default function ChatBot() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-3 bg-white/5 border border-[#0ea5e9]/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#0ea5e9] focus:ring-2 focus:ring-sky-500/20 transition-all"
+                className="flex-1 px-4 py-3 bg-white/5 border border-[#8b00ff]/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-[#8b00ff] focus:ring-2 focus:ring-[#8b00ff]/20 transition-all"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="px-6 py-3 bg-gradient-to-r from-[#0ea5e9] to-[#14b8a6] hover:from-[#0ea5e9] hover:to-[#14b8a6] disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all hover:scale-105 disabled:scale-100"
+                className="px-6 py-3 bg-gradient-to-r from-[#f84608] to-[#8b00ff] hover:from-[#ff5722] hover:to-[#9c27b0] disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all hover:scale-105 disabled:scale-100"
               >
                 <svg
                   className="w-5 h-5"
@@ -869,28 +820,28 @@ export default function ChatBot() {
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: linear-gradient(180deg, rgba(14, 165, 233, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+          background: linear-gradient(180deg, rgba(248, 70, 8, 0.1) 0%, rgba(139, 0, 255, 0.1) 100%);
           border-radius: 10px;
           margin: 8px 0;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #0ea5e9 0%, #14b8a6 100%);
+          background: linear-gradient(180deg, #f84608 0%, #8b00ff 100%);
           border-radius: 10px;
           border: 2px solid rgba(0, 0, 0, 0.8);
           transition: all 0.3s ease;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #0284c7 0%, #0d9488 100%);
-          box-shadow: 0 0 12px rgba(14, 165, 233, 0.6), 0 0 20px rgba(20, 184, 166, 0.4);
-          border-color: rgba(14, 165, 233, 0.3);
+          background: linear-gradient(180deg, #ff5722 0%, #9c27b0 100%);
+          box-shadow: 0 0 12px rgba(248, 70, 8, 0.6), 0 0 20px rgba(139, 0, 255, 0.4);
+          border-color: rgba(139, 0, 255, 0.3);
         }
 
         /* Firefox scrollbar */
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #0ea5e9 rgba(14, 165, 233, 0.1);
+          scrollbar-color: #8b00ff rgba(139, 0, 255, 0.1);
         }
       `}</style>
     </>
