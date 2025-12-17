@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { HiOutlineCurrencyDollar } from 'react-icons/hi2';
 import { BsGraphUpArrow, BsRocketTakeoff } from 'react-icons/bs';
+import { useRevenueLiftStyleSafe } from './RevenueLiftStyleContext';
+import { useLeadGateSafe } from './LeadGateContext';
 
 interface Particle {
   x: number;
@@ -18,6 +20,26 @@ interface Particle {
 export default function AIVICalculatorV4() {
   const [currentPackage, setCurrentPackage] = useState<'basic' | 'full'>('basic');
   const [advancedOpen, setAdvancedOpen] = useState(false);
+
+  // Get the selected Revenue Lift style from context
+  const revenueLiftContext = useRevenueLiftStyleSafe();
+  const liftStyle = revenueLiftContext?.style || '3';
+
+  // Lead gate context for gating the detailed breakdown
+  const leadGateContext = useLeadGateSafe();
+  const isGateUnlocked = leadGateContext?.isUnlocked ?? false;
+
+  // Floating state - for styles that show floating elements
+  const [showFloatingNumber, setShowFloatingNumber] = useState(false);
+  const revenueCardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Style 2: Draggable banner state
+  const [bannerX, setBannerX] = useState(0); // 0 = centered
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartX = useRef(0);
+  const bannerStartX = useRef(0);
+  const bannerRef = useRef<HTMLDivElement>(null);
 
   // Canvas refs for constellation animation
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -198,6 +220,81 @@ export default function AIVICalculatorV4() {
     };
   }, [initParticles]);
 
+  // Scroll detection for floating elements
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!revenueCardRef.current || !sectionRef.current) return;
+
+      const cardRect = revenueCardRef.current.getBoundingClientRect();
+      const sectionRect = sectionRef.current.getBoundingClientRect();
+
+      // Show floating element when card is out of view but still in section
+      const cardIsAboveViewport = cardRect.bottom < 100;
+      const stillInSection = sectionRect.bottom > 200;
+      setShowFloatingNumber(cardIsAboveViewport && stillInSection);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Style 2: Drag handlers for the floating banner
+  useEffect(() => {
+    if (liftStyle !== '2') return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - dragStartX.current;
+      const newX = bannerStartX.current + deltaX;
+      // Limit drag range to prevent going off screen
+      const maxDrag = window.innerWidth / 2 - 150; // Leave some margin
+      setBannerX(Math.max(-maxDrag, Math.min(maxDrag, newX)));
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - dragStartX.current;
+      const newX = bannerStartX.current + deltaX;
+      const maxDrag = window.innerWidth / 2 - 150;
+      setBannerX(Math.max(-maxDrag, Math.min(maxDrag, newX)));
+    };
+
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+      window.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging, liftStyle]);
+
+  const handleBannerDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    setIsDragging(true);
+    if ('touches' in e) {
+      dragStartX.current = e.touches[0].clientX;
+    } else {
+      dragStartX.current = e.clientX;
+    }
+    bannerStartX.current = bannerX;
+  };
+
   // Form values
   const [leadVolume, setLeadVolume] = useState(23000);
   const [transferRate, setTransferRate] = useState(35);
@@ -253,7 +350,9 @@ export default function AIVICalculatorV4() {
 
   return (
     <section
-      className="w-full relative overflow-hidden px-6 sm:px-12 md:px-16 lg:px-24 py-20 sm:py-28 md:py-32"
+      id="calculator-section"
+      ref={sectionRef}
+      className="w-full relative overflow-x-clip px-6 sm:px-12 md:px-16 lg:px-24 py-20 sm:py-28 md:py-32"
       style={{ background: 'linear-gradient(180deg, #cccdce 0%, #d8d9da 50%, #e5e6e7 100%)' }}
     >
       {/* Dark Constellation Canvas */}
@@ -624,21 +723,21 @@ export default function AIVICalculatorV4() {
 
           {/* Right Column: All Results */}
           <div className="space-y-6">
-            {/* Main Impact Card */}
-            <div className="calculator-results-gradient rounded-3xl overflow-hidden">
+            {/* Main Impact Card - Normal Card (scrolls normally) */}
+            <div
+              ref={revenueCardRef}
+              className="calculator-results-gradient rounded-3xl overflow-hidden"
+            >
               <div className="relative p-8 sm:p-10 text-white text-center">
                 <div className="text-[12px] font-semibold uppercase tracking-[3px] opacity-80 mb-3">
                   Your Revenue Lift
                 </div>
-
                 <div className="text-[48px] sm:text-[56px] font-bold leading-none tracking-[-0.03em] mb-2">
                   +{formatCurrency(monthlyLift)}
                 </div>
-
                 <div className="text-[15px] opacity-90 mb-5">
                   per month • <span className="font-semibold">{formatCurrency(annualLift)}</span> per year
                 </div>
-
                 {/* Mini stats row */}
                 <div className="flex justify-center gap-8 pt-5 border-t border-white/20">
                   <div className="text-center">
@@ -676,183 +775,227 @@ export default function AIVICalculatorV4() {
             </div>
 
             {/* Detailed Performance Breakdown - Now in right column */}
-            <div className="pt-6 border-t border-[#c0c1c2]">
-              <h3 className="text-[20px] font-semibold text-[#0a0a0a] mb-2">Detailed Performance Breakdown</h3>
-              <p className="text-[14px] text-[#6b7280] mb-6">See exactly how AIVI improves each stage of your funnel</p>
+            <div className="pt-6 border-t border-[#c0c1c2] relative">
+              {/* Actual Content - blurred when gated */}
+              <div className={`transition-all duration-500 ${!isGateUnlocked ? 'blur-md opacity-50 select-none' : ''}`}>
+                <h3 className="text-[20px] font-semibold text-[#0a0a0a] mb-2">Detailed Performance Breakdown</h3>
+                <p className="text-[14px] text-[#6b7280] mb-6">See exactly how AIVI improves each stage of your funnel</p>
 
-              {/* Premium comparison cards - 2x2 grid */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Transfer Rate Card */}
-                <div className="calculator-breakdown-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[13px] text-[#555555] font-medium">Transfer Rate</span>
-                    <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
-                      +{transferRateImprovement}pts
-                    </span>
-                  </div>
+                {/* Premium comparison cards - 2x2 grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Transfer Rate Card */}
+                  <div className="calculator-breakdown-card">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[13px] text-[#555555] font-medium">Transfer Rate</span>
+                      <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
+                        +{transferRateImprovement}pts
+                      </span>
+                    </div>
 
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#9ca3af]">Before</span>
-                        <span className="font-semibold text-[#374151]">{transferRate}%</span>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#9ca3af]">Before</span>
+                          <span className="font-semibold text-[#374151]">{transferRate}%</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(transferRate / 60) * 100}%` }} />
+                        </div>
                       </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(transferRate / 60) * 100}%` }} />
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#f84608] font-medium">With AIVI</span>
+                          <span className="font-semibold text-[#0a0a0a]">{aiviTransferRate}%</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: `${(aiviTransferRate / 60) * 100}%` }} />
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#f84608] font-medium">With AIVI</span>
-                        <span className="font-semibold text-[#0a0a0a]">{aiviTransferRate}%</span>
+                  </div>
+
+                  {/* Leads Transferred Card */}
+                  <div className="calculator-breakdown-card">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[13px] text-[#555555] font-medium">Leads Transferred</span>
+                      <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
+                        +{formatNumber(transferredLift)}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#9ca3af]">Before</span>
+                          <span className="font-semibold text-[#374151]">{formatNumber(currentTransferred)}</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(currentTransferred / aiviTransferred) * 100}%` }} />
+                        </div>
                       </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: `${(aiviTransferRate / 60) * 100}%` }} />
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#f84608] font-medium">With AIVI</span>
+                          <span className="font-semibold text-[#0a0a0a]">{formatNumber(aiviTransferred)}</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: '100%' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Close Rate Card */}
+                  <div className="calculator-breakdown-card">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[13px] text-[#555555] font-medium">Close Rate</span>
+                      <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
+                        +{closeRateImprovement}pts
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#9ca3af]">Before</span>
+                          <span className="font-semibold text-[#374151]">{closeRate}%</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(closeRate / 15) * 100}%` }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#f84608] font-medium">With AIVI</span>
+                          <span className="font-semibold text-[#0a0a0a]">{aiviCloseRate}%</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: `${(aiviCloseRate / 15) * 100}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Closed Loans Card */}
+                  <div className="calculator-breakdown-card">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[13px] text-[#555555] font-medium">Closed Loans</span>
+                      <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
+                        +{formatNumber(closedLift)}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#9ca3af]">Before</span>
+                          <span className="font-semibold text-[#374151]">{formatNumber(currentClosed)}</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(currentClosed / aiviClosed) * 100}%` }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-[12px] mb-1.5">
+                          <span className="text-[#f84608] font-medium">With AIVI</span>
+                          <span className="font-semibold text-[#0a0a0a]">{formatNumber(aiviClosed)}</span>
+                        </div>
+                        <div className="calculator-progress-bar">
+                          <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: '100%' }} />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Leads Transferred Card */}
-                <div className="calculator-breakdown-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[13px] text-[#555555] font-medium">Leads Transferred</span>
-                    <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
-                      +{formatNumber(transferredLift)}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#9ca3af]">Before</span>
-                        <span className="font-semibold text-[#374151]">{formatNumber(currentTransferred)}</span>
+                {/* Revenue Summary - Premium unified tile */}
+                <div className="mt-5 bg-white rounded-2xl p-5 border border-[#e5e5e5] shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                  <div className="flex items-center justify-between divide-x divide-[#e5e5e5]">
+                    {/* Current Revenue */}
+                    <div className="flex-1 flex items-center gap-3 pr-5">
+                      <div className="w-10 h-10 rounded-xl bg-[#f5f5f5] flex items-center justify-center flex-shrink-0">
+                        <HiOutlineCurrencyDollar className="w-5 h-5 text-[#6b7280]" />
                       </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(currentTransferred / aiviTransferred) * 100}%` }} />
+                      <div>
+                        <span className="text-[10px] text-[#9ca3af] uppercase tracking-[0.12em] font-medium block mb-0.5">Current</span>
+                        <span className="text-[17px] font-bold text-[#374151]">{formatCurrency(currentRevenue)}</span>
                       </div>
                     </div>
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#f84608] font-medium">With AIVI</span>
-                        <span className="font-semibold text-[#0a0a0a]">{formatNumber(aiviTransferred)}</span>
+
+                    {/* With AIVI */}
+                    <div className="flex-1 flex items-center gap-3 px-5">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 flex items-center justify-center flex-shrink-0">
+                        <BsGraphUpArrow className="w-4 h-4 text-[#f84608]" />
                       </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: '100%' }} />
+                      <div>
+                        <span className="text-[10px] text-[#f84608] uppercase tracking-[0.12em] font-semibold block mb-0.5">With AIVI</span>
+                        <span className="text-[17px] font-bold text-[#0a0a0a]">{formatCurrency(aiviRevenue)}</span>
+                      </div>
+                    </div>
+
+                    {/* Monthly Lift */}
+                    <div className="flex-1 flex items-center gap-3 pl-5">
+                      <div className="w-10 h-10 rounded-xl bg-[#10b981]/10 flex items-center justify-center flex-shrink-0">
+                        <BsRocketTakeoff className="w-4 h-4 text-[#10b981]" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[#10b981] uppercase tracking-[0.12em] font-semibold block mb-0.5">Lift</span>
+                        <span className="text-[17px] font-bold text-[#10b981]">+{formatCurrency(monthlyLift)}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Close Rate Card */}
-                <div className="calculator-breakdown-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[13px] text-[#555555] font-medium">Close Rate</span>
-                    <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
-                      +{closeRateImprovement}pts
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#9ca3af]">Before</span>
-                        <span className="font-semibold text-[#374151]">{closeRate}%</span>
-                      </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(closeRate / 15) * 100}%` }} />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#f84608] font-medium">With AIVI</span>
-                        <span className="font-semibold text-[#0a0a0a]">{aiviCloseRate}%</span>
-                      </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: `${(aiviCloseRate / 15) * 100}%` }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Closed Loans Card */}
-                <div className="calculator-breakdown-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[13px] text-[#555555] font-medium">Closed Loans</span>
-                    <span className="text-[11px] font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-1 rounded-full">
-                      +{formatNumber(closedLift)}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#9ca3af]">Before</span>
-                        <span className="font-semibold text-[#374151]">{formatNumber(currentClosed)}</span>
-                      </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gray" style={{ width: `${(currentClosed / aiviClosed) * 100}%` }} />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-[12px] mb-1.5">
-                        <span className="text-[#f84608] font-medium">With AIVI</span>
-                        <span className="font-semibold text-[#0a0a0a]">{formatNumber(aiviClosed)}</span>
-                      </div>
-                      <div className="calculator-progress-bar">
-                        <div className="calculator-progress-fill calculator-progress-fill-gradient" style={{ width: '100%' }} />
-                      </div>
-                    </div>
-                  </div>
+                {/* Revenue Disclaimer */}
+                <div className="mt-4 text-center text-[13px] text-[#6b7280] leading-relaxed bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-white/60">
+                  Results based on {formatNumber(leadVolume)} monthly leads at ${formatNumber(commission)} commission per close.<br />
+                  Actual results may vary based on lead quality, team performance, and market conditions.<br />
+                  AIVI customers typically see ROI within the first 30 days of implementation.<br />
+                  Schedule a strategy call to get a personalized projection for your business.
                 </div>
               </div>
 
-              {/* Revenue Summary - Premium unified tile */}
-              <div className="mt-5 bg-white rounded-2xl p-5 border border-[#e5e5e5] shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-                <div className="flex items-center justify-between divide-x divide-[#e5e5e5]">
-                  {/* Current Revenue */}
-                  <div className="flex-1 flex items-center gap-3 pr-5">
-                    <div className="w-10 h-10 rounded-xl bg-[#f5f5f5] flex items-center justify-center flex-shrink-0">
-                      <HiOutlineCurrencyDollar className="w-5 h-5 text-[#6b7280]" />
+              {/* Lead Gate Overlay */}
+              {!isGateUnlocked && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-white/60 backdrop-blur-sm rounded-2xl">
+                  <div className="text-center max-w-md px-6">
+                    {/* Lock Icon */}
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-[#f84608]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
                     </div>
-                    <div>
-                      <span className="text-[10px] text-[#9ca3af] uppercase tracking-[0.12em] font-medium block mb-0.5">Current</span>
-                      <span className="text-[17px] font-bold text-[#374151]">{formatCurrency(currentRevenue)}</span>
-                    </div>
-                  </div>
 
-                  {/* With AIVI */}
-                  <div className="flex-1 flex items-center gap-3 px-5">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 flex items-center justify-center flex-shrink-0">
-                      <BsGraphUpArrow className="w-4 h-4 text-[#f84608]" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-[#f84608] uppercase tracking-[0.12em] font-semibold block mb-0.5">With AIVI</span>
-                      <span className="text-[17px] font-bold text-[#0a0a0a]">{formatCurrency(aiviRevenue)}</span>
-                    </div>
-                  </div>
+                    {/* Title */}
+                    <h3 className="text-[22px] font-bold text-[#0a0a0a] mb-2">
+                      Unlock Your Full Analysis
+                    </h3>
 
-                  {/* Monthly Lift */}
-                  <div className="flex-1 flex items-center gap-3 pl-5">
-                    <div className="w-10 h-10 rounded-xl bg-[#10b981]/10 flex items-center justify-center flex-shrink-0">
-                      <BsRocketTakeoff className="w-4 h-4 text-[#10b981]" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-[#10b981] uppercase tracking-[0.12em] font-semibold block mb-0.5">Lift</span>
-                      <span className="text-[17px] font-bold text-[#10b981]">+{formatCurrency(monthlyLift)}</span>
-                    </div>
+                    {/* Description */}
+                    <p className="text-[14px] text-[#6b7280] mb-6">
+                      Try our personalized demo in the hero section to see your detailed performance breakdown
+                    </p>
+
+                    {/* CTA Button - Scroll to Hero */}
+                    <button
+                      onClick={() => {
+                        document.getElementById('hero-demo-section')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="px-6 py-3 bg-gradient-to-r from-[#f84608] to-[#321ca3] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+                    >
+                      Try Personalized Demo
+                    </button>
+
+                    {/* Bypass Link */}
+                    <button
+                      onClick={() => leadGateContext?.unlockGate()}
+                      className="block mx-auto mt-4 text-[12px] text-[#9ca3af] hover:text-[#6b7280] transition-colors underline"
+                    >
+                      Just show me the numbers
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              {/* Revenue Disclaimer */}
-              <div className="mt-4 text-center text-[13px] text-[#6b7280] leading-relaxed bg-white/50 backdrop-blur-sm rounded-xl p-4 border border-white/60">
-                Results based on {formatNumber(leadVolume)} monthly leads at ${formatNumber(commission)} commission per close.<br />
-                Actual results may vary based on lead quality, team performance, and market conditions.<br />
-                AIVI customers typically see ROI within the first 30 days of implementation.<br />
-                Schedule a strategy call to get a personalized projection for your business.
-              </div>
-
+              )}
             </div>
           </div>
         </div>
@@ -875,6 +1018,153 @@ export default function AIVICalculatorV4() {
           </a>
         </div>
       </div>
+
+      {/* Floating Elements - Different styles based on liftStyle */}
+
+      {/* Style 1: Morphing Floating Pill */}
+      {liftStyle === '1' && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 transition-all duration-500 ${
+            showFloatingNumber
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+        >
+          <button
+            onClick={() => revenueCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+            className="group flex items-center gap-3 px-5 py-3 rounded-full cursor-pointer calculator-results-gradient shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-300"
+          >
+            <span className="text-[22px] sm:text-[26px] font-bold text-white leading-none">
+              +{formatCurrency(monthlyLift)}
+            </span>
+            <span className="text-[11px] text-white/70 uppercase tracking-wider">/mo</span>
+            <svg className="w-4 h-4 text-white/60 group-hover:text-white group-hover:-translate-y-0.5 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* Style 2: Draggable Floating Banner (like ROI Option C) */}
+      {liftStyle === '2' && (
+        <div
+          ref={bannerRef}
+          className={`fixed bottom-0 z-50 select-none rounded-t-2xl overflow-hidden ${
+            showFloatingNumber
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-full pointer-events-none'
+          }`}
+          style={{
+            left: '50%',
+            transform: `translateX(calc(-50% + ${bannerX}px))`,
+            cursor: isDragging ? 'grabbing' : 'grab',
+            transition: isDragging ? 'none' : 'all 0.3s ease',
+          }}
+          onMouseDown={handleBannerDragStart}
+          onTouchStart={handleBannerDragStart}
+        >
+          {/* Gradient accent bar */}
+          <div
+            className="h-[3px] w-full"
+            style={{
+              background: 'linear-gradient(90deg, #8b00ff 0%, #f84608 50%, #8b00ff 100%)',
+              backgroundSize: '200% 100%',
+              animation: 'gradientFlow 3s ease-in-out infinite',
+            }}
+          />
+
+          {/* Content */}
+          <div
+            className="flex items-center gap-4 px-6 py-4"
+            style={{
+              background: 'linear-gradient(180deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: 'none',
+              boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            {/* Drag Handle */}
+            <div className="flex flex-col gap-[3px] opacity-40 mr-1">
+              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
+              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
+              <div className="w-5 h-[2px] bg-white/60 rounded-full" />
+            </div>
+
+            {/* Revenue Lift - Main Number */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-[28px] sm:text-[32px] font-bold text-white leading-none">
+                +{formatCurrency(monthlyLift)}
+              </span>
+              <span className="text-[12px] text-white/50">/mo</span>
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-10 bg-white/20" />
+
+            {/* Stats */}
+            <div className="flex gap-5">
+              <div className="text-center">
+                <div className="text-[18px] font-bold text-white">+{transferRateImprovement}%</div>
+                <div className="text-[9px] text-white/50 uppercase tracking-wider">Transfer</div>
+              </div>
+              <div className="text-center">
+                <div className="text-[18px] font-bold text-white">+{formatNumber(closedLift)}</div>
+                <div className="text-[9px] text-white/50 uppercase tracking-wider">Closes</div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-10 bg-white/20" />
+
+            {/* Annual */}
+            <div className="text-center">
+              <div className="text-[16px] font-bold text-[#10b981]">{formatCurrency(annualLift)}</div>
+              <div className="text-[9px] text-white/50 uppercase tracking-wider">Per Year</div>
+            </div>
+
+            {/* Click to scroll button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                revenueCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }}
+              className="ml-2 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
+              aria-label="Scroll to calculator"
+            >
+              <svg className="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Style 3: Detached Floating Number */}
+      {liftStyle === '3' && (
+        <div
+          className={`fixed top-28 right-6 z-50 transition-all duration-300 ${
+            showFloatingNumber
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 translate-x-4 pointer-events-none'
+          }`}
+        >
+          <button
+            onClick={() => revenueCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+            className="group flex flex-col items-end cursor-pointer"
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-[1.5px] text-[#555555] mb-1">
+              Revenue Lift
+            </span>
+            <span className="text-[28px] sm:text-[32px] font-bold aivi-gradient-text leading-none group-hover:scale-105 transition-transform duration-200">
+              +{formatCurrency(monthlyLift)}
+            </span>
+            <span className="text-[11px] text-[#777777] mt-0.5">/month</span>
+          </button>
+        </div>
+      )}
+
     </section>
   );
 }

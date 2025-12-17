@@ -105,8 +105,8 @@ export default function AIVISocialProofV4() {
       // Draw mouse glow
       if (mouse.x !== null && mouse.y !== null) {
         const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
-        gradient.addColorStop(0, 'rgba(100, 200, 255, 0.15)');
-        gradient.addColorStop(0.5, 'rgba(139, 0, 255, 0.05)');
+        gradient.addColorStop(0, 'rgba(248, 70, 8, 0.12)');
+        gradient.addColorStop(0.5, 'rgba(139, 0, 255, 0.06)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
@@ -159,7 +159,7 @@ export default function AIVISocialProofV4() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(100, 200, 255, ${0.4 * brightness})`;
+        ctx.fillStyle = `rgba(139, 0, 255, ${0.3 * brightness})`;
         ctx.fill();
       });
 
@@ -171,7 +171,7 @@ export default function AIVISocialProofV4() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 140) {
-            let opacity = 0.15 * (1 - dist / 140);
+            let opacity = 0.12 * (1 - dist / 140);
 
             if (mouse.x !== null && mouse.y !== null) {
               const midX = (particles[i].x + particles[j].x) / 2;
@@ -183,7 +183,7 @@ export default function AIVISocialProofV4() {
             }
 
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
+            ctx.strokeStyle = `rgba(139, 0, 255, ${opacity})`;
             ctx.lineWidth = 0.6;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -327,7 +327,7 @@ export default function AIVISocialProofV4() {
         >
           <path
             d="M0 120L1440 120L1440 0L0 80L0 120Z"
-            fill="white"
+            fill="#FAFAFA"
           />
         </svg>
       </div>

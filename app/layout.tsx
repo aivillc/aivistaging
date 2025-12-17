@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import ChatBot from "@/components/ChatBot";
+import { ChatBotProvider } from "@/components/ChatBotContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <ScrollToTop />
-        <ChatBot />
+        <ChatBotProvider>
+          {children}
+          <ScrollToTop />
+          <ChatBot />
+        </ChatBotProvider>
       </body>
     </html>
   );

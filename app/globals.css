@@ -797,13 +797,6 @@ button:focus-visible, a:focus-visible {
   gap: 16px;
   margin: 50px 0;
   padding: 40px 60px;
-  background: rgba(10, 10, 26, 0.6);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  border: 1px solid rgba(139, 0, 255, 0.2);
-  box-shadow:
-    0 4px 30px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   flex-wrap: wrap;
 }
 
@@ -928,55 +921,73 @@ button:focus-visible, a:focus-visible {
 .orchestration-flow .flow-connector:nth-child(6) { animation-delay: 0.35s; }
 .orchestration-flow .flow-connector:nth-child(8) { animation-delay: 0.45s; }
 
-/* Premium flow connector with traveling dot */
+/* Premium flow connector with arrow */
 .flow-connector {
-  width: 80px;
-  height: 3px;
+  width: 60px;
+  height: 20px;
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   align-self: flex-start;
-  margin-top: 92px;
+  margin-top: 75px;
+  cursor: pointer;
 }
 
-.flow-connector::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, #8b00ff, #0099ff);
-  border-radius: 2px;
-  box-shadow: 0 0 20px rgba(139, 0, 255, 0.6);
+/* Arrow SVG styling */
+.flow-connector .connector-arrow {
+  width: 40px;
+  height: 20px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 6px rgba(139, 0, 255, 0.5)) drop-shadow(0 0 12px rgba(248, 70, 8, 0.3));
 }
 
-.flow-connector::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, #8b00ff, #0099ff);
-  border-radius: 2px;
-  filter: blur(8px);
-  opacity: 0.5;
+.flow-connector .connector-arrow .arrow-line {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: arrowDraw 2s ease-in-out infinite;
 }
 
-/* Animated dot traveling along connector */
-.flow-connector .connector-dot {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 15px #0099ff, 0 0 30px #8b00ff;
-  animation: travelDot 2s ease-in-out infinite;
-  z-index: 1;
+.flow-connector .connector-arrow .arrow-head {
+  transition: all 0.3s ease;
+  transform-origin: center;
+  animation: arrowHeadPulse 2s ease-in-out infinite;
 }
 
-@keyframes travelDot {
-  0% { left: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { left: calc(100% - 8px); opacity: 0; }
+@keyframes arrowDraw {
+  0% { stroke-dashoffset: 40; opacity: 0.6; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -40; opacity: 0.6; }
+}
+
+@keyframes arrowHeadPulse {
+  0%, 100% { opacity: 0.7; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(2px); }
+}
+
+/* Hover animation - enhanced glow */
+.flow-connector:hover .connector-arrow {
+  filter: drop-shadow(0 0 10px rgba(139, 0, 255, 0.8)) drop-shadow(0 0 20px rgba(248, 70, 8, 0.6));
+  transform: scale(1.1);
+}
+
+.flow-connector:hover .connector-arrow .arrow-line {
+  animation: arrowDrawFast 1s ease-in-out infinite;
+}
+
+.flow-connector:hover .connector-arrow .arrow-head {
+  animation: arrowHeadBounce 0.4s ease-in-out infinite;
+}
+
+@keyframes arrowDrawFast {
+  0% { stroke-dashoffset: 40; opacity: 0.8; }
+  50% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -40; opacity: 0.8; }
+}
+
+@keyframes arrowHeadBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
 }
 
 /* Keep old flow-arrow for backwards compatibility */
@@ -992,6 +1003,7 @@ button:focus-visible, a:focus-visible {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
+  margin-top: 20px;
   margin-bottom: 20px;
   background: linear-gradient(90deg, #f84608, #8b00ff, #f84608);
   background-size: 200% 100%;
@@ -1006,42 +1018,6 @@ button:focus-visible, a:focus-visible {
   50% { background-position: 100% 50%; }
 }
 
-.vertical-columns {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  z-index: 3;
-}
-
-.v-column {
-  flex: 1;
-  height: 100%;
-  border-left: 1px solid rgba(139, 0, 255, 0.1);
-  border-right: 1px solid rgba(139, 0, 255, 0.1);
-  transition: all 0.4s ease;
-  position: relative;
-}
-
-.v-column:first-child { border-left: none; }
-.v-column:last-child { border-right: none; }
-
-.v-column .phase-label {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: rgba(139, 0, 255, 0.3);
-  white-space: nowrap;
-  opacity: 0;
-  transition: all 0.4s ease;
-}
 
 #neuralCanvas {
   position: absolute;
@@ -1116,7 +1092,7 @@ button:focus-visible, a:focus-visible {
    ============================================ */
 
 .results-preview-simple {
-  margin-top: 60px;
+  margin-top: 50px;
   text-align: center;
 }
 
@@ -1302,27 +1278,29 @@ button:focus-visible, a:focus-visible {
   }
 
   .flow-connector {
-    width: 3px;
+    width: 20px;
     height: 40px;
     margin-top: 0;
     transform: none;
   }
 
-  .flow-connector::before,
-  .flow-connector::after {
-    width: 100%;
-    height: 100%;
+  .flow-connector .connector-arrow {
+    transform: rotate(90deg);
+    width: 40px;
+    height: 20px;
   }
 
-  .flow-connector .connector-dot {
-    animation: travelDotVertical 2s ease-in-out infinite;
+  .flow-connector:hover .connector-arrow {
+    transform: rotate(90deg) scale(1.1);
   }
 
-  @keyframes travelDotVertical {
-    0% { top: 0; left: 50%; transform: translateX(-50%); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { top: calc(100% - 8px); left: 50%; transform: translateX(-50%); opacity: 0; }
+  .flow-connector:hover .connector-arrow .arrow-head {
+    animation: arrowPulseVertical 0.4s ease-in-out infinite;
+  }
+
+  @keyframes arrowPulseVertical {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
   }
 
   .step-circle {
@@ -1333,10 +1311,6 @@ button:focus-visible, a:focus-visible {
   .flow-arrow {
     transform: rotate(90deg);
     margin: 8px 0;
-  }
-
-  .vertical-columns {
-    display: none;
   }
 
   /* Premium Counter Mobile Styles */
@@ -1379,16 +1353,14 @@ button:focus-visible, a:focus-visible {
   left: 50%;
   transform: translateX(-50%) scale(0.95);
   width: 700px;
-  background: rgba(10, 10, 20, 0.98);
-  border: 1px solid rgba(139, 0, 255, 0.4);
+  background: transparent;
+  border: none;
   border-radius: 16px;
   padding: 0;
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 0, 255, 0.3);
-  z-index: 1000;
+  z-index: 9999;
   overflow: hidden;
 }
 
@@ -1399,7 +1371,13 @@ button:focus-visible, a:focus-visible {
 }
 
 .demo-form {
+  position: relative;
   padding: 24px 32px;
+  background: rgba(10, 10, 20, 0.98);
+  border: 1px solid rgba(139, 0, 255, 0.4);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 0, 255, 0.3);
 }
 
 .form-header {
@@ -1896,7 +1874,7 @@ button:focus-visible, a:focus-visible {
    =========================================== */
 
 .social-proof-section-dark {
-  background: #000;
+  background: #f5f0e8;
   min-height: auto;
 }
 
@@ -1917,22 +1895,20 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   gap: 12px;
   padding: 12px 24px;
-  background: rgba(139, 0, 255, 0.1);
-  border: 1px solid rgba(139, 0, 255, 0.3);
+  background: linear-gradient(135deg, #f84608, #8b00ff);
+  border: none;
   border-radius: 50px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(248, 70, 8, 0.3);
 }
 
 .trust-badge-dark:hover {
-  background: rgba(139, 0, 255, 0.15);
-  border-color: rgba(139, 0, 255, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(139, 0, 255, 0.2);
+  box-shadow: 0 6px 30px rgba(248, 70, 8, 0.4);
 }
 
 .trust-icon-dark {
-  color: #8b00ff;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
@@ -1941,7 +1917,7 @@ button:focus-visible, a:focus-visible {
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
 }
 
 /* Dark Theme Company Logos */
@@ -1954,16 +1930,15 @@ button:focus-visible, a:focus-visible {
 
 .company-logo-dark {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(26, 26, 26, 0.5);
   transition: all 0.3s ease;
   position: relative;
   cursor: default;
 }
 
 .company-logo-dark:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(26, 26, 26, 0.9);
   transform: translateY(-2px);
-  text-shadow: 0 0 20px rgba(139, 0, 255, 0.5);
 }
 
 .company-logo-dark::after {
@@ -1973,7 +1948,7 @@ button:focus-visible, a:focus-visible {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #8b00ff, #0099ff);
+  background: linear-gradient(90deg, #f84608, #8b00ff);
   transition: width 0.3s ease;
 }
 
@@ -1994,11 +1969,11 @@ button:focus-visible, a:focus-visible {
   font-size: 180px;
   font-family: Georgia, serif;
   line-height: 1;
-  background: linear-gradient(135deg, #8b00ff, #0099ff);
+  background: linear-gradient(135deg, #8b00ff, #f84608);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  opacity: 0.2;
+  opacity: 0.3;
   pointer-events: none;
   user-select: none;
 }
@@ -2012,7 +1987,7 @@ button:focus-visible, a:focus-visible {
   font-size: clamp(28px, 5vw, 56px);
   line-height: 1.15;
   font-weight: 400;
-  color: #ffffff;
+  color: #1a1a1a;
   letter-spacing: -0.02em;
 }
 
@@ -2022,7 +1997,7 @@ button:focus-visible, a:focus-visible {
   align-items: center;
   margin-top: 40px;
   padding-top: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(26, 26, 26, 0.1);
 }
 
 .author-details-dark {
@@ -2035,7 +2010,7 @@ button:focus-visible, a:focus-visible {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8b00ff, #0099ff);
+  background: linear-gradient(135deg, #f84608, #8b00ff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2043,7 +2018,7 @@ button:focus-visible, a:focus-visible {
   font-weight: 600;
   font-size: 14px;
   flex-shrink: 0;
-  box-shadow: 0 0 30px rgba(139, 0, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(248, 70, 8, 0.3);
 }
 
 .author-info-dark {
@@ -2055,7 +2030,7 @@ button:focus-visible, a:focus-visible {
 .author-name-dark {
   font-size: 14px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -2063,7 +2038,7 @@ button:focus-visible, a:focus-visible {
 .author-role-dark {
   font-size: 12px;
   font-weight: 500;
-  background: linear-gradient(90deg, #8b00ff, #0099ff);
+  background: linear-gradient(90deg, #f84608, #8b00ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2074,7 +2049,7 @@ button:focus-visible, a:focus-visible {
 .author-company-dark {
   font-size: 20px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
+  color: #8b00ff;
 }
 
 /* Dark Theme Stats Grid */
@@ -2094,22 +2069,19 @@ button:focus-visible, a:focus-visible {
 /* Dark Theme Stat Card - Glass Effect */
 .stat-card-dark {
   position: relative;
-  background: rgba(10, 10, 26, 0.6);
-  backdrop-filter: blur(20px);
+  background: #ffffff;
   border-radius: 24px;
   padding: 32px;
   min-height: 260px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid rgba(139, 0, 255, 0.2);
+  border: 1px solid rgba(26, 26, 26, 0.08);
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: statCardFadeInUp 0.6s ease-out forwards;
   opacity: 0;
-  box-shadow:
-    0 0 40px rgba(139, 0, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .stat-card-dark:nth-child(1) { animation-delay: 0.1s; }
@@ -2118,11 +2090,8 @@ button:focus-visible, a:focus-visible {
 
 .stat-card-dark:hover {
   transform: translateY(-8px);
-  border-color: rgba(139, 0, 255, 0.4);
-  box-shadow:
-    0 0 60px rgba(139, 0, 255, 0.2),
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(248, 70, 8, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* Dark Theme Decorative Corner Accent */
@@ -2132,7 +2101,7 @@ button:focus-visible, a:focus-visible {
   right: 0;
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, rgba(139, 0, 255, 0.15), transparent);
+  background: linear-gradient(135deg, rgba(248, 70, 8, 0.08), transparent);
   border-radius: 0 24px 0 100%;
   transition: all 0.4s ease;
   pointer-events: none;
@@ -2141,7 +2110,7 @@ button:focus-visible, a:focus-visible {
 .stat-card-dark:hover .stat-card-accent-dark {
   width: 150px;
   height: 150px;
-  background: linear-gradient(135deg, rgba(139, 0, 255, 0.25), transparent);
+  background: linear-gradient(135deg, rgba(248, 70, 8, 0.15), transparent);
 }
 
 /* Dark Theme Stat Card Header */
@@ -2157,7 +2126,7 @@ button:focus-visible, a:focus-visible {
 .stat-card-label-dark {
   font-size: 14px;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
   line-height: 1.6;
   max-width: 200px;
 }
@@ -2165,15 +2134,15 @@ button:focus-visible, a:focus-visible {
 .stat-card-metric-dark {
   font-size: 12px;
   font-weight: 700;
-  color: #8b00ff;
+  color: #f84608;
   letter-spacing: 1px;
   text-transform: uppercase;
   white-space: nowrap;
   padding: 6px 12px;
-  background: rgba(139, 0, 255, 0.15);
+  background: rgba(248, 70, 8, 0.1);
   border-radius: 20px;
   flex-shrink: 0;
-  border: 1px solid rgba(139, 0, 255, 0.3);
+  border: 1px solid rgba(248, 70, 8, 0.2);
 }
 
 /* Dark Theme Stat Card Value */
@@ -2397,3 +2366,8 @@ button:focus-visible, a:focus-visible {
   opacity: 0.85;
 }
 
+/* Gradient Flow Animation for Revenue Lift Banner */
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}

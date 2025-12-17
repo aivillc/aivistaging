@@ -205,13 +205,13 @@ export default function DemoPopup({ isOpen, onClose }: DemoPopupProps) {
     <>
       {/* Backdrop with blur */}
       <div
-        className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+        className="fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
         onClick={handleClose}
         aria-hidden="true"
       />
 
       {/* Popup Container */}
-      <div className="fixed inset-0 z-[201] flex items-center justify-center p-4 pointer-events-none">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
         <div
           className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl pointer-events-auto transform transition-all duration-300 animate-popup-enter"
           onClick={(e) => e.stopPropagation()}

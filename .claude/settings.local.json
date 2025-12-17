@@ -32,7 +32,8 @@
       "Bash(if exist \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\" rmdir /s /q \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\.next\")",
       "Bash(for file in app/aiviv3/resources/case-studies/*/page.tsx)",
       "Bash(do sed:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

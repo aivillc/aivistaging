@@ -6,6 +6,7 @@ import { BsChatDots } from 'react-icons/bs';
 import { FiMic } from 'react-icons/fi';
 import { TbCreditCard } from 'react-icons/tb';
 import { FaUserTie } from 'react-icons/fa';
+import { useLeadGateSafe } from './LeadGateContext';
 
 interface Particle {
   x: number;
@@ -27,10 +28,14 @@ export default function AIVIHeroV4() {
   const [welcomeText, setWelcomeText] = useState('');
   const [counterValue, setCounterValue] = useState(0);
 
+  // Lead gate context for unlocking calculator breakdown
+  const leadGateContext = useLeadGateSafe();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioCanvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef<{ x: number | null; y: number | null; radius: number }>({ x: null, y: null, radius: 150 });
+  const scrollOffsetRef = useRef<number>(0);
   const animationIdRef = useRef<number>(undefined);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -77,6 +82,12 @@ export default function AIVIHeroV4() {
     resize();
     window.addEventListener('resize', resize);
 
+    // Scroll parallax effect
+    const handleScroll = () => {
+      scrollOffsetRef.current = window.scrollY * 0.15; // Subtle parallax factor
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       // Check if mouse is within the hero section bounds
@@ -104,6 +115,7 @@ export default function AIVIHeroV4() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const mouse = mouseRef.current;
       const particles = particlesRef.current;
+      const scrollOffset = scrollOffsetRef.current;
 
       // Draw mouse glow
       if (mouse.x !== null && mouse.y !== null) {
@@ -117,12 +129,16 @@ export default function AIVIHeroV4() {
         ctx.fill();
       }
 
-      // Update and draw particles
-      particles.forEach((p) => {
+      // Update and draw particles with parallax depth
+      particles.forEach((p, index) => {
+        // Each particle has different depth based on its size (larger = closer = more movement)
+        const depthFactor = p.radius / 3; // 0.33 to 1.0 range
+        const parallaxY = scrollOffset * depthFactor;
+
         // Mouse interaction
         if (mouse.x !== null && mouse.y !== null) {
           const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
+          const dy = mouse.y - (p.y + parallaxY);
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < mouse.radius) {
             const forceX = dx / dist;
@@ -149,11 +165,13 @@ export default function AIVIHeroV4() {
           p.baseY = p.y;
         }
 
-        // Draw particle
+        // Draw particle with parallax offset
+        const drawY = p.y + parallaxY;
+
         let brightness = 0.6;
         if (mouse.x !== null && mouse.y !== null) {
           const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
+          const dy = mouse.y - drawY;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < mouse.radius) {
             brightness = 1 - (dist / mouse.radius) * 0.4;
@@ -161,16 +179,21 @@ export default function AIVIHeroV4() {
         }
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.arc(p.x, drawY, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(100, 200, 255, ${0.4 * brightness})`;
         ctx.fill();
       });
 
-      // Draw connections
+      // Draw connections with parallax
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
+          const p1DepthFactor = particles[i].radius / 3;
+          const p2DepthFactor = particles[j].radius / 3;
+          const p1Y = particles[i].y + scrollOffset * p1DepthFactor;
+          const p2Y = particles[j].y + scrollOffset * p2DepthFactor;
+
           const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+          const dy = p1Y - p2Y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 140) {
@@ -178,7 +201,7 @@ export default function AIVIHeroV4() {
 
             if (mouse.x !== null && mouse.y !== null) {
               const midX = (particles[i].x + particles[j].x) / 2;
-              const midY = (particles[i].y + particles[j].y) / 2;
+              const midY = (p1Y + p2Y) / 2;
               const mouseDist = Math.sqrt((mouse.x - midX) ** 2 + (mouse.y - midY) ** 2);
               if (mouseDist < mouse.radius) {
                 opacity *= 1 + (1 - mouseDist / mouse.radius) * 2;
@@ -188,8 +211,8 @@ export default function AIVIHeroV4() {
             ctx.beginPath();
             ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
             ctx.lineWidth = 0.6;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.moveTo(particles[i].x, p1Y);
+            ctx.lineTo(particles[j].x, p2Y);
             ctx.stroke();
           }
         }
@@ -202,6 +225,7 @@ export default function AIVIHeroV4() {
 
     return () => {
       window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseOut);
       if (animationIdRef.current) {
@@ -562,6 +586,9 @@ export default function AIVIHeroV4() {
           email: formData.email,
         }),
       }).catch((error) => console.error('Webhook error:', error));
+
+      // Unlock the lead gate for calculator breakdown section
+      leadGateContext?.unlockGate();
 
       setDemoModalOpen(false);
       setAudioOverlayOpen(true);
@@ -1011,27 +1038,6 @@ export default function AIVIHeroV4() {
       <section className="hero-section-v4">
         <canvas ref={canvasRef} id="neuralCanvas" />
 
-        {/* 7 Vertical Columns with bottom fade */}
-        <div className="vertical-columns" style={{ maskImage: 'linear-gradient(to bottom, black 0%, black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 70%, transparent 100%)' }}>
-          <div className="v-column"></div>
-          <div className="v-column">
-            <span className="phase-label">Lead Submits</span>
-          </div>
-          <div className="v-column">
-            <span className="phase-label">Instant SMS</span>
-          </div>
-          <div className="v-column">
-            <span className="phase-label">AI Voice</span>
-          </div>
-          <div className="v-column">
-            <span className="phase-label">Credit Pull</span>
-          </div>
-          <div className="v-column">
-            <span className="phase-label">Agent Transfer</span>
-          </div>
-          <div className="v-column"></div>
-        </div>
-
         <div className="hero-content-v4">
           <div className="eyebrow">Experience AI Orchestration Live</div>
 
@@ -1055,7 +1061,16 @@ export default function AIVIHeroV4() {
               <div className="step-detail">Form completed</div>
             </div>
             <div className="flow-connector">
-              <span className="connector-dot"></span>
+              <svg className="connector-arrow" viewBox="0 0 40 20" fill="none">
+                <path className="arrow-line" d="M0 10H30" stroke="url(#arrowGradPO)" strokeWidth="2.5" strokeLinecap="round"/>
+                <path className="arrow-head" d="M26 5L36 10L26 15" stroke="url(#arrowGradPO)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <defs>
+                  <linearGradient id="arrowGradPO" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#8b00ff"/>
+                    <stop offset="100%" stopColor="#f84608"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <div className="flow-step">
               <div className="step-circle" style={{ position: 'relative' }}>
@@ -1066,9 +1081,18 @@ export default function AIVIHeroV4() {
               <div className="step-detail">3-second response</div>
             </div>
             <div className="flow-connector">
-              <span className="connector-dot"></span>
+              <svg className="connector-arrow" viewBox="0 0 40 20" fill="none">
+                <path className="arrow-line" d="M0 10H30" stroke="url(#arrowGradPO2)" strokeWidth="2.5" strokeLinecap="round"/>
+                <path className="arrow-head" d="M26 5L36 10L26 15" stroke="url(#arrowGradPO2)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <defs>
+                  <linearGradient id="arrowGradPO2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#8b00ff"/>
+                    <stop offset="100%" stopColor="#f84608"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
-            <div className="flow-step step-microphone">
+            <div id="hero-demo-section" className="flow-step step-microphone">
               <div
                 className="step-circle"
                 onClick={() => setDemoModalOpen(true)}
@@ -1082,21 +1106,58 @@ export default function AIVIHeroV4() {
                 Experience It Yourself →
               </button>
 
-              <div
-                className="demo-modal-backdrop"
-                style={{
-                  display: demoModalOpen ? 'block' : 'none',
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  zIndex: 999,
-                }}
-                onClick={() => setDemoModalOpen(false)}
-              />
+              {/* Invisible backdrop for click-outside-to-close */}
+              {demoModalOpen && (
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 9998,
+                    background: 'transparent',
+                  }}
+                  onClick={() => setDemoModalOpen(false)}
+                />
+              )}
+
               <div className={`demo-modal ${demoModalOpen ? 'active' : ''}`} onClick={(e) => e.stopPropagation()}>
                 <div className="demo-form">
+                  {/* Close button */}
+                  <button
+                    onClick={() => setDemoModalOpen(false)}
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '28px',
+                      height: '28px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      color: 'rgba(255, 255, 255, 0.6)',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
+                    }}
+                    aria-label="Close"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
                   <div className="form-header">
                     <div className="form-title">Your Personalized Demo</div>
                     <div className="form-subtitle">See AIVI handle your lead in real-time</div>
@@ -1176,7 +1237,16 @@ export default function AIVIHeroV4() {
               </div>
             </div>
             <div className="flow-connector">
-              <span className="connector-dot"></span>
+              <svg className="connector-arrow" viewBox="0 0 40 20" fill="none">
+                <path className="arrow-line" d="M0 10H30" stroke="url(#arrowGradPO3)" strokeWidth="2.5" strokeLinecap="round"/>
+                <path className="arrow-head" d="M26 5L36 10L26 15" stroke="url(#arrowGradPO3)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <defs>
+                  <linearGradient id="arrowGradPO3" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#8b00ff"/>
+                    <stop offset="100%" stopColor="#f84608"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <div className="flow-step">
               <div className="step-circle" style={{ position: 'relative' }}>
@@ -1187,7 +1257,16 @@ export default function AIVIHeroV4() {
               <div className="step-detail">Soft pull + verify</div>
             </div>
             <div className="flow-connector">
-              <span className="connector-dot"></span>
+              <svg className="connector-arrow" viewBox="0 0 40 20" fill="none">
+                <path className="arrow-line" d="M0 10H30" stroke="url(#arrowGradPO4)" strokeWidth="2.5" strokeLinecap="round"/>
+                <path className="arrow-head" d="M26 5L36 10L26 15" stroke="url(#arrowGradPO4)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <defs>
+                  <linearGradient id="arrowGradPO4" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#8b00ff"/>
+                    <stop offset="100%" stopColor="#f84608"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
             <div className="flow-step">
               <div className="step-circle">
@@ -1198,7 +1277,13 @@ export default function AIVIHeroV4() {
             </div>
           </div>
 
-          <div className="results-preview-simple">
+          <div
+            className="results-preview-simple"
+            style={{
+              transform: demoModalOpen ? 'translateY(120px)' : 'translateY(-10px)',
+              transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          >
               {/* Main Counter with Animated Digits */}
               <div className="counter-display">
                 {counterValue.toLocaleString().split('').map((char, i) => (
@@ -1213,12 +1298,6 @@ export default function AIVIHeroV4() {
               </div>
 
               <div className="counter-label-simple">AI-Powered Conversations Completed</div>
-
-              {/* Live Indicator */}
-              <div className="counter-live-simple">
-                <span className="live-dot-simple"></span>
-                <span className="live-text-simple">LIVE</span>
-              </div>
             </div>
         </div>
       </section>

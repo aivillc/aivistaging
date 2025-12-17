@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useDemoPopup } from '../aiviv3/DemoPopupContext';
+import { useROIButtonStyle, ROIButtonStyle } from './ROIButtonStyleContext';
+import { useRevenueLiftStyleSafe, RevenueLiftStyle } from './RevenueLiftStyleContext';
 
 // Navigation structure with mega menu for Solutions
 const navItems = [
@@ -45,6 +47,18 @@ export default function AIVINavigationV4() {
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const { openDemoPopup } = useDemoPopup();
+
+  // ROI Button Style switcher - only show on /aiviv4 homepage
+  const isHomepage = pathname === '/aiviv4';
+  let roiStyleContext: { style: ROIButtonStyle; setStyle: (style: ROIButtonStyle) => void } | null = null;
+  try {
+    roiStyleContext = useROIButtonStyle();
+  } catch {
+    // Context not available, that's fine
+  }
+
+  // Revenue Lift Style switcher - only show on /aiviv4 homepage
+  const revenueLiftContext = useRevenueLiftStyleSafe();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -134,7 +148,7 @@ export default function AIVINavigationV4() {
               <div className="relative h-10 w-[120px]">
                 {/* Colored logo - visible when not scrolled */}
                 <Image
-                  src="/aivilogo.png"
+                  src="/AIVILogo.png"
                   alt="AIVI - AI-Powered Lead Conversion"
                   fill
                   className={`object-contain object-left transition-all duration-500 ease-out ${
@@ -144,7 +158,7 @@ export default function AIVINavigationV4() {
                 />
                 {/* White logo - visible when scrolled */}
                 <Image
-                  src="/AIVI-LOGO-W.png"
+                  src="/AIVILogow.png"
                   alt="AIVI - AI-Powered Lead Conversion"
                   fill
                   className={`object-contain object-left transition-all duration-500 ease-out ${
@@ -286,7 +300,7 @@ export default function AIVINavigationV4() {
             <div className="relative h-8 sm:h-10 w-[100px] sm:w-[120px]">
               {/* Colored logo - visible when not scrolled */}
               <Image
-                src="/aivilogo.png"
+                src="/AIVILogo.png"
                 alt="AIVI - AI-Powered Lead Conversion"
                 fill
                 className={`object-contain object-left transition-all duration-500 ease-out ${
@@ -296,7 +310,7 @@ export default function AIVINavigationV4() {
               />
               {/* White logo - visible when scrolled */}
               <Image
-                src="/AIVI-LOGO-W.png"
+                src="/AIVILogow.png"
                 alt="AIVI - AI-Powered Lead Conversion"
                 fill
                 className={`object-contain object-left transition-all duration-500 ease-out ${
@@ -309,6 +323,50 @@ export default function AIVINavigationV4() {
 
           {/* Right Actions - Desktop only */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* ROI Button Style Switcher - only on homepage */}
+            {isHomepage && roiStyleContext && (
+              <div className="flex items-center gap-1 mr-2 px-2 py-1 rounded-lg bg-white/5 border border-white/10">
+                <span className="text-[11px] text-white/50 mr-1 uppercase tracking-wide">ROI:</span>
+                {(['A', 'B', 'C', 'D'] as ROIButtonStyle[]).map((styleOption) => (
+                  <button
+                    key={styleOption}
+                    onClick={() => roiStyleContext?.setStyle(styleOption)}
+                    className={`w-6 h-6 rounded-md text-[11px] font-semibold transition-all duration-200 ${
+                      roiStyleContext?.style === styleOption
+                        ? 'bg-gradient-to-r from-[#8b00ff] to-[#f84608] text-white'
+                        : 'text-white/60 hover:text-white hover:bg-white/10'
+                    }`}
+                    aria-label={`ROI Button Style ${styleOption}`}
+                    aria-pressed={roiStyleContext?.style === styleOption}
+                  >
+                    {styleOption}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Revenue Lift Style Switcher - only on homepage */}
+            {isHomepage && revenueLiftContext && (
+              <div className="flex items-center gap-1 mr-2 px-2 py-1 rounded-lg bg-white/5 border border-white/10">
+                <span className="text-[11px] text-white/50 mr-1 uppercase tracking-wide">Lift:</span>
+                {(['1', '2', '3'] as RevenueLiftStyle[]).map((styleOption) => (
+                  <button
+                    key={styleOption}
+                    onClick={() => revenueLiftContext?.setStyle(styleOption)}
+                    className={`w-6 h-6 rounded-md text-[11px] font-semibold transition-all duration-200 ${
+                      revenueLiftContext?.style === styleOption
+                        ? 'bg-gradient-to-r from-[#f84608] to-[#321ca3] text-white'
+                        : 'text-white/60 hover:text-white hover:bg-white/10'
+                    }`}
+                    aria-label={`Revenue Lift Style ${styleOption}`}
+                    aria-pressed={revenueLiftContext?.style === styleOption}
+                  >
+                    {styleOption}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <Link
               href="/aiviv4/login"
               className="text-[15px] font-medium text-white/80 px-5 py-2.5 rounded-md hover:text-white hover:bg-white/5 transition-all duration-300 focus-brand-ring"

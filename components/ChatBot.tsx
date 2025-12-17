@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { CHAT_CONFIG, generateMessageId } from '@/lib/chatConfig';
 import { getSessionData, updateSessionData, clearSessionData, extractInfoFromMessage, type SessionData } from '@/lib/sessionData';
 import { getGlobalSessionId, clearGlobalSession } from '@/lib/globalSession';
+import { useChatBotSafe } from './ChatBotContext';
 
 if (process.env.NODE_ENV === 'development') {
   console.log('🤖 [ChatBot] Module loaded');
@@ -29,6 +30,9 @@ interface ChatState {
 }
 
 export default function ChatBot() {
+  // Get context if available (for external control)
+  const chatBotContext = useChatBotSafe();
+
   // Helper to get cached state (parse once, reuse)
   const getCachedState = (): ChatState | null => {
     if (typeof window !== 'undefined') {
@@ -93,6 +97,13 @@ export default function ChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync with context if available (for external control)
+  useEffect(() => {
+    if (chatBotContext && chatBotContext.isOpen !== isOpen) {
+      setIsOpen(chatBotContext.isOpen);
+    }
+  }, [chatBotContext?.isOpen]);
 
   // Hydrate from localStorage on mount (client-side only)
   useEffect(() => {
@@ -666,19 +677,23 @@ export default function ChatBot() {
     }
   };
 
+  // Check if floating button should be hidden (when Option A is selected)
+  const shouldHideFloatingButton = chatBotContext?.hideFloatingButton ?? false;
+
   return (
     <>
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
-          }
-          setIsOpen(!isOpen);
-        }}
-        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
-        aria-label="Open chat"
-      >
+      {/* Floating Chat Button - hidden when Option A ROI button is active */}
+      {!shouldHideFloatingButton && (
+        <button
+          onClick={() => {
+            if (process.env.NODE_ENV === 'development') {
+              console.log('🤖 [ChatBot] Button clicked. Current isOpen:', isOpen, '→ New isOpen:', !isOpen);
+            }
+            setIsOpen(!isOpen);
+          }}
+          className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-br from-[#0ea5e9] to-[#14b8a6] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50 group"
+          aria-label="Open chat"
+        >
         {isOpen ? (
           <svg
             className="w-6 h-6 text-white"
@@ -714,7 +729,8 @@ export default function ChatBot() {
             />
           </>
         )}
-      </button>
+        </button>
+      )}
 
       {/* Chat Window */}
       {isOpen && (
