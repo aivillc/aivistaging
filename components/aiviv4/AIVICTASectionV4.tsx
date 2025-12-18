@@ -23,15 +23,10 @@ export default function AIVICTASectionV4() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Section is visible - play video unmuted
-            video.muted = false;
-            setIsMuted(false);
-            video.play().catch(() => {
-              // If autoplay with sound fails, try muted first
-              video.muted = true;
-              setIsMuted(true);
-              video.play().catch(() => {});
-            });
+            // Start muted to guarantee autoplay works (browser policy)
+            video.muted = true;
+            setIsMuted(true);
+            video.play().catch(() => {});
           } else {
             // Section is not visible - pause video
             video.pause();
@@ -299,23 +294,34 @@ export default function AIVICTASectionV4() {
                   </div>
                 </div>
 
-                {/* Mute/Unmute Button */}
-                <button
-                  onClick={handleMuteToggle}
-                  className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-all duration-200 z-10"
-                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-                >
-                  {isMuted ? (
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                    </svg>
-                  ) : (
+                {/* Click to Unmute Overlay - Shows when playing but muted */}
+                {isPlaying && isMuted && (
+                  <button
+                    onClick={handleMuteToggle}
+                    className="absolute inset-0 flex items-center justify-center bg-black/40 z-20 animate-pulse"
+                  >
+                    <div className="flex items-center gap-2 bg-white/95 px-4 py-2.5 rounded-full shadow-lg">
+                      <svg className="w-5 h-5 text-[#0a0a0a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                      </svg>
+                      <span className="text-[14px] font-medium text-[#0a0a0a]">Click to unmute</span>
+                    </div>
+                  </button>
+                )}
+
+                {/* Mute/Unmute Button - Shows in corner when unmuted */}
+                {!isMuted && (
+                  <button
+                    onClick={handleMuteToggle}
+                    className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-all duration-200 z-10"
+                    aria-label="Mute video"
+                  >
                     <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                     </svg>
-                  )}
-                </button>
+                  </button>
+                )}
 
                 {/* Gradient border effect */}
                 <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/20" />
