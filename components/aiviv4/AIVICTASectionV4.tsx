@@ -12,6 +12,29 @@ export default function AIVICTASectionV4() {
   const sectionRef = useRef<HTMLElement>(null);
   const { openDemoPopup } = useDemoPopup();
 
+  // Track if user has interacted with the page
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+
+  // Listen for any user interaction on the page
+  useEffect(() => {
+    const markInteraction = () => {
+      setHasUserInteracted(true);
+    };
+
+    // These events indicate user interaction
+    window.addEventListener('click', markInteraction, { once: true });
+    window.addEventListener('touchstart', markInteraction, { once: true });
+    window.addEventListener('keydown', markInteraction, { once: true });
+    window.addEventListener('scroll', markInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('click', markInteraction);
+      window.removeEventListener('touchstart', markInteraction);
+      window.removeEventListener('keydown', markInteraction);
+      window.removeEventListener('scroll', markInteraction);
+    };
+  }, []);
+
   // Intersection Observer for auto-play on scroll
   useEffect(() => {
     const video = videoRef.current;
@@ -23,10 +46,15 @@ export default function AIVICTASectionV4() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Start muted to guarantee autoplay works (browser policy)
-            video.muted = true;
-            setIsMuted(true);
-            video.play().catch(() => {});
+            // Try unmuted first (works if user has interacted with page)
+            video.muted = false;
+            setIsMuted(false);
+            video.play().catch(() => {
+              // If unmuted fails, try muted as fallback
+              video.muted = true;
+              setIsMuted(true);
+              video.play().catch(() => {});
+            });
           } else {
             // Section is not visible - pause video
             video.pause();
@@ -44,7 +72,7 @@ export default function AIVICTASectionV4() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [hasUserInteracted]);
 
   const handleMuteToggle = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering video click
