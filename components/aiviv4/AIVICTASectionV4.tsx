@@ -12,30 +12,7 @@ export default function AIVICTASectionV4() {
   const sectionRef = useRef<HTMLElement>(null);
   const { openDemoPopup } = useDemoPopup();
 
-  // Track if user has interacted with the page
-  const [hasUserInteracted, setHasUserInteracted] = useState(false);
-
-  // Listen for any user interaction on the page
-  useEffect(() => {
-    const markInteraction = () => {
-      setHasUserInteracted(true);
-    };
-
-    // These events indicate user interaction
-    window.addEventListener('click', markInteraction, { once: true });
-    window.addEventListener('touchstart', markInteraction, { once: true });
-    window.addEventListener('keydown', markInteraction, { once: true });
-    window.addEventListener('scroll', markInteraction, { once: true });
-
-    return () => {
-      window.removeEventListener('click', markInteraction);
-      window.removeEventListener('touchstart', markInteraction);
-      window.removeEventListener('keydown', markInteraction);
-      window.removeEventListener('scroll', markInteraction);
-    };
-  }, []);
-
-  // Intersection Observer for auto-play on scroll
+  // Intersection Observer for auto-play on scroll (muted - browser requirement)
   useEffect(() => {
     const video = videoRef.current;
     const section = sectionRef.current;
@@ -46,15 +23,10 @@ export default function AIVICTASectionV4() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Try unmuted first (works if user has interacted with page)
-            video.muted = false;
-            setIsMuted(false);
-            video.play().catch(() => {
-              // If unmuted fails, try muted as fallback
-              video.muted = true;
-              setIsMuted(true);
-              video.play().catch(() => {});
-            });
+            // Must start muted - browsers block unmuted autoplay without click
+            video.muted = true;
+            setIsMuted(true);
+            video.play().catch(() => {});
           } else {
             // Section is not visible - pause video
             video.pause();
@@ -72,7 +44,7 @@ export default function AIVICTASectionV4() {
     return () => {
       observer.disconnect();
     };
-  }, [hasUserInteracted]);
+  }, []);
 
   const handleMuteToggle = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering video click
@@ -322,19 +294,17 @@ export default function AIVICTASectionV4() {
                   </div>
                 </div>
 
-                {/* Click to Unmute Overlay - Shows when playing but muted */}
-                {isPlaying && isMuted && (
+                {/* Unmute Button - Shows in corner when muted */}
+                {isMuted && (
                   <button
                     onClick={handleMuteToggle}
-                    className="absolute inset-0 flex items-center justify-center bg-black/40 z-20 animate-pulse"
+                    className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 hover:bg-white px-3 py-2 rounded-full shadow-lg z-20 transition-all duration-200 hover:scale-105"
                   >
-                    <div className="flex items-center gap-2 bg-white/95 px-4 py-2.5 rounded-full shadow-lg">
-                      <svg className="w-5 h-5 text-[#0a0a0a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                      </svg>
-                      <span className="text-[14px] font-medium text-[#0a0a0a]">Click to unmute</span>
-                    </div>
+                    <svg className="w-4 h-4 text-[#0a0a0a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                    <span className="text-[13px] font-medium text-[#0a0a0a]">Unmute</span>
                   </button>
                 )}
 
