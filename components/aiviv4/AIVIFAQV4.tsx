@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useDemoPopup } from '../aiviv3/DemoPopupContext';
 
 const faqs = [
   {
@@ -47,6 +48,7 @@ const faqs = [
 
 export default function AIVIFAQV4() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { openDemoPopup } = useDemoPopup();
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -144,10 +146,8 @@ export default function AIVIFAQV4() {
           <p className="text-[15px] text-[#737373] mb-6">
             Still have questions?
           </p>
-          <a
-            href="https://calendar.app.google/CUobgKJa1AZh95tTA"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={openDemoPopup}
             className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-[16px] font-medium text-white bg-[#0a0a0a] hover:bg-[#171717] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
           >
             <span>Talk to Our Team</span>
@@ -159,7 +159,7 @@ export default function AIVIFAQV4() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
     </section>

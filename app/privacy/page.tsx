@@ -8,7 +8,7 @@ import Link from 'next/link';
 function PrivacyContent() {
   return (
     <div className="bg-[#000] min-h-screen antialiased font-manrope">
-      <AIVINavigationV4 />
+      <AIVINavigationV4 transparent={false} />
 
       <main className="pt-[72px]">
         {/* Hero Section */}

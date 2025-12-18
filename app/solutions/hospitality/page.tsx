@@ -1,20 +1,19 @@
-import { Metadata } from 'next';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
-import AIVIFooter from '@/components/aiviv3/AIVIFooter';
-import {
-  IndustryHero,
-  UseCaseCards,
-  HowItWorks,
-  StatsBar,
-  IntegrationLogos,
-  IndustryFAQ,
-  IndustryCTA,
-} from '@/components/aiviv3/shared';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI Voice Agents for Hospitality | AIVI',
-  description: 'Deliver 5-star service at every touchpoint. AIVI AI voice agents handle reservations, guest inquiries, and concierge requests 24/7—so your staff can focus on creating unforgettable experiences.',
-};
+import { useRef } from 'react';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
+import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import { SolutionsSidebar } from '@/components/aiviv3/shared';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
+import {
+  RetailHeroPremium,
+  RetailStatsPremium,
+  RetailUseCasesPremium,
+  RetailProcessPremium,
+  RetailIntegrationsPremium,
+  RetailFAQPremium,
+  RetailCTAPremium,
+} from '@/components/aiviv4/retail';
 
 const useCases = [
   {
@@ -54,9 +53,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: '97%', label: 'Calls resolved without staff' },
-  { value: '4.8★', label: 'Average post-call rating' },
-  { value: '0', label: 'Missed reservation calls' },
+  { value: '97%', label: 'Calls resolved without staff', badge: 'Efficiency' },
+  { value: '4.8★', label: 'Average post-call rating', badge: 'Satisfaction' },
+  { value: '0', label: 'Missed reservation calls', badge: 'Coverage' },
 ];
 
 const faqs = [
@@ -87,22 +86,34 @@ const faqs = [
 ];
 
 export default function HospitalitySolutionPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
   return (
     <>
-      <AIVINavigation />
-      <main className="min-h-screen bg-[#E8E5E0] font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient font-manrope relative">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
+        {/* Floating Sidebar - Desktop Only */}
+        <SolutionsSidebar mainRef={mainRef} />
+
         <div className="mx-4 sm:mx-6 lg:mx-12">
-          <IndustryHero
-            headline="5-Star Service, Zero Hold Time"
-            subheadline="Your guests expect instant, exceptional service—at 3 PM and 3 AM. AIVI delivers concierge-level assistance for every caller, handling reservations, requests, and inquiries while your team creates unforgettable in-person experiences."
-            audioLabel="Hear AIVI assist a guest with a special request"
-          />
-          <StatsBar stats={stats} />
-          <UseCaseCards useCases={useCases} />
-          <IntegrationLogos />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          {/* Main Layout - with left margin for sidebar on desktop */}
+          <div className="lg:ml-[320px]">
+            <RetailHeroPremium
+              headline="5-Star Service, Zero Hold Time"
+              subheadline="Your guests expect instant, exceptional service—at 3 PM and 3 AM. AIVI delivers concierge-level assistance for every caller, handling reservations, requests, and inquiries while your team creates unforgettable in-person experiences."
+              audioLabel="Hear AIVI assist a guest with a special request"
+              eyebrowLabel="Hospitality"
+            />
+            <RetailStatsPremium stats={stats} />
+            <RetailUseCasesPremium useCases={useCases} sectionTitle="The Solution" />
+            <RetailIntegrationsPremium />
+            <RetailProcessPremium steps={steps} sectionTitle="How It Works" />
+            <RetailFAQPremium faqs={faqs} />
+            <RetailCTAPremium />
+          </div>
         </div>
       </main>
       <AIVIFooter />

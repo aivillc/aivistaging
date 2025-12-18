@@ -88,7 +88,7 @@ export default function SolutionsPage() {
 
   return (
     <>
-      <AIVINavigationV4 />
+      <AIVINavigationV4 transparent={false} />
       <main className="min-h-screen bg-[#E8E5E0] font-manrope">
         <div className="mx-4 sm:mx-6 lg:mx-12">
           {/* Hero Section */}

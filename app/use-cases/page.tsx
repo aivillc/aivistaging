@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
 import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
 import Script from 'next/script';
 import { FaExclamationTriangle, FaChartLine, FaDollarSign, FaUsers, FaCog, FaCode, FaRocket, FaChartBar } from 'react-icons/fa';
 import { useDemoPopup } from '@/components/aiviv3/DemoPopupContext';
@@ -467,195 +468,198 @@ export default function UseCasesPage() {
   return (
     <>
       <Script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer />
-      <AIVINavigationV4 />
-      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] relative font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient relative font-manrope">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
         {/* Fixed Sidebar Navigation - Desktop Only */}
-        <aside 
+        <aside
           ref={sidebarRef}
-          className="hidden lg:block w-64 z-40"
-          style={{ 
-            position: sidebarStyle.position, 
+          className="hidden lg:block w-[260px] z-40"
+          style={{
+            position: sidebarStyle.position,
             top: sidebarStyle.top,
             left: `${sidebarLeftPosition}px`
           }}
         >
-          <div className="bg-white rounded-2xl p-6 shadow-soft overflow-y-auto" style={{ maxHeight: 'calc(100vh - 156px)' }}>
-            <h3
-              className="text-[18px] font-bold text-[#1A1A1A] mb-6 font-manrope"
-            >
-              Case Studies
-            </h3>
-            <nav className="space-y-2 mb-8">
-              {caseStudies.map((caseStudy) => (
-                <button
-                  key={caseStudy.id}
-                  onClick={() => handleCaseStudyChange(caseStudy.id)}
-                  className={`block w-full text-left px-4 py-3 rounded-xl text-[17px] font-medium transition-all duration-300 font-manrope ${
-                    activeCaseStudy === caseStudy.id
-                      ? 'bg-gradient-to-r from-[#FF8C00]/10 to-[#8A2BE2]/10 text-[#FF8C00] border border-[#FF8C00]/20'
-                      : 'text-[#666666] hover:bg-[#F5F5F5]'
-                  }`}
-                >
-                  {caseStudy.title}
-                </button>
-              ))}
-            </nav>
+          {/* Premium Glass Card Container */}
+          <div
+            className="relative bg-white/95 backdrop-blur-md border border-white/60 rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.08)]"
+            style={{ maxHeight: 'calc(100vh - 156px)' }}
+          >
+            {/* Subtle gradient top accent */}
+            <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
 
-            <div className="pt-6 border-t border-[#E8E5E0]">
-              <p className="text-[12px] font-semibold text-[#999999] uppercase tracking-wider mb-3">
-                Quick Links
-              </p>
-              <Link
-                href="/integrations"
-                className="block text-[14px] text-[#FF8C00] hover:underline mb-2"
-              >
-                View all integrations
-              </Link>
-              <Link
-                href="#"
-                className="block text-[14px] text-[#8A2BE2] hover:underline"
-              >
-                Developer API documentation
-              </Link>
+            <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+              {/* Section Header with Eyebrow */}
+              <div className="mb-6">
+                <div className="inline-flex items-center gap-2 mb-2">
+                  <span className="w-4 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                  <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                    Resources
+                  </span>
+                </div>
+                <h3 className="text-[17px] font-semibold text-[#0a0a0a] tracking-[-0.01em] font-manrope">
+                  Case Studies
+                </h3>
+              </div>
+
+              {/* Premium Navigation Links */}
+              <nav className="space-y-1.5 mb-8">
+                {caseStudies.map((caseStudy) => (
+                  <button
+                    key={caseStudy.id}
+                    onClick={() => handleCaseStudyChange(caseStudy.id)}
+                    className={`group relative block w-full text-left px-4 py-3 rounded-xl text-[15px] font-medium transition-all duration-300 font-manrope overflow-hidden ${
+                      activeCaseStudy === caseStudy.id
+                        ? 'bg-gradient-to-r from-[#f84608] to-[#321ca3] text-white shadow-lg shadow-[#f84608]/20'
+                        : 'text-[#555555] hover:bg-[#f5f5f5] hover:text-[#0a0a0a]'
+                    }`}
+                  >
+                    {/* Shine effect on active item */}
+                    {activeCaseStudy === caseStudy.id && (
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    )}
+                    <span className="relative z-10">{caseStudy.title}</span>
+                  </button>
+                ))}
+              </nav>
+
+              {/* Premium Divider */}
+              <div className="h-[1px] bg-gradient-to-r from-[#f84608]/20 via-[#e0e0e0] to-transparent mb-6" />
+
+              {/* Quick Links Section */}
+              <div>
+                <p className="text-[10px] font-semibold text-[#999999] uppercase tracking-[0.15em] mb-4">
+                  Quick Links
+                </p>
+                <div className="space-y-2">
+                  <Link
+                    href="/integrations"
+                    className="group flex items-center gap-2 text-[14px] text-[#555555] hover:text-[#f84608] transition-colors duration-300"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#f84608] opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <span>View all integrations</span>
+                  </Link>
+                  <Link
+                    href="/solutions/retail"
+                    className="group flex items-center gap-2 text-[14px] text-[#555555] hover:text-[#321ca3] transition-colors duration-300"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#321ca3] opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <span>Explore solutions</span>
+                  </Link>
+                </div>
+              </div>
             </div>
+
+            {/* Decorative corner gradient */}
+            <div className="absolute bottom-0 right-0 w-[100px] h-[100px] bg-gradient-to-tl from-[#f84608]/5 via-transparent to-transparent pointer-events-none rounded-br-2xl" />
           </div>
         </aside>
 
         <div className="mx-4 sm:mx-6 lg:mx-12">
           {/* Main Layout - with left margin for sidebar on desktop */}
-          <div className="pt-[72px] lg:ml-[280px]">
+          <div className="pt-[72px] lg:ml-[320px]">
             {/* Main Content Area */}
             <div>
-              {/* Hero Section */}
-              <section className="w-full relative overflow-hidden mb-12">
-                <div className="gradient-bg absolute inset-0 rounded-2xl"></div>
-
-                <div className="w-full px-3 sm:px-6 py-16 sm:py-20 relative z-10">
+              {/* Hero Section - Premium Design */}
+              <section className="w-full relative overflow-hidden mb-16 sm:mb-20">
+                <div className="w-full py-20 sm:py-24 md:py-28 relative z-10">
                   {/* Content wrapper with animation */}
                   <div className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
                     {/* Hero Text */}
-                    <div className="text-center lg:text-left mb-12">
-                      <h1
-                        className="text-[36px] sm:text-[48px] md:text-[60px] leading-[1.1] font-normal text-[#1A1A1A] mb-4 font-manrope"
-                      >
+                    <div className="text-center lg:text-left mb-14">
+                      {/* Eyebrow Label */}
+                      <div className="inline-flex items-center gap-4 mb-6 sm:mb-8">
+                        <span className="w-8 sm:w-10 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                        <span className="text-[11px] sm:text-[12px] font-semibold tracking-[0.2em] uppercase text-[#f84608]">
+                          Case Study: {currentCaseStudy.title}
+                        </span>
+                        <span className="w-8 sm:w-10 h-[1px] bg-gradient-to-l from-transparent to-[#f84608]" />
+                      </div>
+
+                      <h1 className="text-[36px] sm:text-[48px] md:text-[56px] lg:text-[64px] leading-[1.05] font-medium tracking-[-0.02em] text-[#0a0a0a] mb-5 sm:mb-6 font-manrope">
                         {currentCaseStudy.heading}
                       </h1>
-                      <p className="text-[17px] sm:text-[19px] leading-[1.6] text-[#666666] max-w-[600px] mx-auto lg:mx-0 mb-8">
+                      <p className="text-[17px] sm:text-[19px] md:text-[21px] leading-[1.6] text-[#555555] max-w-[650px] mx-auto lg:mx-0 mb-10">
                         {currentCaseStudy.description}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <Link
-                          href="/demo"
-                          className="group relative inline-flex items-center justify-center h-12 px-8 text-white text-[15px] font-semibold rounded-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2]"
-                        >
-                          <span className="relative z-10">View Live Dashboard</span>
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#8A2BE2] to-[#FF8C00] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </Link>
+                        {/* Primary Button - Gradient with shine effect */}
                         <button
                           onClick={openDemoPopup}
-                          className="inline-flex items-center justify-center h-12 px-8 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] text-[15px] font-semibold rounded-md hover:bg-[#1A1A1A] hover:text-white transition-all duration-300"
+                          className="group relative inline-flex items-center justify-center h-14 px-10 text-white text-[16px] font-semibold rounded-xl overflow-hidden hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#f84608]/20 transition-all duration-400 bg-gradient-to-r from-[#f84608] to-[#321ca3]"
                         >
-                          Book a Demo
+                          <span className="relative z-10">Book a Demo</span>
+                          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                         </button>
+
+                        {/* Secondary Button - Glass with border */}
+                        <Link
+                          href="/pricing"
+                          className="inline-flex items-center justify-center h-14 px-10 bg-white/90 backdrop-blur-sm border-2 border-[#f84608]/30 text-[#f84608] text-[16px] font-semibold rounded-xl hover:bg-white hover:border-[#f84608]/50 hover:shadow-lg hover:shadow-[#f84608]/10 transition-all duration-400"
+                        >
+                          View Pricing
+                        </Link>
                       </div>
                     </div>
 
-                    {/* Key Metrics */}
-                    <div className="grid sm:grid-cols-3 gap-6 mb-16">
+                    {/* Key Metrics - Premium Glass Cards */}
+                    <div className="grid sm:grid-cols-3 gap-5 sm:gap-6 mb-16 sm:mb-20">
                       {currentCaseStudy.metrics.map((metric, index) => (
-                        <div key={index} className="bg-white rounded-2xl p-6 text-center shadow-soft">
-                          <div
-                            className="text-[32px] sm:text-[42px] font-bold mb-2 bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2] bg-clip-text text-transparent font-manrope"
-                          >
+                        <div
+                          key={index}
+                          className="group relative bg-white/80 backdrop-blur-sm border border-white/60 rounded-2xl p-6 sm:p-8 text-center shadow-[0_4px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_8px_50px_rgba(0,0,0,0.1)] transition-all duration-400"
+                        >
+                          {/* Gradient accent on hover */}
+                          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[#f84608] to-[#321ca3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-2xl" />
+
+                          <div className="text-[40px] sm:text-[52px] lg:text-[64px] leading-[0.9] font-medium mb-3 bg-gradient-to-r from-[#f84608] to-[#321ca3] bg-clip-text text-transparent tracking-[-0.04em] font-manrope">
                             {metric.value}
                           </div>
-                          <p className="text-[14px] text-[#666666]">
+                          <p className="text-[14px] sm:text-[15px] text-[#555555] font-medium">
                             {metric.label}
                           </p>
                         </div>
                       ))}
                     </div>
 
-                    {/* Challenges Section */}
-                    <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16 shadow-soft">
-                      <h2
-                        className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-8 font-manrope"
-                      >
-                        The Challenge
-                      </h2>
-                      <div className="grid sm:grid-cols-2 gap-6">
-                        {currentCaseStudy.challenges.map((challenge, index) => (
-                          <div key={index} className="bg-[#F5F5F5] rounded-xl p-6 flex gap-4">
-                            <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-[#FF8C00]/20 to-[#8A2BE2]/20 flex items-center justify-center">
-                              <challenge.icon className="text-[24px]" style={{ color: index % 2 === 0 ? '#FF8C00' : '#8A2BE2' }} />
-                            </div>
-                            <div className="flex-1">
-                              <h3
-                                className="text-[19px] font-bold text-[#1A1A1A] mb-2 font-manrope"
-                              >
-                                {challenge.title}
-                              </h3>
-                              <p className="text-[14px] text-[#666666] leading-[1.6]">
-                                {challenge.description}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    {/* Challenges Section - Premium Glass Card */}
+                    <div className="relative bg-white/90 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)] mb-16 sm:mb-20">
+                      {/* Gradient top accent */}
+                      <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
 
-                    {/* Solutions Section */}
-                    <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16 shadow-soft">
-                      <h2
-                        className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-8 font-manrope"
-                      >
-                        The Solution
-                      </h2>
-                      <div className="lg:flex lg:gap-8 items-start">
-                        {/* SVG Illustration on the left */}
-                        <div className="hidden lg:block lg:w-1/3 flex-shrink-0 mb-8 lg:mb-0">
-                          <div className="bg-gradient-to-br from-[#FF8C00]/10 to-[#8A2BE2]/10 rounded-2xl p-8 h-full flex items-center justify-center">
-                            <svg viewBox="0 0 200 200" className="w-full h-auto">
-                              {/* Robot/AI Icon */}
-                              <circle cx="100" cy="80" r="35" fill="#8A2BE2" opacity="0.2" />
-                              <circle cx="100" cy="80" r="25" fill="#8A2BE2" />
-                              <circle cx="90" cy="75" r="4" fill="white" />
-                              <circle cx="110" cy="75" r="4" fill="white" />
-                              <path d="M85,90 Q100,95 115,90" stroke="white" strokeWidth="2" fill="none" />
-                              {/* Body */}
-                              <rect x="75" y="115" width="50" height="50" rx="8" fill="#FF8C00" opacity="0.8" />
-                              {/* Arms */}
-                              <rect x="55" y="125" width="20" height="8" rx="4" fill="#8A2BE2" opacity="0.6" />
-                              <rect x="125" y="125" width="20" height="8" rx="4" fill="#8A2BE2" opacity="0.6" />
-                              {/* Connecting nodes */}
-                              <circle cx="40" cy="50" r="8" fill="#FF8C00" opacity="0.5" />
-                              <circle cx="160" cy="50" r="8" fill="#FF8C00" opacity="0.5" />
-                              <circle cx="40" cy="150" r="8" fill="#8A2BE2" opacity="0.5" />
-                              <circle cx="160" cy="150" r="8" fill="#8A2BE2" opacity="0.5" />
-                              {/* Connection lines */}
-                              <line x1="40" y1="50" x2="75" y2="80" stroke="#FF8C00" strokeWidth="2" opacity="0.3" strokeDasharray="4,4" />
-                              <line x1="160" y1="50" x2="125" y2="80" stroke="#FF8C00" strokeWidth="2" opacity="0.3" strokeDasharray="4,4" />
-                              <line x1="40" y1="150" x2="75" y2="140" stroke="#8A2BE2" strokeWidth="2" opacity="0.3" strokeDasharray="4,4" />
-                              <line x1="160" y1="150" x2="125" y2="140" stroke="#8A2BE2" strokeWidth="2" opacity="0.3" strokeDasharray="4,4" />
-                            </svg>
+                      <div className="p-6 sm:p-8 md:p-12">
+                        {/* Section Header with Eyebrow */}
+                        <div className="mb-10">
+                          <div className="inline-flex items-center gap-2 mb-3">
+                            <span className="w-6 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                              The Problem
+                            </span>
                           </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] font-manrope">
+                            The Challenge
+                          </h2>
                         </div>
 
-                        {/* Solutions list on the right */}
-                        <div className="lg:w-2/3 space-y-6">
-                          {currentCaseStudy.solutions.map((solution, index) => (
-                            <div key={index} className="flex gap-4">
-                              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[#FF8C00] to-[#8A2BE2] flex items-center justify-center text-white font-bold text-[14px]">
-                                {index + 1}
+                        <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+                          {currentCaseStudy.challenges.map((challenge, index) => (
+                            <div
+                              key={index}
+                              className="group relative bg-[#f8f8f8]/80 backdrop-blur-sm border border-[#e8e5e0]/60 rounded-xl p-6 flex gap-5 hover:bg-white hover:shadow-lg hover:shadow-[#f84608]/5 hover:-translate-y-0.5 transition-all duration-400"
+                            >
+                              {/* Icon Badge */}
+                              <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-[#1e293b] flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-[#f84608] group-hover:to-[#321ca3] transition-all duration-300">
+                                <challenge.icon className="text-[24px]" />
                               </div>
-                              <div>
-                                <h3
-                                  className="text-[19px] font-bold text-[#1A1A1A] mb-2 font-manrope"
-                                >
-                                  {solution.title}
+                              <div className="flex-1">
+                                <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#0a0a0a] mb-2 font-manrope">
+                                  {challenge.title}
                                 </h3>
-                                <p className="text-[14px] text-[#666666] leading-[1.6]">
-                                  {solution.description}
+                                <p className="text-[14px] sm:text-[15px] text-[#555555] leading-[1.6]">
+                                  {challenge.description}
                                 </p>
                               </div>
                             </div>
@@ -664,168 +668,276 @@ export default function UseCasesPage() {
                       </div>
                     </div>
 
-                    {/* Results Section */}
-                    <div className="bg-gradient-to-br from-[#FF8C00] to-[#8A2BE2] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16">
-                      <h2
-                        className="text-[24px] sm:text-[32px] font-normal text-white mb-8 text-center font-manrope"
-                      >
-                        The Results
-                      </h2>
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {currentCaseStudy.results.map((result, index) => (
-                          <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+                    {/* Solutions Section - Premium Glass Card */}
+                    <div className="relative bg-white/90 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)] mb-16 sm:mb-20">
+                      {/* Gradient top accent */}
+                      <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
+
+                      <div className="p-6 sm:p-8 md:p-12">
+                        {/* Section Header with Eyebrow */}
+                        <div className="mb-10">
+                          <div className="inline-flex items-center gap-2 mb-3">
+                            <span className="w-6 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                              Our Approach
+                            </span>
+                          </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] font-manrope">
+                            The Solution
+                          </h2>
+                        </div>
+
+                        {/* Solution cards in 2-column grid */}
+                        <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+                          {currentCaseStudy.solutions.map((solution, index) => (
                             <div
-                              className="text-[28px] sm:text-[36px] font-bold mb-2 text-white font-manrope"
+                              key={index}
+                              className="group relative bg-[#f8f8f8]/80 backdrop-blur-sm border border-[#e8e5e0]/60 rounded-xl p-6 pt-8 hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-400"
                             >
-                              {result.metric}
-                            </div>
-                            <p className="text-[13px] text-white/90">
-                              {result.description}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Dashboard Section */}
-                    <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16 shadow-soft">
-                      <div className="mb-8">
-                        <h2
-                          className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-3 font-manrope"
-                        >
-                          Real-time Performance Dashboard
-                        </h2>
-                        <p className="text-[15px] sm:text-[16px] text-[#666666]">
-                          Visualize, analyze, and act on insights across every touchpoint.
-                        </p>
-                      </div>
-
-                      <div className="grid sm:grid-cols-2 gap-6 mb-8">
-                        {dashboardPanels.map((panel, index) => (
-                          <div
-                            key={index}
-                            className="bg-[#F5F5F5] rounded-xl p-6 border border-[#E8E5E0]"
-                          >
-                            <div className="w-full h-32 mb-4 bg-white rounded-lg p-4 flex items-center justify-center">
-                              {panel.svg}
-                            </div>
-                            <h3
-                              className="text-[19px] font-bold text-[#1A1A1A] mb-2 font-manrope"
-                            >
-                              {panel.title}
-                            </h3>
-                            <p className="text-[13px] text-[#666666]">{panel.description}</p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="text-center">
-                        <Link
-                          href="/demo"
-                          className="inline-flex items-center justify-center h-12 px-8 bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2] text-white text-[15px] font-semibold rounded-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-                        >
-                          Explore Live Demo Dashboard
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* AI Workflow Process */}
-                    <div className="mb-16">
-                      <h2
-                        className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-12 text-center font-manrope"
-                      >
-                        AI Workflow Process
-                      </h2>
-
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-                        {/* Flow line - desktop only */}
-                        <div className="hidden lg:block absolute top-12 left-0 right-0 h-px flow-line"></div>
-
-                        {workflowSteps.map((step, index) => (
-                          <div key={index} className="relative">
-                            <div className="text-center">
-                              {/* Icon with gradient background */}
-                              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#FF8C00]/20 to-[#8A2BE2]/20 flex items-center justify-center relative z-10">
-                                <step.icon
-                                  className="text-[36px]"
-                                  style={{ color: index % 2 === 0 ? '#FF8C00' : '#8A2BE2' }}
-                                />
+                              {/* Gradient step badge */}
+                              <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] text-white text-[13px] font-bold flex items-center justify-center shadow-md">
+                                {index + 1}
                               </div>
+                              <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#0a0a0a] mb-2 font-manrope">
+                                {solution.title}
+                              </h3>
+                              <p className="text-[14px] sm:text-[15px] text-[#555555] leading-[1.6]">
+                                {solution.description}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
 
-                              <h3
-                                className="text-[19px] font-bold text-[#1A1A1A] mb-2 font-manrope"
-                              >
+                    {/* Results Section - Premium Gradient with Glass Cards */}
+                    <div className="relative bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16 sm:mb-20 overflow-hidden">
+                      {/* Subtle pattern overlay */}
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1)_0%,transparent_50%)]" />
+
+                      <div className="relative z-10">
+                        {/* Eyebrow + Title */}
+                        <div className="text-center mb-10">
+                          <div className="inline-flex items-center gap-4 mb-4">
+                            <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-white/60" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-white/80">
+                              Proven Results
+                            </span>
+                            <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-white/60" />
+                          </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-white font-manrope">
+                            The Results
+                          </h2>
+                        </div>
+
+                        {/* Result cards */}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                          {currentCaseStudy.results.map((result, index) => (
+                            <div
+                              key={index}
+                              className="group bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300"
+                            >
+                              <div className="text-[36px] sm:text-[48px] lg:text-[56px] leading-[0.9] font-medium text-white mb-3 tracking-[-0.04em] font-manrope">
+                                {result.metric}
+                              </div>
+                              <p className="text-[14px] text-white/90">
+                                {result.description}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Dashboard Section - Premium Glass Card */}
+                    <div className="relative bg-white/90 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)] mb-16 sm:mb-20">
+                      <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
+
+                      <div className="p-6 sm:p-8 md:p-12">
+                        {/* Header */}
+                        <div className="mb-10">
+                          <div className="inline-flex items-center gap-2 mb-3">
+                            <span className="w-6 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                              Analytics
+                            </span>
+                          </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] mb-3 font-manrope">
+                            Real-time Performance Dashboard
+                          </h2>
+                          <p className="text-[16px] sm:text-[17px] text-[#555555]">
+                            Visualize, analyze, and act on insights across every touchpoint.
+                          </p>
+                        </div>
+
+                        {/* Dashboard panels with premium styling */}
+                        <div className="grid sm:grid-cols-2 gap-5 sm:gap-6 mb-10">
+                          {dashboardPanels.map((panel, index) => (
+                            <div
+                              key={index}
+                              className="group bg-[#f8f8f8]/80 backdrop-blur-sm border border-[#e8e5e0]/60 rounded-xl p-6 hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-400"
+                            >
+                              <div className="w-full h-32 mb-4 bg-white rounded-lg p-4 flex items-center justify-center border border-[#e8e5e0]/40">
+                                {panel.svg}
+                              </div>
+                              <h3 className="text-[17px] font-semibold text-[#0a0a0a] mb-2 font-manrope">
+                                {panel.title}
+                              </h3>
+                              <p className="text-[13px] text-[#555555]">{panel.description}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Premium CTA */}
+                        <div className="text-center">
+                          <button
+                            onClick={openDemoPopup}
+                            className="group relative inline-flex items-center justify-center h-14 px-10 text-white text-[16px] font-semibold rounded-xl overflow-hidden hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#f84608]/20 transition-all duration-400 bg-gradient-to-r from-[#f84608] to-[#321ca3]"
+                          >
+                            <span className="relative z-10">Explore Live Demo Dashboard</span>
+                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* AI Workflow Process - Premium Design */}
+                    <div className="relative bg-white/90 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)] mb-16 sm:mb-20">
+                      <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
+
+                      <div className="p-6 sm:p-8 md:p-12">
+                        {/* Header */}
+                        <div className="text-center mb-12">
+                          <div className="inline-flex items-center gap-4 mb-4">
+                            <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                              How It Works
+                            </span>
+                            <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-[#f84608]" />
+                          </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] font-manrope">
+                            AI Workflow Process
+                          </h2>
+                        </div>
+
+                        {/* Steps with gradient connecting line */}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+                          {/* Gradient connecting line - desktop only */}
+                          <div className="hidden lg:block absolute top-[52px] left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
+
+                          {workflowSteps.map((step, index) => (
+                            <div key={index} className="relative text-center">
+                              {/* Icon with gradient hover */}
+                              <div className="group w-24 h-24 mx-auto mb-5 rounded-2xl bg-[#f8f8f8] border border-[#e8e5e0]/60 flex items-center justify-center relative z-10 hover:bg-gradient-to-br hover:from-[#f84608] hover:to-[#321ca3] transition-all duration-300">
+                                <step.icon className="text-[40px] text-[#0a0a0a] group-hover:text-white transition-colors duration-300" />
+                                {/* Step badge */}
+                                <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] text-white text-[12px] font-bold flex items-center justify-center shadow-md">
+                                  {index + 1}
+                                </div>
+                              </div>
+                              <h3 className="text-[17px] font-semibold text-[#0a0a0a] mb-2 font-manrope">
                                 {step.title}
                               </h3>
-                              <p className="text-[13px] text-[#666666]">{step.description}</p>
+                              <p className="text-[13px] text-[#555555]">{step.description}</p>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
 
-                    {/* FAQ Section */}
-                    <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 mb-16 shadow-soft">
-                      <h2
-                        className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-8 font-manrope"
-                      >
-                        Frequently Asked Questions
-                      </h2>
+                    {/* FAQ Section - Premium Glass Card */}
+                    <div className="relative bg-white/90 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)] mb-16 sm:mb-20">
+                      <div className="h-[2px] bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
 
-                      <div className="space-y-4">
-                        {faqItems.map((item, index) => (
-                          <div
-                            key={index}
-                            className="border border-[#E8E5E0] rounded-xl overflow-hidden"
-                          >
-                            <button
-                              onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                              className="w-full flex items-center justify-between p-5 text-left hover:bg-[#F5F5F5] transition-colors"
-                            >
-                              <span
-                                className="text-[16px] font-semibold text-[#1A1A1A] font-manrope"
-                              >
-                                {item.question}
-                              </span>
-                              <span
-                                className="text-[24px] text-[#FF8C00] transition-transform duration-300 flex-shrink-0 ml-4"
-                                style={{
-                                  transform: openFaqIndex === index ? 'rotate(45deg)' : 'rotate(0deg)',
-                                }}
-                              >
-                                +
-                              </span>
-                            </button>
+                      <div className="p-6 sm:p-8 md:p-12">
+                        {/* Header */}
+                        <div className="mb-10">
+                          <div className="inline-flex items-center gap-2 mb-3">
+                            <span className="w-6 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                            <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                              Common Questions
+                            </span>
+                          </div>
+                          <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] font-manrope">
+                            Frequently Asked Questions
+                          </h2>
+                        </div>
+
+                        {/* Premium accordion */}
+                        <div className="space-y-3">
+                          {faqItems.map((item, index) => (
                             <div
-                              className={`overflow-hidden transition-all duration-300 ${
-                                openFaqIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                              }`}
+                              key={index}
+                              className="group bg-[#f8f8f8]/80 backdrop-blur-sm border border-[#e8e5e0]/60 rounded-xl overflow-hidden hover:border-[#f84608]/30 transition-all duration-300"
                             >
-                              <div className={`p-5 text-[14px] text-[#666666] leading-[1.6] ${openFaqIndex === index ? 'pt-2.5' : 'pt-0'}`}>
-                                {item.answer}
+                              <button
+                                onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                                className="w-full flex items-center justify-between p-5 text-left"
+                              >
+                                <span className="text-[16px] font-semibold text-[#0a0a0a] group-hover:text-[#f84608] transition-colors duration-300 font-manrope">
+                                  {item.question}
+                                </span>
+                                <div
+                                  className={`w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 ml-4 transition-transform duration-300 ${
+                                    openFaqIndex === index ? 'rotate-180' : ''
+                                  }`}
+                                >
+                                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                  </svg>
+                                </div>
+                              </button>
+                              <div
+                                className={`overflow-hidden transition-all duration-300 ${
+                                  openFaqIndex === index ? 'max-h-96' : 'max-h-0'
+                                }`}
+                              >
+                                <div className="px-5 pb-5 text-[14px] text-[#555555] leading-[1.6]">
+                                  {item.answer}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Final CTA */}
-                    <div className="bg-gradient-to-br from-[#FF8C00] to-[#8A2BE2] rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-center">
-                      <h2
-                        className="text-[28px] sm:text-[36px] font-normal text-white mb-4 font-manrope"
-                      >
-                        Ready to Achieve Similar Results?
-                      </h2>
-                      <p className="text-[16px] text-white/80 mb-8 max-w-[500px] mx-auto">
-                        Join hundreds of businesses transforming their operations with AIVI's AI-powered platform.
-                      </p>
-                      <Link
-                        href="/demo"
-                        className="inline-flex items-center justify-center h-12 px-8 bg-white text-[#FF8C00] text-[15px] font-semibold rounded-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-                      >
-                        Get Started Today
-                      </Link>
+                    {/* Final CTA - Premium White Card */}
+                    <div className="relative bg-white/95 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.06)]">
+                      {/* Gradient top accent */}
+                      <div className="h-1 bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
+
+                      <div className="p-8 sm:p-12 md:p-16 text-center">
+                        {/* Eyebrow */}
+                        <div className="inline-flex items-center gap-4 mb-6">
+                          <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-[#f84608]" />
+                          <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#f84608]">
+                            Get Started
+                          </span>
+                          <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-[#f84608]" />
+                        </div>
+
+                        <h2 className="text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[-0.02em] text-[#0a0a0a] mb-4 font-manrope">
+                          Ready to Achieve Similar Results?
+                        </h2>
+                        <p className="text-[16px] sm:text-[17px] text-[#555555] mb-10 max-w-[550px] mx-auto">
+                          Join hundreds of businesses transforming their operations with AIVI's AI-powered platform.
+                        </p>
+
+                        {/* Dark CTA with arrow */}
+                        <button
+                          onClick={openDemoPopup}
+                          className="group inline-flex items-center justify-center gap-3 h-14 px-10 bg-[#0a0a0a] text-white text-[16px] font-semibold rounded-xl hover:-translate-y-0.5 hover:shadow-xl transition-all duration-400"
+                        >
+                          <span>Get Started Today</span>
+                          <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* Decorative corner gradient */}
+                      <div className="absolute bottom-0 right-0 w-[150px] h-[150px] bg-gradient-to-tl from-[#f84608]/5 via-transparent to-transparent pointer-events-none rounded-br-3xl" />
                     </div>
                     {/* End of animation wrapper */}
                   </div>

@@ -1,20 +1,19 @@
-import { Metadata } from 'next';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
-import AIVIFooter from '@/components/aiviv3/AIVIFooter';
-import {
-  IndustryHero,
-  UseCaseCards,
-  HowItWorks,
-  StatsBar,
-  IntegrationLogos,
-  IndustryFAQ,
-  IndustryCTA,
-} from '@/components/aiviv3/shared';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI Voice Agents for Financial Services | AIVI',
-  description: 'Compliant AI voice agents for banks, lenders, and financial institutions. Automate KYC, accelerate loan processing, and deliver 24/7 customer service while maintaining regulatory compliance.',
-};
+import { useRef } from 'react';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
+import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import { SolutionsSidebar } from '@/components/aiviv3/shared';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
+import {
+  RetailHeroPremium,
+  RetailStatsPremium,
+  RetailUseCasesPremium,
+  RetailProcessPremium,
+  RetailIntegrationsPremium,
+  RetailFAQPremium,
+  RetailCTAPremium,
+} from '@/components/aiviv4/retail';
 
 const useCases = [
   {
@@ -54,9 +53,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: '85%', label: 'First-call resolution rate' },
-  { value: '40%', label: 'Faster loan processing' },
-  { value: '$0.15', label: 'Average cost per call' },
+  { value: '85%', label: 'First-call resolution rate', badge: 'Resolution' },
+  { value: '40%', label: 'Faster loan processing', badge: 'Speed' },
+  { value: '$0.15', label: 'Average cost per call', badge: 'Savings' },
 ];
 
 const faqs = [
@@ -87,22 +86,34 @@ const faqs = [
 ];
 
 export default function FinancialServicesSolutionPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
   return (
     <>
-      <AIVINavigation />
-      <main className="min-h-screen bg-[#E8E5E0] font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient font-manrope relative">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
+        {/* Floating Sidebar - Desktop Only */}
+        <SolutionsSidebar mainRef={mainRef} />
+
         <div className="mx-4 sm:mx-6 lg:mx-12">
-          <IndustryHero
-            headline="Compliant AI That Your Customers Will Love"
-            subheadline="Financial services demands perfection—in compliance, security, and customer experience. AIVI delivers all three. Handle account inquiries, accelerate loan origination, and manage collections while maintaining regulatory compliance at every interaction."
-            audioLabel="Hear AIVI process a loan pre-qualification"
-          />
-          <StatsBar stats={stats} />
-          <UseCaseCards useCases={useCases} />
-          <IntegrationLogos />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          {/* Main Layout - with left margin for sidebar on desktop */}
+          <div className="lg:ml-[320px]">
+            <RetailHeroPremium
+              headline="Compliant AI That Your Customers Will Love"
+              subheadline="Financial services demands perfection—in compliance, security, and customer experience. AIVI delivers all three. Handle account inquiries, accelerate loan origination, and manage collections while maintaining regulatory compliance at every interaction."
+              audioLabel="Hear AIVI process a loan pre-qualification"
+              eyebrowLabel="Financial Services"
+            />
+            <RetailStatsPremium stats={stats} />
+            <RetailUseCasesPremium useCases={useCases} sectionTitle="The Solution" />
+            <RetailIntegrationsPremium />
+            <RetailProcessPremium steps={steps} sectionTitle="How It Works" />
+            <RetailFAQPremium faqs={faqs} />
+            <RetailCTAPremium />
+          </div>
         </div>
       </main>
       <AIVIFooter />

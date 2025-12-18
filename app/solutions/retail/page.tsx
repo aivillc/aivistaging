@@ -1,20 +1,19 @@
-import { Metadata } from 'next';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
-import AIVIFooter from '@/components/aiviv3/AIVIFooter';
-import {
-  IndustryHero,
-  UseCaseCards,
-  HowItWorks,
-  StatsBar,
-  IntegrationLogos,
-  IndustryFAQ,
-  IndustryCTA,
-} from '@/components/aiviv3/shared';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI Voice Agents for Retail & E-Commerce | AIVI',
-  description: 'Transform your retail customer experience with AIVI AI voice agents. Recover abandoned carts, automate order support, and drive sales 24/7 with human-like conversations.',
-};
+import { useRef } from 'react';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
+import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import { SolutionsSidebar } from '@/components/aiviv3/shared';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
+import {
+  RetailHeroPremium,
+  RetailStatsPremium,
+  RetailUseCasesPremium,
+  RetailProcessPremium,
+  RetailIntegrationsPremium,
+  RetailFAQPremium,
+  RetailCTAPremium,
+} from '@/components/aiviv4/retail';
 
 const useCases = [
   {
@@ -54,9 +53,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: '35%', label: 'Cart recovery rate increase' },
-  { value: '60%', label: 'Reduction in support costs' },
-  { value: '<3sec', label: 'Average response time' },
+  { value: '35%', label: 'Cart recovery rate increase', badge: 'Recovery' },
+  { value: '60%', label: 'Reduction in support costs', badge: 'Savings' },
+  { value: '<3sec', label: 'Average response time', badge: 'Speed' },
 ];
 
 const faqs = [
@@ -87,22 +86,34 @@ const faqs = [
 ];
 
 export default function RetailSolutionPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
   return (
     <>
-      <AIVINavigation />
-      <main className="min-h-screen bg-[#E8E5E0] font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient font-manrope relative">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
+        {/* Floating Sidebar - Desktop Only */}
+        <SolutionsSidebar mainRef={mainRef} />
+
         <div className="mx-4 sm:mx-6 lg:mx-12">
-          <IndustryHero
-            headline="Turn Every Customer Call Into Revenue"
-            subheadline="AIVI's AI voice agents handle sales inquiries, recover abandoned carts, and resolve support tickets—all while delivering the premium experience your customers expect. Available 24/7, scales infinitely, costs 60% less."
-            audioLabel="Hear AIVI recover an abandoned cart"
-          />
-          <StatsBar stats={stats} />
-          <UseCaseCards useCases={useCases} />
-          <IntegrationLogos />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          {/* Main Layout - with left margin for sidebar on desktop */}
+          <div className="lg:ml-[320px]">
+            <RetailHeroPremium
+              headline="Turn Every Customer Call Into Revenue"
+              subheadline="AIVI's AI voice agents handle sales inquiries, recover abandoned carts, and resolve support tickets—all while delivering the premium experience your customers expect. Available 24/7, scales infinitely, costs 60% less."
+              audioLabel="Hear AIVI recover an abandoned cart"
+              eyebrowLabel="Retail & E-Commerce"
+            />
+            <RetailStatsPremium stats={stats} />
+            <RetailUseCasesPremium useCases={useCases} sectionTitle="The Solution" />
+            <RetailIntegrationsPremium />
+            <RetailProcessPremium steps={steps} sectionTitle="How It Works" />
+            <RetailFAQPremium faqs={faqs} />
+            <RetailCTAPremium />
+          </div>
         </div>
       </main>
       <AIVIFooter />

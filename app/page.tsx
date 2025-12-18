@@ -530,7 +530,7 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, roiTabRef }: ROIFl
             <line x1="8" y1="18" x2="16" y2="18" />
           </svg>
           <div className="tab-labels">
-            <span className="tab-label-short">My ROI</span>
+            <span className="tab-label-short">ROI Calculator</span>
             <span className="tab-label-full">See Your Impact</span>
           </div>
         </div>

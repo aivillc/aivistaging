@@ -459,8 +459,9 @@ export default function AIVIFeatureTabsV4() {
             <div className="flex justify-center items-center gap-3 mb-10" role="group" aria-label="Feature progress">
               {features.map((feature, i) => (
                 <motion.button
+                  type="button"
                   key={i}
-                  onClick={() => setActiveIndex(i)}
+                  onClick={(e) => { e.preventDefault(); setActiveIndex(i); }}
                   className="relative h-3.5 rounded-full focus-brand-ring overflow-hidden"
                   animate={{ width: i === activeIndex ? 56 : 14 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
@@ -518,10 +519,11 @@ export default function AIVIFeatureTabsV4() {
           >
             {features.map((feature, index) => (
               <button
+                type="button"
                 key={feature.id}
                 id={feature.id}
                 ref={(el) => { tabRefs.current[index] = el; }}
-                onClick={() => setActiveIndex(index)}
+                onClick={(e) => { e.preventDefault(); setActiveIndex(index); }}
                 onKeyDown={(e) => {
                   const key = e.key;
                   if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(key)) return;
@@ -619,12 +621,12 @@ export default function AIVIFeatureTabsV4() {
 
                 {/* Premium CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-5 pt-10">
-                  <button className="group relative w-full sm:w-auto px-10 py-5 overflow-hidden text-white text-[17px] font-semibold rounded-xl bg-gradient-to-r from-[#f84608] to-[#321ca3] hover:shadow-xl hover:shadow-[#f84608]/20 hover:-translate-y-0.5 transition-all duration-400">
+                  <button type="button" className="group relative w-full sm:w-auto px-10 py-5 overflow-hidden text-white text-[17px] font-semibold rounded-xl bg-gradient-to-r from-[#f84608] to-[#321ca3] hover:shadow-xl hover:shadow-[#f84608]/20 hover:-translate-y-0.5 transition-all duration-400">
                     <span className="relative z-10">See It In Action</span>
                     {/* Shine effect */}
                     <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                   </button>
-                  <button className="w-full sm:w-auto px-10 py-5 bg-white/90 backdrop-blur-sm border-2 border-[#f84608]/30 text-[#f84608] text-[17px] font-semibold rounded-xl hover:bg-white hover:border-[#f84608]/50 hover:shadow-lg hover:shadow-[#f84608]/10 transition-all duration-400">
+                  <button type="button" className="w-full sm:w-auto px-10 py-5 bg-white/90 backdrop-blur-sm border-2 border-[#f84608]/30 text-[#f84608] text-[17px] font-semibold rounded-xl hover:bg-white hover:border-[#f84608]/50 hover:shadow-lg hover:shadow-[#f84608]/10 transition-all duration-400">
                     Learn more
                   </button>
                 </div>

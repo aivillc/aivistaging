@@ -5,6 +5,7 @@ import { HiOutlineCurrencyDollar } from 'react-icons/hi2';
 import { BsGraphUpArrow, BsRocketTakeoff, BsArrowLeftRight } from 'react-icons/bs';
 import { useRevenueLiftStyleSafe } from './RevenueLiftStyleContext';
 import { useLeadGateSafe } from './LeadGateContext';
+import { useDemoPopup } from '../aiviv3/DemoPopupContext';
 
 export default function AIVICalculatorV4() {
   const [currentPackage, setCurrentPackage] = useState<'basic' | 'full'>('basic');
@@ -17,6 +18,9 @@ export default function AIVICalculatorV4() {
   // Lead gate context for gating the detailed breakdown
   const leadGateContext = useLeadGateSafe();
   const isGateUnlocked = leadGateContext?.isUnlocked ?? false;
+
+  // Demo popup context
+  const { openDemoPopup } = useDemoPopup();
 
   // Floating state - for styles that show floating elements
   const [showFloatingNumber, setShowFloatingNumber] = useState(false);
@@ -772,7 +776,7 @@ export default function AIVICalculatorV4() {
 
                     {/* Title */}
                     <h3 className="text-[22px] font-bold text-[#0a0a0a] mb-2">
-                      Unlock Your Full Analysis
+                      Unlock Your <span className="bg-gradient-to-r from-[#f84608] to-[#321ca3] bg-clip-text text-transparent">{formatCurrency(annualLift)}</span> Analysis
                     </h3>
 
                     {/* Description */}
@@ -806,16 +810,14 @@ export default function AIVICalculatorV4() {
 
         {/* CTA Buttons - Full width at bottom */}
         <div className="mt-12 max-w-[500px] mx-auto space-y-3">
-          <a
-            href="https://calendar.app.google/CUobgKJa1AZh95tTA"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={openDemoPopup}
             className="block w-full py-5 rounded-2xl text-[16px] font-semibold text-center bg-[#0a0a0a] text-white hover:bg-[#1a1a1a] hover:-translate-y-1 hover:shadow-xl transition-all duration-400"
           >
             Book Strategy Call →
-          </a>
+          </button>
           <a
-            href="#case-studies"
+            href="/use-cases"
             className="block w-full py-4 rounded-xl text-[15px] font-medium text-center bg-white/60 backdrop-blur-sm text-[#374151] border border-white/80 hover:bg-white hover:shadow-md transition-all duration-300"
           >
             See Case Studies

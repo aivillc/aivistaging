@@ -1,20 +1,19 @@
-import { Metadata } from 'next';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
-import AIVIFooter from '@/components/aiviv3/AIVIFooter';
-import {
-  IndustryHero,
-  UseCaseCards,
-  HowItWorks,
-  StatsBar,
-  IntegrationLogos,
-  IndustryFAQ,
-  IndustryCTA,
-} from '@/components/aiviv3/shared';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI Voice Agents for Healthcare | AIVI',
-  description: 'HIPAA-compliant AI voice agents that transform patient access. Reduce no-shows by 50%, automate scheduling, and let your clinical staff focus on what matters—patient care.',
-};
+import { useRef } from 'react';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
+import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import { SolutionsSidebar } from '@/components/aiviv3/shared';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
+import {
+  RetailHeroPremium,
+  RetailStatsPremium,
+  RetailUseCasesPremium,
+  RetailProcessPremium,
+  RetailIntegrationsPremium,
+  RetailFAQPremium,
+  RetailCTAPremium,
+} from '@/components/aiviv4/retail';
 
 const useCases = [
   {
@@ -54,9 +53,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: '50%', label: 'Reduction in no-shows' },
-  { value: '89%', label: 'Patient satisfaction rate' },
-  { value: '3x', label: 'More calls handled' },
+  { value: '50%', label: 'Reduction in no-shows', badge: 'Efficiency' },
+  { value: '89%', label: 'Patient satisfaction rate', badge: 'Quality' },
+  { value: '3x', label: 'More calls handled', badge: 'Capacity' },
 ];
 
 const faqs = [
@@ -87,22 +86,34 @@ const faqs = [
 ];
 
 export default function HealthcareSolutionPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
   return (
     <>
-      <AIVINavigation />
-      <main className="min-h-screen bg-[#E8E5E0] font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient font-manrope relative">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
+        {/* Floating Sidebar - Desktop Only */}
+        <SolutionsSidebar mainRef={mainRef} />
+
         <div className="mx-4 sm:mx-6 lg:mx-12">
-          <IndustryHero
-            headline="Better Patient Access, Without More Staff"
-            subheadline="Your front desk is overwhelmed. Patients wait on hold. No-shows drain revenue. AIVI changes everything—handling scheduling, reminders, and patient inquiries 24/7 while maintaining full HIPAA compliance. Let your team focus on care."
-            audioLabel="Hear AIVI schedule a patient appointment"
-          />
-          <StatsBar stats={stats} />
-          <UseCaseCards useCases={useCases} />
-          <IntegrationLogos />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          {/* Main Layout - with left margin for sidebar on desktop */}
+          <div className="lg:ml-[320px]">
+            <RetailHeroPremium
+              headline="Better Patient Access, Without More Staff"
+              subheadline="Your front desk is overwhelmed. Patients wait on hold. No-shows drain revenue. AIVI changes everything—handling scheduling, reminders, and patient inquiries 24/7 while maintaining full HIPAA compliance. Let your team focus on care."
+              audioLabel="Hear AIVI schedule a patient appointment"
+              eyebrowLabel="Healthcare"
+            />
+            <RetailStatsPremium stats={stats} />
+            <RetailUseCasesPremium useCases={useCases} sectionTitle="The Solution" />
+            <RetailIntegrationsPremium />
+            <RetailProcessPremium steps={steps} sectionTitle="How It Works" />
+            <RetailFAQPremium faqs={faqs} />
+            <RetailCTAPremium />
+          </div>
         </div>
       </main>
       <AIVIFooter />

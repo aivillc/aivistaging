@@ -1,20 +1,19 @@
-import { Metadata } from 'next';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
-import AIVIFooter from '@/components/aiviv3/AIVIFooter';
-import {
-  IndustryHero,
-  UseCaseCards,
-  HowItWorks,
-  StatsBar,
-  IntegrationLogos,
-  IndustryFAQ,
-  IndustryCTA,
-} from '@/components/aiviv3/shared';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'AI Voice Agents for Law Firms | AIVI',
-  description: 'Never miss another potential client. AIVI AI voice agents handle legal intake 24/7, qualify cases, schedule consultations, and keep existing clients informed—all while maintaining attorney-client confidentiality.',
-};
+import { useRef } from 'react';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
+import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import { SolutionsSidebar } from '@/components/aiviv3/shared';
+import PageConstellationCanvas from '@/components/aiviv4/PageConstellationCanvas';
+import {
+  RetailHeroPremium,
+  RetailStatsPremium,
+  RetailUseCasesPremium,
+  RetailProcessPremium,
+  RetailIntegrationsPremium,
+  RetailFAQPremium,
+  RetailCTAPremium,
+} from '@/components/aiviv4/retail';
 
 const useCases = [
   {
@@ -54,9 +53,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: '3x', label: 'More consultations booked' },
-  { value: '70%', label: 'Reduction in status calls' },
-  { value: '24/7', label: 'Intake coverage' },
+  { value: '3x', label: 'More consultations booked', badge: 'Growth' },
+  { value: '70%', label: 'Reduction in status calls', badge: 'Efficiency' },
+  { value: '24/7', label: 'Intake coverage', badge: 'Coverage' },
 ];
 
 const faqs = [
@@ -87,22 +86,34 @@ const faqs = [
 ];
 
 export default function LegalSolutionPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
   return (
     <>
-      <AIVINavigation />
-      <main className="min-h-screen bg-[#E8E5E0] font-manrope">
+      <AIVINavigationV4 transparent={false} />
+      <main ref={mainRef} className="min-h-screen bg-[#E8E5E0] bg-soft-gradient font-manrope relative">
+        {/* Page-wide Constellation Canvas - excludes sidebar area */}
+        <PageConstellationCanvas />
+
+        {/* Floating Sidebar - Desktop Only */}
+        <SolutionsSidebar mainRef={mainRef} />
+
         <div className="mx-4 sm:mx-6 lg:mx-12">
-          <IndustryHero
-            headline="Turn Every Call Into a Consultation"
-            subheadline="That potential million-dollar case called at 11 PM. Your receptionist wasn't there. A competitor answered. AIVI ensures this never happens—handling intake, qualifying cases, and scheduling consultations 24/7 while you focus on practicing law."
-            audioLabel="Hear AIVI qualify a legal intake"
-          />
-          <StatsBar stats={stats} />
-          <UseCaseCards useCases={useCases} />
-          <IntegrationLogos />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          {/* Main Layout - with left margin for sidebar on desktop */}
+          <div className="lg:ml-[320px]">
+            <RetailHeroPremium
+              headline="Turn Every Call Into a Consultation"
+              subheadline="That potential million-dollar case called at 11 PM. Your receptionist wasn't there. A competitor answered. AIVI ensures this never happens—handling intake, qualifying cases, and scheduling consultations 24/7 while you focus on practicing law."
+              audioLabel="Hear AIVI qualify a legal intake"
+              eyebrowLabel="Legal"
+            />
+            <RetailStatsPremium stats={stats} />
+            <RetailUseCasesPremium useCases={useCases} sectionTitle="The Solution" />
+            <RetailIntegrationsPremium />
+            <RetailProcessPremium steps={steps} sectionTitle="How It Works" />
+            <RetailFAQPremium faqs={faqs} />
+            <RetailCTAPremium />
+          </div>
         </div>
       </main>
       <AIVIFooter />

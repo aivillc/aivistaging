@@ -34,7 +34,11 @@ const navItems = [
   { label: 'Pricing', href: '/pricing' },
 ];
 
-export default function AIVINavigationV4() {
+interface AIVINavigationV4Props {
+  transparent?: boolean;
+}
+
+export default function AIVINavigationV4({ transparent = true }: AIVINavigationV4Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
@@ -45,6 +49,9 @@ export default function AIVINavigationV4() {
   const megaMenuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const { openDemoPopup } = useDemoPopup();
+
+  // Determine if navbar should show solid background
+  const showSolidBg = !transparent || scrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -120,7 +127,7 @@ export default function AIVINavigationV4() {
       role="navigation"
       aria-label="Main navigation"
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-out h-[72px] ${
-        scrolled
+        showSolidBg
           ? 'bg-[#000]/95 backdrop-blur-xl border-b border-white/10 shadow-lg'
           : 'bg-transparent border-b border-transparent'
       }`}
@@ -132,23 +139,23 @@ export default function AIVINavigationV4() {
             {/* Logo with crossfade animation */}
             <Link href="/" className="flex items-center gap-2 group flex-shrink-0 relative">
               <div className="relative h-10 w-[120px]">
-                {/* Colored logo - visible when not scrolled */}
+                {/* Colored logo - visible when transparent and not scrolled */}
                 <Image
                   src="/AIVILogo.png"
                   alt="AIVI - AI-Powered Lead Conversion"
                   fill
                   className={`object-contain object-left transition-all duration-500 ease-out ${
-                    scrolled ? 'opacity-0' : 'opacity-100'
+                    showSolidBg ? 'opacity-0' : 'opacity-100'
                   }`}
                   priority
                 />
-                {/* White logo - visible when scrolled */}
+                {/* White logo - visible when solid background */}
                 <Image
                   src="/AIVILogow.png"
                   alt="AIVI - AI-Powered Lead Conversion"
                   fill
                   className={`object-contain object-left transition-all duration-500 ease-out ${
-                    scrolled ? 'opacity-100' : 'opacity-0'
+                    showSolidBg ? 'opacity-100' : 'opacity-0'
                   }`}
                   priority
                 />
@@ -284,23 +291,23 @@ export default function AIVINavigationV4() {
           {/* Mobile Logo with crossfade animation */}
           <Link href="/" className="flex lg:hidden items-center gap-2 group flex-shrink-0 relative">
             <div className="relative h-8 sm:h-10 w-[100px] sm:w-[120px]">
-              {/* Colored logo - visible when not scrolled */}
+              {/* Colored logo - visible when transparent and not scrolled */}
               <Image
                 src="/AIVILogo.png"
                 alt="AIVI - AI-Powered Lead Conversion"
                 fill
                 className={`object-contain object-left transition-all duration-500 ease-out ${
-                  scrolled ? 'opacity-0' : 'opacity-100'
+                  showSolidBg ? 'opacity-0' : 'opacity-100'
                 }`}
                 priority
               />
-              {/* White logo - visible when scrolled */}
+              {/* White logo - visible when solid background */}
               <Image
                 src="/AIVILogow.png"
                 alt="AIVI - AI-Powered Lead Conversion"
                 fill
                 className={`object-contain object-left transition-all duration-500 ease-out ${
-                  scrolled ? 'opacity-100' : 'opacity-0'
+                  showSolidBg ? 'opacity-100' : 'opacity-0'
                 }`}
                 priority
               />
@@ -310,7 +317,7 @@ export default function AIVINavigationV4() {
           {/* Right Actions - Desktop only */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="https://www.app.aivi.io"
+              href="https://app.aivi.io"
               className="text-[15px] font-medium text-white/80 px-5 py-2.5 rounded-md hover:text-white hover:bg-white/5 transition-all duration-300 focus-brand-ring"
             >
               Log in
@@ -465,7 +472,7 @@ export default function AIVINavigationV4() {
           ))}
           <div className="border-t border-white/10 my-2" />
           <a
-            href="https://www.app.aivi.io"
+            href="https://app.aivi.io"
             role="menuitem"
             className="flex items-center text-[15px] font-medium text-white/80 py-3.5 px-4 rounded-md hover:bg-white/5 transition-all duration-200 focus-brand-ring min-h-[48px]"
             onClick={() => setMobileMenuOpen(false)}

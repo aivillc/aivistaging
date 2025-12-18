@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import AIVINavigation from '@/components/aiviv3/AIVINavigation';
+import AIVINavigationV4 from '@/components/aiviv4/AIVINavigationV4';
 import AIVIFooter from '@/components/aiviv3/AIVIFooter';
 
 export const metadata: Metadata = {
@@ -64,7 +64,7 @@ const results = [
 export default function HealthcareCaseStudyPage() {
   return (
     <>
-      <AIVINavigation />
+      <AIVINavigationV4 transparent={false} />
       <main className="min-h-screen bg-[#E8E5E0] font-manrope">
         <div className="mx-4 sm:mx-6 lg:mx-12">
           {/* Hero Section */}
