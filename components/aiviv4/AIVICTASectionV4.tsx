@@ -1,14 +1,63 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDemoPopup } from '../aiviv3/DemoPopupContext';
 
 export default function AIVICTASectionV4() {
   const [email, setEmail] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const { openDemoPopup } = useDemoPopup();
+
+  // Intersection Observer for auto-play on scroll
+  useEffect(() => {
+    const video = videoRef.current;
+    const section = sectionRef.current;
+
+    if (!video || !section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Section is visible - play video unmuted
+            video.muted = false;
+            setIsMuted(false);
+            video.play().catch(() => {
+              // If autoplay with sound fails, try muted first
+              video.muted = true;
+              setIsMuted(true);
+              video.play().catch(() => {});
+            });
+          } else {
+            // Section is not visible - pause video
+            video.pause();
+          }
+        });
+      },
+      {
+        threshold: 0.4, // Trigger when 40% of section is visible
+        rootMargin: '0px',
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const handleMuteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering video click
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +94,7 @@ export default function AIVICTASectionV4() {
 
   return (
     <section
+      ref={sectionRef}
       className="w-full relative bg-[#FAFAFA] px-6 sm:px-8 md:px-12 lg:px-16 py-20 sm:py-24 md:py-28 lg:py-32"
       aria-labelledby="cta-heading"
     >
@@ -248,6 +298,24 @@ export default function AIVICTASectionV4() {
                     )}
                   </div>
                 </div>
+
+                {/* Mute/Unmute Button */}
+                <button
+                  onClick={handleMuteToggle}
+                  className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-all duration-200 z-10"
+                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                >
+                  {isMuted ? (
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
+                  )}
+                </button>
 
                 {/* Gradient border effect */}
                 <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/20" />
