@@ -37,7 +37,9 @@
       "Bash(copy \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\aiviv4\\features\\page.tsx\" \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\features\\page.tsx\")",
       "Bash(copy \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\aiviv4\\pricing\\page.tsx\" \"c:\\Users\\Admin\\OneDrive\\Desktop\\AIVI Staging\\app\\pricing\\page.tsx\")",
       "Bash(copy:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(pm2 start:*)",
+      "Bash(npx pm2:*)"
     ],
     "deny": [],
     "ask": []
