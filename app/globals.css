@@ -600,6 +600,22 @@ button:focus-visible, a:focus-visible {
   100% { background-position: 0% 50%; }
 }
 
+/* Premium badge animations */
+@keyframes badge-glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+.animate-badge-glow {
+  animation: badge-glow-pulse 2s ease-in-out infinite;
+}
+
 /* Glow effects */
 .aivi-glow-orange {
   box-shadow: 0 0 20px rgba(248, 70, 8, 0.3);
@@ -1670,6 +1686,14 @@ button:focus-visible, a:focus-visible {
   flex-shrink: 0;
 }
 
+/* Center trust badge on mobile */
+@media (max-width: 768px) {
+  .social-proof-trust-row {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 .trust-badge {
   display: inline-flex;
   align-items: center;
@@ -2107,6 +2131,13 @@ button:focus-visible, a:focus-visible {
   letter-spacing: -0.02em;
 }
 
+/* Center testimonial text on mobile */
+@media (max-width: 768px) {
+  .testimonial-text-dark {
+    text-align: center;
+  }
+}
+
 .testimonial-author-dark {
   display: flex;
   justify-content: space-between;
@@ -2114,6 +2145,15 @@ button:focus-visible, a:focus-visible {
   margin-top: 40px;
   padding-top: 32px;
   border-top: 1px solid rgba(26, 26, 26, 0.1);
+}
+
+/* Center and stack author section on mobile */
+@media (max-width: 768px) {
+  .testimonial-author-dark {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
 }
 
 .author-details-dark {
@@ -2644,14 +2684,18 @@ button:focus-visible, a:focus-visible {
 /* Enhanced Demo Modal Responsive */
 @media (max-width: 768px) {
   .demo-modal {
+    position: fixed;
     width: calc(100vw - 32px);
     max-width: 400px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%) scale(0.95);
+    transform: translate(-50%, -50%) scale(0.95);
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
   .demo-modal.active {
-    transform: translateX(-50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .demo-form {
@@ -2679,8 +2723,17 @@ button:focus-visible, a:focus-visible {
 
 @media (max-width: 480px) {
   .demo-modal {
+    position: fixed;
     width: calc(100vw - 24px);
-    top: calc(100% + 8px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .demo-modal.active {
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .demo-form {

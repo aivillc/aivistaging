@@ -173,13 +173,13 @@ export default function FeaturesPage() {
   });
 
   return (
-    <>
+    <div className="min-h-screen bg-[#FAFAFA]">
+      {/* Constellation Background - renders on top of bg */}
+      <PageConstellationCanvas sidebarOffset={0} />
+
       <AIVINavigationV4 transparent={false} />
 
-      {/* Constellation Background */}
-      <PageConstellationCanvas />
-
-      <main className="min-h-screen bg-[#FAFAFA] font-manrope relative">
+      <main className="min-h-screen font-manrope relative z-[2]">
         {/* Hero Section */}
         <section className="w-full pt-32 sm:pt-36 md:pt-40 pb-16 sm:pb-20 relative overflow-hidden">
           <div className="max-w-[1200px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 text-center relative z-10">
@@ -208,25 +208,25 @@ export default function FeaturesPage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/demo"
+              <button
+                onClick={openDemoPopup}
                 className="group relative inline-flex items-center justify-center h-[52px] px-8 text-white text-[15px] font-medium rounded-xl overflow-hidden transition-all duration-300 bg-[#0a0a0a] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Create Agent
+                  Try AIVI
                   <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </span>
                 {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </Link>
-              <button
-                onClick={openDemoPopup}
+              </button>
+              <Link
+                href="/use-cases"
                 className="group inline-flex items-center justify-center h-[52px] px-8 bg-white/80 backdrop-blur-sm border border-[#e5e5e5] text-[#0a0a0a] text-[15px] font-medium rounded-xl hover:border-[#0a0a0a] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300"
               >
-                Book a Demo
-              </button>
+                Use Cases
+              </Link>
             </div>
           </div>
 
@@ -382,28 +382,25 @@ export default function FeaturesPage() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link
-                    href="/demo"
+                  <button
+                    onClick={openDemoPopup}
                     className="group relative inline-flex items-center justify-center h-[52px] px-8 text-white text-[15px] font-medium rounded-xl overflow-hidden transition-all duration-300 bg-[#0a0a0a] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      Create Agent
+                      Try AIVI
                       <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
                     </span>
                     {/* Shine effect */}
                     <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                  </Link>
-                  <button
-                    onClick={openDemoPopup}
-                    className="group inline-flex items-center justify-center h-[52px] px-8 bg-transparent border border-[#e5e5e5] text-[#0a0a0a] text-[15px] font-medium rounded-xl hover:border-[#0a0a0a] transition-all duration-300"
-                  >
-                    <span className="relative">
-                      Book a Demo
-                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#0a0a0a] group-hover:w-full transition-all duration-300" />
-                    </span>
                   </button>
+                  <Link
+                    href="/use-cases"
+                    className="group inline-flex items-center justify-center h-[52px] px-8 bg-white/80 backdrop-blur-sm border border-[#e5e5e5] text-[#0a0a0a] text-[15px] font-medium rounded-xl hover:border-[#0a0a0a] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300"
+                  >
+                    Use Cases
+                  </Link>
                 </div>
               </div>
             </div>
@@ -411,6 +408,6 @@ export default function FeaturesPage() {
         </section>
       </main>
       <AIVIFooter />
-    </>
+    </div>
   );
 }

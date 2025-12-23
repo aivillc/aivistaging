@@ -115,8 +115,8 @@ export default function AIVICTASectionV4() {
           {/* Subtle gradient accent */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#f84608] via-[#a855f7] to-[#321ca3]" />
 
-          {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          {/* Two Column Layout - Desktop Only */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* Left Column - Content */}
             <div className="space-y-8">
               {/* Eyebrow */}
@@ -144,6 +144,81 @@ export default function AIVICTASectionV4() {
                 Apple&apos;s iOS 26 Call Screening and Google&apos;s Call Screen now block unknown and unverified callers by default.
                 If your outbound calls aren&apos;t authenticated, they&apos;re not getting through.
               </p>
+
+              {/* Video - Mobile Only (between text and comparison) */}
+              <div className="lg:hidden relative flex items-center justify-center">
+                <div
+                  className="relative rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)] cursor-pointer group w-full max-w-[400px]"
+                  onClick={handleVideoClick}
+                >
+                  {/* Video */}
+                  <video
+                    ref={videoRef}
+                    className="w-full h-auto"
+                    poster="/aiviscreening-poster.jpg"
+                    playsInline
+                    onPlay={() => setIsPlaying(true)}
+                    onPause={() => setIsPlaying(false)}
+                    onEnded={handleVideoEnded}
+                  >
+                    <source src="/aiviscreening.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+
+                  {/* Play/Pause Overlay */}
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center bg-black/20 transition-opacity duration-300 ${
+                      isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
+                    }`}
+                  >
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/95 shadow-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                      {isPlaying ? (
+                        <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#0a0a0a]" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#0a0a0a] ml-1" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Unmute Button - Shows in corner when muted */}
+                  {isMuted && (
+                    <button
+                      onClick={handleMuteToggle}
+                      className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 hover:bg-white px-3 py-2 rounded-full shadow-lg z-20 transition-all duration-200 hover:scale-105"
+                    >
+                      <svg className="w-4 h-4 text-[#0a0a0a]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                      </svg>
+                      <span className="text-[13px] font-medium text-[#0a0a0a]">Unmute</span>
+                    </button>
+                  )}
+
+                  {/* Mute/Unmute Button - Shows in corner when unmuted */}
+                  {!isMuted && (
+                    <button
+                      onClick={handleMuteToggle}
+                      className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-all duration-200 z-10"
+                      aria-label="Mute video"
+                    >
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      </svg>
+                    </button>
+                  )}
+
+                  {/* Gradient border effect */}
+                  <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/20" />
+                </div>
+
+                {/* Decorative elements */}
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 rounded-full blur-xl pointer-events-none" />
+                <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-[#321ca3]/10 to-[#f84608]/10 rounded-full blur-xl pointer-events-none" />
+              </div>
 
               {/* Two Column Comparison */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -271,8 +346,8 @@ export default function AIVICTASectionV4() {
               </form>
             </div>
 
-            {/* Right Column - Video */}
-            <div className="relative flex items-center justify-center">
+            {/* Right Column - Video (Desktop Only) */}
+            <div className="hidden lg:flex relative items-center justify-center">
               <div
                 className="relative rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)] cursor-pointer group w-[70%]"
                 onClick={handleVideoClick}

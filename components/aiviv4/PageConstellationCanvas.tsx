@@ -223,14 +223,7 @@ export default function PageConstellationCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 0
-      }}
+      className="fixed inset-0 pointer-events-none z-0"
     />
   );
 }

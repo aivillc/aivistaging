@@ -9,6 +9,7 @@ import AIVIFeatureTabsV4 from '@/components/aiviv4/AIVIFeatureTabsV4';
 import AIVICalculatorV4 from '@/components/aiviv4/AIVICalculatorV4';
 import AIVICTASectionV4 from '@/components/aiviv4/AIVICTASectionV4';
 import AIVIFooter from '@/components/aiviv3/AIVIFooter';
+import AIVIFAQMasterV4 from '@/components/aiviv4/faq/AIVIFAQMasterV4';
 import { ROIButtonStyleProvider, useROIButtonStyle } from '@/components/aiviv4/ROIButtonStyleContext';
 import { RevenueLiftStyleProvider } from '@/components/aiviv4/RevenueLiftStyleContext';
 import { LeadGateProvider } from '@/components/aiviv4/LeadGateContext';
@@ -190,28 +191,17 @@ function ROIFloatingButton({ isVisible, onScrollToCalculator, roiTabRef }: ROIFl
             to { opacity: 1; transform: translateY(0); }
           }
 
-          /* Responsive positioning for mobile */
-          @media (max-width: 768px) {
+          /* Hide on desktop - we'll show the mobile button instead */
+          @media (min-width: 769px) {
             .floating-roi-glass-container {
-              bottom: 16px;
-              right: 16px;
-            }
-            .roi-side {
-              padding: 12px 12px 12px 16px;
-              gap: 8px;
-            }
-            .roi-text {
-              font-size: 12px;
-            }
-            .chat-side {
-              padding: 12px 14px;
+              /* Styles remain for desktop */
             }
           }
 
-          @media (max-width: 480px) {
+          /* Hide this version on mobile - we'll show dedicated mobile button */
+          @media (max-width: 768px) {
             .floating-roi-glass-container {
-              bottom: 12px;
-              right: 12px;
+              display: none !important;
             }
           }
         `}</style>
@@ -716,6 +706,7 @@ function HomePageContent() {
         <AIVIFeatureTabsV4 />
         <AIVICalculatorV4 />
         <AIVIBenefitsV4 />
+        <AIVIFAQMasterV4 />
       </main>
       <AIVIFooter />
 
@@ -724,6 +715,134 @@ function HomePageContent() {
         onScrollToCalculator={handleScrollToCalculator}
         roiTabRef={roiTabRef}
       />
+
+      {/* Mobile-Only ROI Calculator Button */}
+      <a
+        href="#calculator-section"
+        onClick={handleScrollToCalculator}
+        className={`mobile-roi-button ${!isFloatingBtnVisible ? 'mobile-roi-hidden' : ''}`}
+        aria-label="Calculate your ROI"
+      >
+        <svg
+          className="mobile-roi-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="4" y="2" width="16" height="20" rx="2" />
+          <line x1="8" y1="6" x2="16" y2="6" />
+          <line x1="8" y1="10" x2="10" y2="10" />
+          <line x1="14" y1="10" x2="16" y2="10" />
+          <line x1="8" y1="14" x2="10" y2="14" />
+          <line x1="14" y1="14" x2="16" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span className="mobile-roi-text">ROI Calculator</span>
+      </a>
+
+      <style jsx>{`
+        .mobile-roi-button {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 999;
+          display: none; /* Hidden by default, shown on mobile */
+          align-items: center;
+          gap: 10px;
+          padding: 14px 24px;
+          background: rgba(20, 20, 20, 0.95);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-radius: 50px;
+          border: 1px solid transparent;
+          background-image: linear-gradient(rgba(20, 20, 20, 0.95), rgba(20, 20, 20, 0.95)),
+                            linear-gradient(135deg, rgba(248, 70, 8, 0.6), rgba(50, 28, 163, 0.6));
+          background-origin: border-box;
+          background-clip: padding-box, border-box;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4),
+                      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+          text-decoration: none;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          animation: mobileNudge 2.5s ease-in-out 1s infinite, mobileFadeIn 0.5s ease-out;
+        }
+
+        .mobile-roi-button:active {
+          transform: translateX(-50%) scale(0.95);
+        }
+
+        .mobile-roi-icon {
+          width: 20px;
+          height: 20px;
+          color: rgba(255, 255, 255, 0.9);
+          flex-shrink: 0;
+        }
+
+        .mobile-roi-text {
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.95);
+          letter-spacing: 0.025em;
+          white-space: nowrap;
+        }
+
+        .mobile-roi-hidden {
+          opacity: 0 !important;
+          transform: translateX(-50%) translateY(20px) !important;
+          pointer-events: none !important;
+          animation: none !important;
+        }
+
+        @keyframes mobileNudge {
+          0%, 70%, 100% {
+            transform: translateX(-50%) translateY(0);
+          }
+          75%, 85% {
+            transform: translateX(-50%) translateY(-8px);
+          }
+          80% {
+            transform: translateX(-50%) translateY(-4px);
+          }
+        }
+
+        @keyframes mobileFadeIn {
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+
+        /* Show only on mobile */
+        @media (max-width: 768px) {
+          .mobile-roi-button {
+            display: flex;
+          }
+        }
+
+        /* Smaller screens - adjust sizing */
+        @media (max-width: 480px) {
+          .mobile-roi-button {
+            bottom: 16px;
+            padding: 12px 20px;
+            gap: 8px;
+          }
+          .mobile-roi-icon {
+            width: 18px;
+            height: 18px;
+          }
+          .mobile-roi-text {
+            font-size: 13px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

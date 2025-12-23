@@ -37,15 +37,23 @@ export default function AIVICalculatorV4() {
   // Scroll detection for floating elements
   useEffect(() => {
     const handleScroll = () => {
-      if (!revenueCardRef.current || !sectionRef.current) return;
+      if (!sectionRef.current) return;
 
-      const cardRect = revenueCardRef.current.getBoundingClientRect();
       const sectionRect = sectionRef.current.getBoundingClientRect();
+      const benefitsSection = document.getElementById('benefits-section');
 
-      // Show floating element when card is out of view but still in section
-      const cardIsAboveViewport = cardRect.bottom < 100;
-      const stillInSection = sectionRect.bottom > 200;
-      setShowFloatingNumber(cardIsAboveViewport && stillInSection);
+      // Show when entering calculator section (top of section enters viewport)
+      const calculatorInView = sectionRect.top < window.innerHeight && sectionRect.bottom > 0;
+
+      // Hide when Benefits section comes into viewport
+      let benefitsInView = false;
+      if (benefitsSection) {
+        const benefitsRect = benefitsSection.getBoundingClientRect();
+        benefitsInView = benefitsRect.top < window.innerHeight;
+      }
+
+      // Show only when in calculator section AND benefits section hasn't entered viewport yet
+      setShowFloatingNumber(calculatorInView && !benefitsInView);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -193,7 +201,7 @@ export default function AIVICalculatorV4() {
           </div>
 
           <h2 className="text-[40px] sm:text-[52px] md:text-[64px] font-normal text-[#0a0a0a] mb-5 leading-[1.05] tracking-[-0.03em]">
-            Your Revenue<br className="hidden sm:block" />
+            Your Revenue<br />
             <span className="aivi-gradient-text">Orchestration Impact</span>
           </h2>
 
@@ -561,19 +569,26 @@ export default function AIVICalculatorV4() {
             </div>
 
             {/* Before/After Mini Cards */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {/* Current */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-white/80">
-                <div className="text-[11px] font-semibold uppercase tracking-[2px] text-[#9ca3af] mb-3">Current</div>
-                <div className="text-[22px] font-bold text-[#374151]">{formatCurrency(currentRevenue)}</div>
-                <div className="text-[13px] text-[#9ca3af]">/month</div>
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/80 min-w-0">
+                <div className="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[1px] sm:tracking-[2px] text-[#9ca3af] mb-1 sm:mb-3">Current</div>
+                <div className="text-[14px] sm:text-[22px] font-bold text-[#374151] truncate">{formatCurrency(currentRevenue)}</div>
+                <div className="text-[10px] sm:text-[13px] text-[#9ca3af]">/month</div>
               </div>
 
               {/* With AIVI */}
-              <div className="bg-gradient-to-br from-[rgba(248,70,8,0.08)] to-[rgba(50,28,163,0.08)] rounded-2xl p-5 border-2 border-[#f84608]/30">
-                <div className="text-[11px] font-semibold uppercase tracking-[2px] text-[#f84608] mb-3">With AIVI</div>
-                <div className="text-[22px] font-bold text-[#0a0a0a]">{formatCurrency(aiviRevenue)}</div>
-                <div className="text-[13px] text-[#10b981] font-semibold">+{formatCurrency(monthlyLift)}</div>
+              <div className="bg-gradient-to-br from-[rgba(248,70,8,0.08)] to-[rgba(50,28,163,0.08)] rounded-xl sm:rounded-2xl p-3 sm:p-5 border-2 border-[#f84608]/30 min-w-0">
+                <div className="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[1px] sm:tracking-[2px] text-[#f84608] mb-1 sm:mb-3">With AIVI</div>
+                <div className="text-[14px] sm:text-[22px] font-bold text-[#0a0a0a] truncate">{formatCurrency(aiviRevenue)}</div>
+                <div className="text-[10px] sm:text-[13px] text-[#555555]">/month</div>
+              </div>
+
+              {/* Lift */}
+              <div className="bg-gradient-to-br from-[#10b981]/10 to-[#10b981]/5 rounded-xl sm:rounded-2xl p-3 sm:p-5 border-2 border-[#10b981]/30 min-w-0 overflow-hidden">
+                <div className="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[1px] sm:tracking-[2px] text-[#10b981] mb-1 sm:mb-3">Lift</div>
+                <div className="text-[14px] sm:text-[22px] font-bold text-[#10b981] truncate">+{formatCurrency(monthlyLift)}</div>
+                <div className="text-[10px] sm:text-[13px] text-[#10b981]/70 font-semibold truncate">{formatCurrency(annualLift)}/yr</div>
               </div>
             </div>
 
@@ -717,38 +732,38 @@ export default function AIVICalculatorV4() {
                 </div>
 
                 {/* Revenue Summary - Premium unified tile */}
-                <div className="mt-5 bg-white rounded-2xl p-5 border border-[#e5e5e5] shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                <div className="mt-5 bg-white rounded-2xl p-3 sm:p-5 border border-[#e5e5e5] shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
                   <div className="flex items-center justify-between divide-x divide-[#e5e5e5]">
                     {/* Current Revenue */}
-                    <div className="flex-1 flex items-center gap-3 pr-5">
-                      <div className="w-10 h-10 rounded-xl bg-[#f5f5f5] flex items-center justify-center flex-shrink-0">
-                        <HiOutlineCurrencyDollar className="w-5 h-5 text-[#6b7280]" />
+                    <div className="flex-1 flex items-center gap-2 sm:gap-3 pr-2 sm:pr-5 min-w-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#f5f5f5] flex items-center justify-center flex-shrink-0">
+                        <HiOutlineCurrencyDollar className="w-4 h-4 sm:w-5 sm:h-5 text-[#6b7280]" />
                       </div>
-                      <div>
-                        <span className="text-[10px] text-[#9ca3af] uppercase tracking-[0.12em] font-medium block mb-0.5">Current</span>
-                        <span className="text-[17px] font-bold text-[#374151]">{formatCurrency(currentRevenue)}</span>
+                      <div className="min-w-0">
+                        <span className="text-[8px] sm:text-[10px] text-[#9ca3af] uppercase tracking-[0.08em] sm:tracking-[0.12em] font-medium block mb-0.5">Current</span>
+                        <span className="text-[13px] sm:text-[17px] font-bold text-[#374151] truncate block">{formatCurrency(currentRevenue)}</span>
                       </div>
                     </div>
 
                     {/* With AIVI */}
-                    <div className="flex-1 flex items-center gap-3 px-5">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 flex items-center justify-center flex-shrink-0">
-                        <BsGraphUpArrow className="w-4 h-4 text-[#f84608]" />
+                    <div className="flex-1 flex items-center gap-2 sm:gap-3 px-2 sm:px-5 min-w-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#f84608]/10 to-[#321ca3]/10 flex items-center justify-center flex-shrink-0">
+                        <BsGraphUpArrow className="w-3 h-3 sm:w-4 sm:h-4 text-[#f84608]" />
                       </div>
-                      <div>
-                        <span className="text-[10px] text-[#f84608] uppercase tracking-[0.12em] font-semibold block mb-0.5">With AIVI</span>
-                        <span className="text-[17px] font-bold text-[#0a0a0a]">{formatCurrency(aiviRevenue)}</span>
+                      <div className="min-w-0">
+                        <span className="text-[8px] sm:text-[10px] text-[#f84608] uppercase tracking-[0.08em] sm:tracking-[0.12em] font-semibold block mb-0.5">With AIVI</span>
+                        <span className="text-[13px] sm:text-[17px] font-bold text-[#0a0a0a] truncate block">{formatCurrency(aiviRevenue)}</span>
                       </div>
                     </div>
 
                     {/* Monthly Lift */}
-                    <div className="flex-1 flex items-center gap-3 pl-5">
-                      <div className="w-10 h-10 rounded-xl bg-[#10b981]/10 flex items-center justify-center flex-shrink-0">
-                        <BsRocketTakeoff className="w-4 h-4 text-[#10b981]" />
+                    <div className="flex-1 flex items-center gap-2 sm:gap-3 pl-2 sm:pl-5 min-w-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#10b981]/10 flex items-center justify-center flex-shrink-0">
+                        <BsRocketTakeoff className="w-3 h-3 sm:w-4 sm:h-4 text-[#10b981]" />
                       </div>
-                      <div>
-                        <span className="text-[10px] text-[#10b981] uppercase tracking-[0.12em] font-semibold block mb-0.5">Lift</span>
-                        <span className="text-[17px] font-bold text-[#10b981]">+{formatCurrency(monthlyLift)}</span>
+                      <div className="min-w-0">
+                        <span className="text-[8px] sm:text-[10px] text-[#10b981] uppercase tracking-[0.08em] sm:tracking-[0.12em] font-semibold block mb-0.5">Lift</span>
+                        <span className="text-[13px] sm:text-[17px] font-bold text-[#10b981] truncate block">+{formatCurrency(monthlyLift)}</span>
                       </div>
                     </div>
                   </div>
@@ -881,7 +896,7 @@ export default function AIVICalculatorV4() {
 
           {/* Content */}
           <div
-            className="flex items-center gap-4 px-6 py-4"
+            className="flex items-center gap-2 sm:gap-4 px-3 sm:px-6 py-3 sm:py-4"
             style={{
               background: 'linear-gradient(180deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%)',
               backdropFilter: 'blur(20px)',
@@ -891,50 +906,52 @@ export default function AIVICalculatorV4() {
               boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3), 0 4px 20px rgba(0, 0, 0, 0.2)',
             }}
           >
-            {/* Drag Handle */}
-            <div className="flex items-center justify-center opacity-50 mr-1">
+            {/* Drag Handle - hidden on mobile */}
+            <div className="hidden sm:flex items-center justify-center opacity-50 mr-1">
               <BsArrowLeftRight className="w-5 h-5 text-white/70" />
             </div>
 
             {/* Revenue Lift - Main Number */}
-            <div className="flex items-baseline gap-2">
-              <span className="text-[28px] sm:text-[32px] font-bold text-white leading-none">
+            <div className="flex items-baseline gap-1 sm:gap-2">
+              <span className="text-[20px] sm:text-[28px] md:text-[32px] font-bold text-white leading-none">
                 +{formatCurrency(monthlyLift)}
               </span>
-              <span className="text-[12px] text-white/50">/mo</span>
+              <span className="text-[10px] sm:text-[12px] text-white/50">/mo</span>
             </div>
 
             {/* Divider */}
-            <div className="w-px h-10 bg-white/20" />
+            <div className="w-px h-8 sm:h-10 bg-white/20" />
 
             {/* Stats */}
-            <div className="flex gap-5">
+            <div className="flex gap-2 sm:gap-5">
               <div className="text-center">
-                <div className="text-[18px] font-bold text-white">+{transferRateImprovement}%</div>
-                <div className="text-[9px] text-white/50 uppercase tracking-wider">Transfer</div>
+                <div className="text-[14px] sm:text-[18px] font-bold text-white">+{transferRateImprovement}%</div>
+                <div className="text-[8px] sm:text-[9px] text-white/50 uppercase tracking-wider hidden sm:block">Transfer</div>
+                <div className="text-[8px] text-white/50 uppercase tracking-wider sm:hidden">TRANS</div>
               </div>
               <div className="text-center">
-                <div className="text-[18px] font-bold text-white">+{formatNumber(closedLift)}</div>
-                <div className="text-[9px] text-white/50 uppercase tracking-wider">Closes</div>
+                <div className="text-[14px] sm:text-[18px] font-bold text-white">+{formatNumber(closedLift)}</div>
+                <div className="text-[8px] sm:text-[9px] text-white/50 uppercase tracking-wider">Closes</div>
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="w-px h-10 bg-white/20" />
+            {/* Divider - hidden on smallest screens */}
+            <div className="hidden xs:block w-px h-8 sm:h-10 bg-white/20" />
 
-            {/* Annual */}
-            <div className="text-center">
-              <div className="text-[16px] font-bold text-[#10b981]">{formatCurrency(annualLift)}</div>
-              <div className="text-[9px] text-white/50 uppercase tracking-wider">Per Year</div>
+            {/* Annual - hidden on smallest screens, shown on xs and up */}
+            <div className="hidden xs:block text-center">
+              <div className="text-[14px] sm:text-[16px] font-bold text-[#10b981]">{formatCurrency(annualLift)}</div>
+              <div className="text-[8px] sm:text-[9px] text-white/50 uppercase tracking-wider hidden sm:block">Per Year</div>
+              <div className="text-[8px] text-white/50 uppercase tracking-wider sm:hidden">/year</div>
             </div>
 
-            {/* Click to scroll button */}
+            {/* Click to scroll button - hidden on mobile */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 revenueCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }}
-              className="ml-2 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
+              className="hidden sm:block ml-2 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200"
               aria-label="Scroll to calculator"
             >
               <svg className="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">

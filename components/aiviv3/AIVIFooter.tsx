@@ -7,36 +7,36 @@ export default function AIVIFooter() {
     {
       title: 'Product',
       links: [
-        { label: 'Features', href: '/aiviv3/features' },
-        { label: 'Pricing', href: '/aiviv3/pricing' },
-        { label: 'Integrations', href: '/aiviv3/integrations' },
-        { label: 'Use Cases', href: '/aiviv3/use-cases' },
+        { label: 'Features', href: '/features' },
+        { label: 'Pricing', href: '/pricing' },
+        { label: 'Integrations', href: '/integrations' },
+        { label: 'Use Cases', href: '/use-cases' },
       ],
     },
     {
       title: 'Solutions',
       links: [
-        { label: 'Healthcare', href: '/aiviv3/solutions/healthcare' },
-        { label: 'Legal', href: '/aiviv3/solutions/legal' },
-        { label: 'Real Estate', href: '/aiviv3/solutions/real-estate' },
-        { label: 'Retail', href: '/aiviv3/solutions/retail' },
-        { label: 'Financial Services', href: '/aiviv3/solutions/financial-services' },
-        { label: 'Hospitality', href: '/aiviv3/solutions/hospitality' },
+        { label: 'Healthcare', href: '/solutions/healthcare' },
+        { label: 'Legal', href: '/solutions/legal' },
+        { label: 'Real Estate', href: '/solutions/real-estate' },
+        { label: 'Retail', href: '/solutions/retail' },
+        { label: 'Financial Services', href: '/solutions/financial-services' },
+        { label: 'Hospitality', href: '/solutions/hospitality' },
       ],
     },
     {
       title: 'Resources',
       links: [
-        { label: 'Case Studies', href: '/aiviv3/resources' },
-        { label: 'Blog', href: '/aiviv3/blog' },
-        { label: 'Documentation', href: '/aiviv3/docs' },
+        { label: 'Case Studies', href: '/resources' },
+        { label: 'Blog', href: '#' },
+        { label: 'Documentation', href: '#' },
       ],
     },
     {
       title: 'Company',
       links: [
-        { label: 'About', href: '/aiviv3/about' },
-        { label: 'Contact', href: '/aiviv3/contact' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '#' },
       ],
     },
   ];
@@ -54,36 +54,36 @@ export default function AIVIFooter() {
       className="w-full bg-[#0A0A0A] text-white relative"
       role="contentinfo"
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
         {/* Main Footer Content */}
-        <div className="pt-20 pb-16">
+        <div className="pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 lg:pb-16">
           {/* Logo */}
-          <div className="mb-16 text-center">
+          <div className="mb-12 sm:mb-14 lg:mb-16 text-center">
             <a href="/" className="inline-block" aria-label="AIVI Home">
               <Image
                 src="/aiviblack.png"
                 alt="AIVI Logo"
                 width={120}
                 height={120}
-                className="w-[120px] h-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity duration-300"
+                className="w-[80px] sm:w-[100px] lg:w-[120px] h-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity duration-300"
               />
             </a>
           </div>
 
           {/* Navigation Grid */}
-          <nav className="mb-20" aria-label="Footer navigation">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10 text-center">
+          <nav className="mb-12 sm:mb-16 lg:mb-20" aria-label="Footer navigation">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 sm:gap-x-8 lg:gap-x-12 gap-y-8 sm:gap-y-10 text-center">
               {footerColumns.map((column, index) => (
                 <div key={index}>
-                  <h3 className="text-[14px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-6">
+                  <h3 className="text-[11px] sm:text-[12px] lg:text-[14px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-white/40 mb-4 sm:mb-5 lg:mb-6">
                     {column.title}
                   </h3>
-                  <ul className="space-y-4">
+                  <ul className="space-y-3 sm:space-y-3.5 lg:space-y-4">
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <a
                           href={link.href}
-                          className="text-[18px] text-white/60 hover:text-white transition-colors duration-200"
+                          className="text-[14px] sm:text-[16px] lg:text-[18px] text-white/60 hover:text-white transition-colors duration-200"
                         >
                           {link.label}
                         </a>
@@ -96,25 +96,25 @@ export default function AIVIFooter() {
           </nav>
 
           {/* Divider */}
-          <div className="border-t border-white/10 mb-16" aria-hidden="true" />
+          <div className="border-t border-white/10 mb-10 sm:mb-12 lg:mb-16" aria-hidden="true" />
 
           {/* Newsletter and Social Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-start mb-16">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-start mb-10 sm:mb-12 lg:mb-16">
             {/* Newsletter Signup */}
-            <div>
-              <h3 className="text-sm font-medium tracking-wide mb-3">Stay Updated</h3>
-              <p className="text-[13px] text-white/50 leading-relaxed mb-6 max-w-sm">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <h3 className="text-xs sm:text-sm font-medium tracking-wide mb-2 sm:mb-3">Stay Updated</h3>
+              <p className="text-[12px] sm:text-[13px] text-white/50 leading-relaxed mb-4 sm:mb-5 lg:mb-6 max-w-sm">
                 Be the first to know about new features and updates.
               </p>
-              <form className="flex gap-3 max-w-md" onSubmit={(e) => e.preventDefault()}>
+              <form className="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-md w-full md:w-auto" onSubmit={(e) => e.preventDefault()}>
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-colors duration-200"
+                  className="flex-1 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-xs sm:text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-colors duration-200"
                 />
                 <button
                   type="submit"
-                  className="px-5 py-3 bg-white text-black text-sm font-medium rounded-lg hover:bg-white/90 transition-colors duration-200"
+                  className="px-5 py-2.5 sm:py-3 bg-white text-black text-xs sm:text-sm font-medium rounded-lg hover:bg-white/90 transition-colors duration-200 whitespace-nowrap"
                 >
                   Subscribe
                 </button>
@@ -122,9 +122,9 @@ export default function AIVIFooter() {
             </div>
 
             {/* Social Links */}
-            <div className="md:text-right">
-              <h4 className="text-sm font-medium tracking-wide mb-6">Connect</h4>
-              <div className="flex items-center gap-5 md:justify-end">
+            <div className="text-center md:text-right flex flex-col items-center md:items-end">
+              <h4 className="text-xs sm:text-sm font-medium tracking-wide mb-4 sm:mb-5 lg:mb-6">Connect</h4>
+              <div className="flex items-center gap-4 sm:gap-5 justify-center md:justify-end">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
@@ -132,7 +132,7 @@ export default function AIVIFooter() {
                     aria-label={`Follow us on ${social.name}`}
                     className="text-white/40 hover:text-white transition-colors duration-200"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-5 h-5 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d={social.path} />
                     </svg>
                   </a>
@@ -142,23 +142,23 @@ export default function AIVIFooter() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-white/10 mb-8" aria-hidden="true" />
+          <div className="border-t border-white/10 mb-6 sm:mb-7 lg:mb-8" aria-hidden="true" />
 
           {/* Bottom Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-white/40">
-            <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-5 text-[11px] sm:text-[12px] text-white/40">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
               <span>&copy; 2025 AIVI</span>
-              <nav className="flex items-center gap-4" aria-label="Legal">
+              <nav className="flex items-center gap-3 sm:gap-4" aria-label="Legal">
                 <a href="/privacy" className="hover:text-white/60 transition-colors duration-200">Privacy</a>
                 <span className="text-white/20">·</span>
                 <a href="/terms" className="hover:text-white/60 transition-colors duration-200">Terms</a>
                 <span className="text-white/20">·</span>
-                <a href="/privacy#do-not-sell" className="hover:text-white/60 transition-colors duration-200">Do Not Sell</a>
+                <a href="/privacy#do-not-sell" className="hover:text-white/60 transition-colors duration-200 whitespace-nowrap">Do Not Sell</a>
               </nav>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
-              <span>All systems operational</span>
+              <span className="whitespace-nowrap">All systems operational</span>
             </div>
           </div>
         </div>

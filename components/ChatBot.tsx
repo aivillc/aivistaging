@@ -97,6 +97,10 @@ export default function ChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [swipeDistance, setSwipeDistance] = useState(0);
 
   // Sync with context if available (for external control)
   useEffect(() => {
@@ -645,6 +649,45 @@ export default function ChatBot() {
     }
   };
 
+  // Handle swipe down to close on mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientY);
+    setSwipeDistance(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+
+    const currentTouch = e.targetTouches[0].clientY;
+    const distance = currentTouch - touchStart;
+
+    // Only allow downward swipes
+    if (distance > 0) {
+      setTouchEnd(currentTouch);
+      setSwipeDistance(Math.min(distance, 300)); // Cap at 300px for visual effect
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) {
+      setSwipeDistance(0);
+      return;
+    }
+
+    const distance = touchEnd - touchStart;
+    const isDownSwipe = distance > 0;
+
+    // If swiped down more than 100px, close the chat
+    if (isDownSwipe && distance > 100) {
+      handleCloseChat();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+    setSwipeDistance(0);
+  };
+
   // Check if floating button should be hidden (when Option A is selected)
   const shouldHideFloatingButton = chatBotContext?.hideFloatingButton ?? false;
 
@@ -686,12 +729,25 @@ export default function ChatBot() {
       {/* Chat Window */}
       {isOpen && (
         <div
-          className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[360px] h-[100dvh] sm:h-[600px] max-h-[100dvh] sm:max-h-[calc(100vh-48px)] bg-[#0a0a14]/98 border-0 sm:border border-[#8b00ff]/40 sm:rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn safe-area-bottom"
+          ref={chatWindowRef}
+          className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[360px] h-[85dvh] sm:h-[600px] max-h-[85dvh] sm:max-h-[calc(100vh-48px)] bg-[#0a0a14]/98 border-0 sm:border border-[#8b00ff]/40 rounded-t-3xl sm:rounded-2xl shadow-2xl z-50 flex flex-col backdrop-blur-xl animate-scaleIn safe-area-bottom transition-transform duration-200"
           style={{
             boxShadow: '0 0 40px rgba(139, 0, 255, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5)',
-            paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+            paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+            transform: swipeDistance > 0 ? `translateY(${swipeDistance}px)` : 'translateY(0)',
+            opacity: swipeDistance > 0 ? Math.max(0.5, 1 - swipeDistance / 300) : 1
           }}
         >
+          {/* Swipe Indicator - Only on mobile */}
+          <div
+            className="sm:hidden flex justify-center pt-2 pb-1"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="w-12 h-1 bg-white/30 rounded-full" />
+          </div>
+
           {/* Header */}
           <div className="p-4 border-b border-[#8b00ff]/30 rounded-t-2xl bg-gradient-to-r from-[#f84608]/10 to-[#8b00ff]/10">
             <div className="flex items-center gap-3">
@@ -718,11 +774,11 @@ export default function ChatBot() {
               </div>
               <button
                 onClick={handleCloseChat}
-                className="hover:bg-white/10 p-2 rounded-lg transition-colors"
+                className="hover:bg-white/10 p-2 sm:p-2 rounded-lg transition-colors touch-target min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Close chat"
               >
                 <svg
-                  className="w-5 h-5 text-white"
+                  className="w-6 h-6 sm:w-5 sm:h-5 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

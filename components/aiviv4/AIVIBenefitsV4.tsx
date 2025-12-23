@@ -100,7 +100,7 @@ export default function AIVIBenefitsV4() {
   useNeuralCanvas(canvasRef);
 
   return (
-    <section className="relative py-20 sm:py-24 md:py-28 lg:py-32 bg-[#f5f0e8] overflow-hidden">
+    <section id="benefits-section" className="relative py-20 sm:py-24 md:py-28 lg:py-32 bg-[#f5f0e8] overflow-hidden">
       {/* Neural Canvas Background */}
       <canvas
         ref={canvasRef}

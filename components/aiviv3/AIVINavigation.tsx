@@ -325,10 +325,11 @@ export default function AIVINavigation() {
         id="mobile-menu"
         role="menu"
         className={`lg:hidden absolute top-full left-0 w-full bg-[#E8E5E0]/98 backdrop-blur-md border-t border-[#DDDDDD] shadow-xl overflow-hidden transition-all duration-300 ${
-          mobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+          mobileMenuOpen ? 'max-h-[calc(100vh-72px)] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
         }`}
         ref={menuRef}
         aria-hidden={!mobileMenuOpen}
+        style={{ overflowY: mobileMenuOpen ? 'auto' : 'hidden', WebkitOverflowScrolling: 'touch' }}
       >
         <div className="px-6 py-4 flex flex-col gap-1">
           {navItems.map((item) => (
@@ -355,67 +356,70 @@ export default function AIVINavigation() {
                   </button>
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
-                      mobileSubmenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                      mobileSubmenuOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
                     }`}
                   >
-                    <div className="pl-4 py-2 space-y-4">
-                      {/* Industries */}
-                      <div>
-                        <h4 className="text-[11px] font-semibold text-[#999999] uppercase tracking-wider px-4 mb-2">
-                          Industries
-                        </h4>
-                        <div className="space-y-1">
-                          {item.megaMenu.industries.map((industry) => (
-                            <Link
-                              key={industry.href}
-                              href={industry.href}
-                              role="menuitem"
-                              className="block text-[14px] text-[#333333] py-2 px-4 rounded-md hover:bg-white/50 transition-all duration-200"
-                              onClick={() => setMobileMenuOpen(false)}
-                              tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
-                            >
-                              {industry.label}
-                            </Link>
-                          ))}
+                    <div className="pl-4 py-2">
+                      {/* Two Column Layout */}
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Industries Column */}
+                        <div>
+                          <h4 className="text-[11px] font-bold text-[#999999] uppercase tracking-wider px-2 mb-2">
+                            Industries
+                          </h4>
+                          <div className="space-y-1">
+                            {item.megaMenu.industries.map((industry) => (
+                              <Link
+                                key={industry.href}
+                                href={industry.href}
+                                role="menuitem"
+                                className="block text-[13px] text-[#333333] py-2 px-2 rounded-md hover:bg-white/50 transition-all duration-200"
+                                onClick={() => setMobileMenuOpen(false)}
+                                tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
+                              >
+                                {industry.label}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      {/* Integrations */}
-                      <div>
-                        <h4 className="text-[11px] font-semibold text-[#999999] uppercase tracking-wider px-4 mb-2">
-                          Integrations
-                        </h4>
-                        <div className="space-y-1">
-                          {item.megaMenu.integrations.map((integration) => (
-                            <Link
-                              key={integration.href}
-                              href={integration.href}
-                              role="menuitem"
-                              className="block text-[14px] text-[#333333] py-2 px-4 rounded-md hover:bg-white/50 transition-all duration-200"
-                              onClick={() => setMobileMenuOpen(false)}
-                              tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
-                            >
-                              {integration.label}
-                            </Link>
-                          ))}
-                        </div>
-                        <Link
-                          href={item.megaMenu.seeAllIntegrations.href}
-                          role="menuitem"
-                          className="flex items-center gap-2 text-[14px] text-[#f84608] py-2 px-4 rounded-md hover:bg-white/50 transition-all duration-200 font-medium mt-2"
-                          onClick={() => setMobileMenuOpen(false)}
-                          tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
-                        >
-                          {item.megaMenu.seeAllIntegrations.label}
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
+                        {/* Integrations Column */}
+                        <div>
+                          <h4 className="text-[11px] font-bold text-[#999999] uppercase tracking-wider px-2 mb-2">
+                            Integrations
+                          </h4>
+                          <div className="space-y-1">
+                            {item.megaMenu.integrations.map((integration) => (
+                              <Link
+                                key={integration.href}
+                                href={integration.href}
+                                role="menuitem"
+                                className="block text-[13px] text-[#333333] py-2 px-2 rounded-md hover:bg-white/50 transition-all duration-200"
+                                onClick={() => setMobileMenuOpen(false)}
+                                tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
+                              >
+                                {integration.label}
+                              </Link>
+                            ))}
+                          </div>
+                          <Link
+                            href={item.megaMenu.seeAllIntegrations.href}
+                            role="menuitem"
+                            className="flex items-center gap-1 text-[13px] text-[#f84608] py-2 px-2 rounded-md hover:bg-white/50 transition-all duration-200 font-medium mt-2"
+                            onClick={() => setMobileMenuOpen(false)}
+                            tabIndex={mobileMenuOpen && mobileSubmenuOpen ? 0 : -1}
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </Link>
+                            {item.megaMenu.seeAllIntegrations.label}
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>

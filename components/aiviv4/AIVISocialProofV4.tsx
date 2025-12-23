@@ -1,16 +1,17 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useNeuralCanvas } from './hooks/useNeuralCanvas';
 
-const companies = [
-  { name: 'AUTODESK', style: 'font-semibold tracking-wide' },
-  { name: 'Dolby', style: 'font-semibold' },
-  { name: 'SMARTLING', style: 'font-semibold tracking-wide' },
-  { name: 'Realis', style: 'font-serif italic font-medium' },
-  { name: 'ANTHROPIC', style: 'font-semibold tracking-wider' },
-  { name: 'kandji', style: 'font-semibold' },
-  { name: 'DocuSign', style: 'font-semibold' },
+const aiModels = [
+  { name: 'Anthropic', style: 'font-semibold tracking-wide' },
+  { name: 'OpenAI', style: 'font-semibold' },
+  { name: 'Gemini', style: 'font-semibold tracking-wide' },
+  { name: 'Claude', style: 'font-semibold' },
+  { name: 'GPT-4', style: 'font-semibold tracking-wider' },
+  { name: 'Llama', style: 'font-semibold' },
+  { name: 'Mistral', style: 'font-semibold' },
+  { name: 'Cohere', style: 'font-semibold' },
 ];
 
 const stats = [
@@ -21,9 +22,24 @@ const stats = [
 
 export default function AIVISocialProofV4() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   // Use the shared neural canvas hook
   useNeuralCanvas(canvasRef);
+
+  // Infinite scroll animation
+  useEffect(() => {
+    const animationFrame = requestAnimationFrame(function animate() {
+      setScrollPosition((prev) => {
+        // Reset when we've scrolled through one set
+        if (prev <= -100) return 0;
+        return prev - 0.05; // Adjust speed here
+      });
+      requestAnimationFrame(animate);
+    });
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
 
   return (
     <section
@@ -49,22 +65,42 @@ export default function AIVISocialProofV4() {
             </div>
           </div>
 
-          {/* Premium Company Logos - Dark Theme */}
+          {/* Premium AI Models Carousel - Dark Theme */}
           <div
-            className="company-logos-dark"
+            className="relative overflow-hidden"
             role="list"
-            aria-label="Featured companies"
+            aria-label="Supported AI models"
+            style={{ width: '100%', maxWidth: '600px' }}
           >
-            {companies.map((company, index) => (
-              <span
-                key={index}
-                role="listitem"
-                className={`company-logo-dark ${company.style}`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {company.name}
-              </span>
-            ))}
+            {/* Fade gradient on left */}
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#f5f0e8] to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+
+            {/* Fade gradient on right */}
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#f5f0e8] to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+
+            {/* Scrolling container */}
+            <div className="flex gap-8" style={{ transform: `translateX(${scrollPosition}%)` }}>
+              {/* First set */}
+              {aiModels.map((model, index) => (
+                <span
+                  key={`first-${index}`}
+                  role="listitem"
+                  className={`company-logo-dark whitespace-nowrap ${model.style}`}
+                >
+                  {model.name}
+                </span>
+              ))}
+              {/* Duplicate set for seamless loop */}
+              {aiModels.map((model, index) => (
+                <span
+                  key={`second-${index}`}
+                  role="listitem"
+                  className={`company-logo-dark whitespace-nowrap ${model.style}`}
+                >
+                  {model.name}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
