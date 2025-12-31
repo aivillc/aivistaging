@@ -59,10 +59,10 @@ export default function OurTeam() {
                 </p>
 
                 {/* Bio */}
-                <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#666666] leading-[1.7] mb-3">
+                <p className="text-[16px] sm:text-[17px] md:text-[18px] text-[#666666] leading-[1.7] mb-3">
                   {member.bio}
                 </p>
-                <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#1A1A1A] leading-[1.7] mb-6 font-medium">
+                <p className="text-[16px] sm:text-[17px] md:text-[18px] text-[#1A1A1A] leading-[1.7] mb-6 font-medium">
                   {member.mission}
                 </p>
 

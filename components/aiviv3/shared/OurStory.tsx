@@ -8,7 +8,7 @@ export default function OurStory() {
         <p className="text-[20px] sm:text-[24px] font-medium bg-gradient-to-r from-[#f84608] to-[#321ca3] bg-clip-text text-transparent mb-8 sm:mb-10">
           The $1.2 Million Problem (Discovered Twice)
         </p>
-        <div className="space-y-6 text-[17px] sm:text-[18px] md:text-[19px] leading-[1.7] text-[#666666] text-left">
+        <div className="space-y-6 text-[18px] sm:text-[19px] md:text-[20px] leading-[1.7] text-[#666666] text-left">
           <p>
             In 2023, Giorgio and Olly were solving the same problem from opposite sides of the industry, without knowing it.
           </p>
@@ -23,7 +23,7 @@ export default function OurStory() {
           </p>
 
           <div className="bg-[#f8f8f8] rounded-xl p-6 my-8 border border-[#e5e5e5]">
-            <ul className="space-y-2 text-[16px] sm:text-[17px]">
+            <ul className="space-y-2 text-[17px] sm:text-[18px]">
               <li className="flex items-center gap-2">
                 <span className="text-[#f84608]">•</span>
                 <span>$1M/month on leads</span>
@@ -55,8 +55,8 @@ export default function OurStory() {
           </p>
 
           <div className="bg-gradient-to-r from-[#f84608]/10 to-[#321ca3]/10 rounded-xl p-6 my-8 border border-[#f84608]/20">
-            <p className="text-[16px] sm:text-[17px] font-semibold text-[#1A1A1A] mb-3">The results speak for themselves:</p>
-            <ul className="space-y-2 text-[16px] sm:text-[17px]">
+            <p className="text-[17px] sm:text-[18px] font-semibold text-[#1A1A1A] mb-3">The results speak for themselves:</p>
+            <ul className="space-y-2 text-[17px] sm:text-[18px]">
               <li className="flex items-center gap-2">
                 <span className="text-[#10b981]">✓</span>
                 <span>SimplePath Financial: 50% → 73% contact rate</span>

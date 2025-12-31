@@ -42,12 +42,12 @@ export default function HowItWorks({ steps, title = 'How It Works' }: HowItWorks
                   </div>
 
                   {/* Step Title */}
-                  <h3 className="text-[17px] sm:text-[18px] font-semibold text-[#1A1A1A] mb-2">
+                  <h3 className="text-[18px] sm:text-[19px] font-semibold text-[#1A1A1A] mb-2">
                     {step.title}
                   </h3>
 
                   {/* Step Description */}
-                  <p className="text-[14px] sm:text-[15px] text-[#666666]">
+                  <p className="text-[15px] sm:text-[16px] text-[#666666]">
                     {step.description}
                   </p>
                 </div>

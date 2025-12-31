@@ -46,7 +46,7 @@ export default function OurValues() {
                 <h3 className="text-[19px] sm:text-[21px] md:text-[22px] font-semibold text-[#1A1A1A] mb-3">
                   {value.title}
                 </h3>
-                <p className="text-[15px] sm:text-[16px] md:text-[17px] text-[#666666] leading-[1.6]">
+                <p className="text-[16px] sm:text-[17px] md:text-[18px] text-[#666666] leading-[1.6]">
                   {value.description}
                 </p>
               </div>
