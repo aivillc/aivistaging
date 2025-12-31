@@ -10,13 +10,13 @@ export default function OurStory() {
         </p>
         <div className="space-y-6 text-[17px] sm:text-[18px] md:text-[19px] leading-[1.7] text-[#666666] text-left">
           <p>
-            In 2023, Giorgio and Olly were solving the same problem from opposite sides of the industry—without knowing it.
+            In 2023, Giorgio and Olly were solving the same problem from opposite sides of the industry, without knowing it.
           </p>
           <p>
             Giorgio had just finished scaling Amazon Connect to 100,000 agents across 22 countries and building Five9&apos;s global expansion. Everywhere he looked, he saw the same pattern: companies spending $50-100 per lead were losing 55% of them to slow follow-up.
           </p>
           <p>
-            At the same time, Olly was running a digital agency managing $100M in annual ad spend. His clients kept blaming &quot;bad lead quality&quot;—but the leads were fine. The problem was simple: by the time they called back 23 minutes later, competitors had already gotten there.
+            At the same time, Olly was running a digital agency managing $100M in annual ad spend. His clients kept blaming &quot;bad lead quality&quot; but the leads were fine. The problem was simple: by the time they called back 23 minutes later, competitors had already gotten there.
           </p>
           <p>
             When we met through a mutual contact center industry connection, we realized we were diagnosing the exact same $1.2M problem:
@@ -49,7 +49,7 @@ export default function OurStory() {
             or had no learning engine (static, didn&apos;t optimize).
           </p>
           <p>
-            So we built AIVI—the AI Revenue Engine specifically for lead generation companies. Multi-channel (SMS, voice, email),
+            So we built AIVI, the AI Revenue Engine specifically for lead generation companies. Multi-channel (SMS, voice, email),
             AI-agnostic (routes to best provider automatically), with a learning engine that optimizes channel, timing,
             messaging, and routing continuously.
           </p>

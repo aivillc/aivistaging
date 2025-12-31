@@ -29,11 +29,11 @@ const steps = [
   },
   {
     title: 'Customer Success',
-    description: 'We don\'t just onboard you and disappear. We actively monitor your contact rates, transfer rates, and revenue lift—then optimize until you hit your targets. Typical results in 90 days: 45% → 65% contact rate, $1.2M+ monthly revenue recovery.',
+    description: 'We don\'t just onboard you and disappear. We actively monitor your contact rates, transfer rates, and revenue lift, then optimize until you hit your targets. Typical results in 90 days: 45% to 65% contact rate, $1.2M+ monthly revenue recovery.',
   },
   {
     title: 'Our Commitment',
-    description: 'We only win when you win. That\'s why we focus on one metric: revenue lift. Everything else is just noise. No inflated stats, no vague promises—just measurable results.',
+    description: 'We only win when you win. That\'s why we focus on one metric: revenue lift. Everything else is just noise. No inflated stats, no vague promises. Just measurable results.',
   },
   {
     title: 'Our Vision',
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <div className="mx-4 sm:mx-6 lg:mx-12">
           <IndustryHero
             headline="Building the AI Revenue Engine for Lead Generation"
-            subheadline="Founded by Amazon Connect and Five9 architects, AIVI solves the biggest problem in lead generation: 55% of expensive leads get wasted because follow-up takes too long. We built the AI Revenue Engine that contacts leads in 3 seconds, qualifies automatically, and routes to the best closer—recovering millions in lost revenue."
+            subheadline="Founded by Amazon Connect and Five9 architects, AIVI solves the biggest problem in lead generation: 55% of expensive leads get wasted because follow-up takes too long. We built the AI Revenue Engine that contacts leads in 3 seconds, qualifies automatically, and routes to the best closer. Recovering millions in lost revenue."
             hideAudio={true}
             centerText={true}
             primaryCta="Book a Demo"

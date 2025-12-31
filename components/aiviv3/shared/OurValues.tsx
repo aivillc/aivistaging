@@ -13,7 +13,7 @@ export default function OurValues() {
     {
       icon: '🧠',
       title: 'Intelligence Over Automation',
-      description: 'AI should learn and optimize—not just automate. Our learning engine gets smarter with every conversation, continuously improving channel selection, timing, and routing.',
+      description: 'AI should learn and optimize, not just automate. Our learning engine gets smarter with every conversation, continuously improving channel selection, timing, and routing.',
     },
     {
       icon: '🤝',
