@@ -6,11 +6,15 @@ import { useDemoPopup } from '../DemoPopupContext';
 interface IndustryCTAProps {
   headline?: string;
   subheadline?: string;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
 }
 
 export default function IndustryCTA({
   headline = 'Ready to Transform Your Business?',
   subheadline = 'Join hundreds of businesses achieving exceptional results with AIVI.',
+  secondaryButtonText = 'View Pricing',
+  secondaryButtonLink = '/aiviv3/pricing',
 }: IndustryCTAProps) {
   const { openDemoPopup } = useDemoPopup();
 
@@ -33,10 +37,10 @@ export default function IndustryCTA({
               Get Started Today
             </button>
             <Link
-              href="/aiviv3/pricing"
+              href={secondaryButtonLink}
               className="inline-flex items-center justify-center h-12 px-8 bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white text-[15px] font-semibold rounded-md hover:bg-white/20 hover:border-white transition-all duration-300"
             >
-              View Pricing
+              {secondaryButtonText}
             </Link>
           </div>
         </div>

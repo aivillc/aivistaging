@@ -5,66 +5,39 @@ import {
   IndustryHero,
   TheResults,
   OurStory,
+  OurTeam,
   OurValues,
   HowItWorks,
-  IndustryFAQ,
   IndustryCTA,
 } from '@/components/aiviv3/shared';
 
 export const metadata: Metadata = {
-  title: 'About AIVI | AI-Powered Lead Conversion Platform',
-  description: 'Learn about AIVI - founded by Amazon, Five9, and Cisco veterans to transform how businesses connect with customers through intelligent AI automation.',
+  title: 'About AIVI | AI Revenue Engine for Lead Generation',
+  description: 'Founded by Amazon Connect and Five9 architects, AIVI solves the biggest problem in lead generation: 55% of expensive leads get wasted because follow-up takes too long.',
 };
 
 const resultsStats = [
-  { value: '500+', label: 'Businesses Impacted' },
-  { value: '10M+', label: 'Happy Customers' },
-  { value: '391%', label: 'ROI for Our Customers' },
+  { value: '1.2M+', label: 'AI Conversations Processed Daily' },
+  { value: '$18M+', label: 'Revenue Generated for Customers' },
+  { value: '65%+', label: 'Contact Rate Achieved' },
 ];
 
 const steps = [
   {
-    title: 'Leadership',
-    description: 'Our leadership team brings decades of combined experience from Amazon, Five9, and Cisco, with a proven track record of scaling enterprise software solutions.',
-  },
-  {
-    title: 'Engineering',
-    description: 'World-class AI researchers and engineers who have published papers in top conferences and built systems processing millions of interactions daily.',
+    title: 'Our Engineering',
+    description: 'Built by former Amazon Connect and Five9 architects who have processed billions of customer interactions. AI-agnostic orchestration, learning engine that optimizes continuously, and financial services workflows including credit pull and compliance.',
   },
   {
     title: 'Customer Success',
-    description: 'Dedicated specialists focused on your ROI, providing strategic guidance and hands-on support to ensure you achieve your business goals.',
+    description: 'We don\'t just onboard you and disappear. We actively monitor your contact rates, transfer rates, and revenue lift—then optimize until you hit your targets. Typical results in 90 days: 45% → 65% contact rate, $1.2M+ monthly revenue recovery.',
+  },
+  {
+    title: 'Our Commitment',
+    description: 'We only win when you win. That\'s why we focus on one metric: revenue lift. Everything else is just noise. No inflated stats, no vague promises—just measurable results.',
   },
   {
     title: 'Our Vision',
-    description: 'Use artificial intelligence to enhance human connection, not replace it. AI should amplify what sales teams do best—building relationships and closing deals.',
-  },
-];
-
-const faqs = [
-  {
-    question: 'Who founded AIVI?',
-    answer: 'AIVI was founded by a team of seasoned executives from Amazon, Five9, and Cisco who saw a critical gap in how businesses engage with their customers. Our leadership brings decades of combined experience scaling enterprise software solutions.',
-  },
-  {
-    question: 'What makes AIVI different from other AI platforms?',
-    answer: 'We focus on intelligent automation that enhances human capabilities rather than replacing them. AIVI works alongside your team to amplify their effectiveness, handling routine tasks so your people can focus on high-value relationships.',
-  },
-  {
-    question: 'How has AIVI been recognized in the industry?',
-    answer: 'We\'ve been recognized as a leader in AI-powered sales engagement, with awards for innovation and customer success from leading industry analysts. But what matters most to us is the results our customers achieve.',
-  },
-  {
-    question: 'What are AIVI\'s core values?',
-    answer: 'Innovation First, Customer Obsessed, Intelligent Automation, and Trust & Transparency. These aren\'t just words on a wall—they guide every decision we make and every feature we build.',
-  },
-  {
-    question: 'How does AIVI ensure data security and privacy?',
-    answer: 'We take data security extremely seriously. Your data stays yours, always. We maintain enterprise-grade security certifications and are transparent about our data practices. Trust is earned through actions, not promises.',
-  },
-  {
-    question: 'What kind of results can customers expect?',
-    answer: 'Our customers see an average 391% increase in conversion rates. Some achieve even higher gains. But beyond the numbers, they report better customer relationships, more efficient teams, and sustainable growth.',
+    description: 'Make lead waste obsolete. Every company spending $10K-$1M+/month on leads should achieve 65%+ contact rates, 3-second response times, and intelligent routing. When we\'re done, "wasting 55% of leads" will sound as outdated as calling customers from a rolodex.',
   },
 ];
 
@@ -75,17 +48,25 @@ export default function AboutPage() {
       <main className="min-h-screen bg-[#E8E5E0] font-manrope">
         <div className="mx-4 sm:mx-6 lg:mx-12">
           <IndustryHero
-            headline="Building the Future of AI-Powered Engagement"
-            subheadline="Founded by Amazon, Five9, and Cisco veterans, AIVI is on a mission to transform how businesses connect with their customers through intelligent, personalized AI that drives real results."
+            headline="Building the AI Revenue Engine for Lead Generation"
+            subheadline="Founded by Amazon Connect and Five9 architects, AIVI solves the biggest problem in lead generation: 55% of expensive leads get wasted because follow-up takes too long. We built the AI Revenue Engine that contacts leads in 3 seconds, qualifies automatically, and routes to the best closer—recovering millions in lost revenue."
             hideAudio={true}
             centerText={true}
+            primaryCta="Book a Demo"
+            secondaryCta="Calculate Your Impact"
+            secondaryCtaLink="/#calculator"
           />
           <TheResults stats={resultsStats} />
           <OurStory />
+          <OurTeam />
           <OurValues />
-          <HowItWorks steps={steps} />
-          <IndustryFAQ faqs={faqs} />
-          <IndustryCTA />
+          <HowItWorks steps={steps} title="How We Work" />
+          <IndustryCTA
+            headline="Ready to Recover Your Lost Revenue?"
+            subheadline="Stop wasting 55% of your leads. See how much revenue you're leaving on the table."
+            secondaryButtonText="ROI Calculator"
+            secondaryButtonLink="/#calculator"
+          />
         </div>
       </main>
       <AIVIFooter />

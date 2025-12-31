@@ -23,8 +23,8 @@ const features = [
     icon: <HiOutlineLink className="w-7 h-7" />,
     description: 'AIVI Connector: Integrate Any Source',
     mainTitle: 'Capture Leads from Anywhere',
-    // Image placeholder - add your image path here
-    image: '/features/lead-capture.png',
+    // Video for this section
+    image: '/features/lead-capture.mp4',
     imagePlaceholder: 'Dashboard showing multiple lead sources flowing into AIVI',
     cta: 'See All Integrations →',
     content: (
@@ -72,7 +72,7 @@ const features = [
     icon: <BsLightning className="w-7 h-7" />,
     description: 'AIVI | Ignite: 3-Second Multi-Channel',
     mainTitle: 'AI Contact & Qualification in 3 Seconds',
-    image: '/features/campaign-engine.png',
+    image: '/features/campaign-engine.mp4',
     imagePlaceholder: 'Split screen showing campaign setup + live conversation',
     cta: 'Try Campaign Wizard →',
     content: (
@@ -126,7 +126,7 @@ const features = [
     icon: <BsPersonCheck className="w-7 h-7" />,
     description: 'Right Lead, Right Closer, Full Context',
     mainTitle: 'Route to Your Best Closer, Every Time',
-    image: '/features/agent-desktop.png',
+    image: '/features/agent-desktop.mp4',
     imagePlaceholder: 'Agent desktop screenshot with live transfer incoming',
     cta: 'See Agent Desktop Demo →',
     content: (
@@ -177,7 +177,7 @@ const features = [
     icon: <BsGraphUp className="w-7 h-7" />,
     description: 'Journey Mapping & Auto-Optimization',
     mainTitle: 'Your AI Gets Smarter Every Day',
-    image: '/features/dashboard.png',
+    image: '/features/dashboard.mp4',
     imagePlaceholder: 'Dashboard with real-time stats + journey map visualization',
     cta: 'See Live Dashboard Demo →',
     content: (
@@ -433,10 +433,11 @@ export default function AIVIFeatureTabsV4() {
             id="features-heading"
             className="text-[36px] sm:text-[48px] md:text-[60px] leading-[1.1] font-medium text-[#0a0a0a] mb-6 max-w-[900px] mx-auto tracking-[-0.02em]"
           >
-            The AIVI Orchestration Flow
+            The Complete Lead Monetization Platform
           </h2>
           <p className="text-[18px] sm:text-[20px] leading-[1.7] text-[#555555] max-w-[700px] mx-auto font-normal">
-            From first contact to closed deal—see how AIVI transforms every lead into a qualified opportunity.
+            Four integrated systems—from AIVI Connector to AIVI | Ignite<br className="hidden sm:block" />
+            that turn every lead into revenue automatically.
           </p>
         </div>
 
@@ -660,17 +661,28 @@ export default function AIVIFeatureTabsV4() {
                   'from-[#F5FFF7] to-[#EBFFEF]'
                 } border border-white/60 shadow-xl shadow-black/5`}>
                   <div className="aspect-[16/9] flex items-center justify-center p-8">
-                    {/* Image placeholder - replace with actual image */}
-                    <div className="w-full h-full rounded-xl bg-white/80 backdrop-blur-sm border-2 border-dashed border-[#d1d5db] flex flex-col items-center justify-center gap-4">
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#f84608]/20 to-[#321ca3]/20 flex items-center justify-center">
-                        {activeFeature.icon}
+                    {/* Check if file is video (.mp4) or image */}
+                    {activeFeature.image.endsWith('.mp4') ? (
+                      <video
+                        className="w-full h-full rounded-xl object-cover"
+                        src={activeFeature.image}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-xl bg-white/80 backdrop-blur-sm border-2 border-dashed border-[#d1d5db] flex flex-col items-center justify-center gap-4">
+                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#f84608]/20 to-[#321ca3]/20 flex items-center justify-center">
+                          {activeFeature.icon}
+                        </div>
+                        <div className="text-center px-4">
+                          <p className="text-[14px] font-semibold text-[#374151] mb-1">Add Image Here</p>
+                          <p className="text-[12px] text-[#6b7280]">{activeFeature.imagePlaceholder}</p>
+                          <p className="text-[11px] text-[#9ca3af] mt-2 font-mono">{activeFeature.image}</p>
+                        </div>
                       </div>
-                      <div className="text-center px-4">
-                        <p className="text-[14px] font-semibold text-[#374151] mb-1">Add Image Here</p>
-                        <p className="text-[12px] text-[#6b7280]">{activeFeature.imagePlaceholder}</p>
-                        <p className="text-[11px] text-[#9ca3af] mt-2 font-mono">{activeFeature.image}</p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 

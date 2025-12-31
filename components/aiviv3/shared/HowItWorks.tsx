@@ -9,17 +9,18 @@ interface Step {
 
 interface HowItWorksProps {
   steps: Step[];
+  title?: string;
 }
 
 const stepIcons = [FaCog, FaCode, FaRocket, FaChartBar];
 
-export default function HowItWorks({ steps }: HowItWorksProps) {
+export default function HowItWorks({ steps, title = 'How It Works' }: HowItWorksProps) {
   return (
     <section className="w-full bg-[#E8E5E0] px-[5%] sm:px-[7%] lg:px-[10%] py-12 sm:py-16 font-manrope">
       <div className="w-full max-w-[calc(100%-24px)] sm:max-w-[calc(100%-48px)] mx-auto">
         {/* Section Header */}
         <h2 className="text-[24px] sm:text-[32px] font-normal text-[#1A1A1A] mb-12 text-center">
-          How It Works
+          {title}
         </h2>
 
         {/* Steps Grid with Flow Line */}

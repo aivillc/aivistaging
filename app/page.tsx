@@ -10,6 +10,7 @@ import AIVICalculatorV4 from '@/components/aiviv4/AIVICalculatorV4';
 import AIVICTASectionV4 from '@/components/aiviv4/AIVICTASectionV4';
 import AIVIFooter from '@/components/aiviv3/AIVIFooter';
 import AIVIFAQMasterV4 from '@/components/aiviv4/faq/AIVIFAQMasterV4';
+import AIVITestimonialCarousel from '@/components/aiviv4/AIVITestimonialCarousel';
 import { ROIButtonStyleProvider, useROIButtonStyle } from '@/components/aiviv4/ROIButtonStyleContext';
 import { RevenueLiftStyleProvider } from '@/components/aiviv4/RevenueLiftStyleContext';
 import { LeadGateProvider } from '@/components/aiviv4/LeadGateContext';
@@ -707,6 +708,7 @@ function HomePageContent() {
         <AIVICalculatorV4 />
         <AIVIBenefitsV4 />
         <AIVIFAQMasterV4 />
+        <AIVITestimonialCarousel />
       </main>
       <AIVIFooter />
 

@@ -10,6 +10,9 @@ interface IndustryHeroProps {
   audioSrc?: string;
   hideAudio?: boolean;
   centerText?: boolean;
+  primaryCta?: string;
+  secondaryCta?: string;
+  secondaryCtaLink?: string;
 }
 
 export default function IndustryHero({
@@ -19,6 +22,9 @@ export default function IndustryHero({
   audioSrc,
   hideAudio = false,
   centerText = false,
+  primaryCta = 'Book a Demo',
+  secondaryCta = 'View Pricing',
+  secondaryCtaLink = '/aiviv3/pricing',
 }: IndustryHeroProps) {
   const { openDemoPopup } = useDemoPopup();
 
@@ -44,14 +50,14 @@ export default function IndustryHero({
                     onClick={openDemoPopup}
                     className="group relative inline-flex items-center justify-center h-12 px-7 text-white text-[15px] font-semibold rounded-md overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300 focus-brand-ring bg-gradient-to-r from-[#FF8C00] to-[#8A2BE2]"
                   >
-                    <span className="relative z-10">Book a Demo</span>
+                    <span className="relative z-10">{primaryCta}</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-[#8A2BE2] to-[#FF8C00] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </button>
                   <a
-                    href="/aiviv3/pricing"
+                    href={secondaryCtaLink}
                     className="inline-flex items-center justify-center h-12 px-7 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] text-[15px] font-semibold rounded-md hover:bg-[#1A1A1A] hover:text-white transition-all duration-300 focus-brand-ring"
                   >
-                    View Pricing
+                    {secondaryCta}
                   </a>
                 </div>
               </div>

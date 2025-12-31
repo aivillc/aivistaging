@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import Fuse from 'fuse.js';
 import { faqs, FAQ } from './faqData';
-import { useDemoPopup } from '@/components/aiviv3/DemoPopupContext';
 
 const categories = [
   { id: 'all', label: 'All Questions', color: '#0a0a0a' },
@@ -19,7 +18,6 @@ export default function AIVISearchMatrixFAQ() {
   const [activeFilters, setActiveFilters] = useState<string[]>(['all']);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  const { openDemoPopup } = useDemoPopup();
 
   // Debounce search query
   useEffect(() => {
@@ -328,35 +326,6 @@ export default function AIVISearchMatrixFAQ() {
           )}
         </LayoutGroup>
 
-        {/* Bottom CTA */}
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <p className="text-[15px] text-[#737373] mb-6">Can&apos;t find what you&apos;re looking for?</p>
-          <button
-            onClick={openDemoPopup}
-            className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-[16px] font-medium text-white bg-[#0a0a0a] hover:bg-[#171717] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
-          >
-            <span>Talk to Our Team</span>
-            <svg
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </button>
-        </motion.div>
       </div>
     </section>
   );
