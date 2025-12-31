@@ -3,239 +3,227 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BsLightning, BsPersonCheck, BsGraphUp } from 'react-icons/bs';
-import { BiTargetLock } from 'react-icons/bi';
+import { HiOutlineLink } from 'react-icons/hi2';
 import { useNeuralCanvas } from './hooks/useNeuralCanvas';
+
+// Checkmark icon component for reuse
+const CheckIcon = () => (
+  <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
+    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  </div>
+);
 
 const features = [
   {
-    id: 'instant-engagement',
-    title: 'Instant Engagement',
+    id: 'universal-lead-capture',
+    title: 'Universal Lead Capture',
     activeColor: 'bg-[#FFF5F2]',
-    icon: <BsLightning className="w-7 h-7" />,
-    description: '3-Second Multi-Channel Response',
-    mainTitle: '3-Second Multi-Channel Response',
+    icon: <HiOutlineLink className="w-7 h-7" />,
+    description: 'AIVI Connector: Integrate Any Source',
+    mainTitle: 'Capture Leads from Anywhere',
+    // Image placeholder - add your image path here
+    image: '/features/lead-capture.png',
+    imagePlaceholder: 'Dashboard showing multiple lead sources flowing into AIVI',
+    cta: 'See All Integrations →',
     content: (
       <div className="space-y-6 font-manrope">
         <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
-          AIVI instantly connects with every lead within 3 seconds of their inquiry—before they even have time to consider a competitor.
+          Your leads come from everywhere: Facebook Ads, Google, your CRM, partner APIs, web forms. <strong className="font-semibold">AIVI Connector</strong> captures them all instantly.
         </p>
 
-        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Why This Matters:</h4>
+        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Direct Integrations:</h4>
         <ul className="space-y-4">
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">78% of customers buy from whoever responds first</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Facebook Lead Ads (no Zapier needed)</span>
           </li>
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Average industry response time: 47 hours</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Salesforce, HubSpot, Zoho (bi-directional sync)</span>
           </li>
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Every minute of delay drops conversion rates by 7%</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Google Ads, LinkedIn (coming soon)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Custom API (standard JSON webhook)</span>
           </li>
         </ul>
-      </div>
-    ),
-  },
-  {
-    id: 'intelligent-qualification',
-    title: 'Intelligent Qualification',
-    activeColor: 'bg-[#F0F7FF]',
-    icon: <BiTargetLock className="w-7 h-7" />,
-    description: 'AI-Driven Pre-Approval',
-    mainTitle: 'AI-Driven Pre-Approval',
-    content: (
-      <div className="space-y-6 font-manrope">
-        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
-          Through natural conversation, AIVI gathers critical qualification data while building rapport—no robotic questionnaires, no lost leads.
-        </p>
 
         <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal mt-6">
-          Within 90 seconds, AIVI has collected: property value, loan amount, credit range, employment status, and refinancing goals—all through conversational flow.
+          The moment a lead submits—anywhere—AIVI has it.<br />
+          <strong className="font-semibold text-[#f84608]">Response time starts: now.</strong>
         </p>
-
-        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Data Captured:</h4>
-        <ul className="space-y-4">
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Home Value: $450,000</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Current Balance: $280,000</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">LTV Ratio: 62%</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Credit Score: 720-740 range</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Goal: Lower monthly payment</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Lead Score: 87/100 (Hot)</span>
-          </li>
-        </ul>
       </div>
     ),
+    stats: [
+      { source: 'Facebook Ads', time: '<1 second', sync: 'Real-time' },
+      { source: 'Salesforce', time: '<1 second', sync: 'Bi-directional' },
+      { source: 'Custom API', time: '<1 second', sync: '100% fields' },
+    ],
   },
   {
-    id: 'strategic-handoff',
-    title: 'Strategic Human Handoff',
+    id: 'ai-campaign-engine',
+    title: 'AI Campaign Engine',
+    activeColor: 'bg-[#F0F7FF]',
+    icon: <BsLightning className="w-7 h-7" />,
+    description: 'AIVI | Ignite: 3-Second Multi-Channel',
+    mainTitle: 'AI Contact & Qualification in 3 Seconds',
+    image: '/features/campaign-engine.png',
+    imagePlaceholder: 'Split screen showing campaign setup + live conversation',
+    cta: 'Try Campaign Wizard →',
+    content: (
+      <div className="space-y-6 font-manrope">
+        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
+          <strong className="font-semibold">AIVI | Ignite</strong> turns every lead into a personalized, multi-channel conversation—SMS, email, and voice—orchestrated automatically based on what converts best.
+        </p>
+
+        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Campaign Wizard (Setup in 5 Minutes):</h4>
+        <ul className="space-y-4">
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Choose your objective (qualify, book appointment, transfer)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">AI optimizes your messaging (or use your own)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Select voice personality (professional, friendly, urgent)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Set sequence rules (when to SMS, when to call, when to email)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">AIVI determines optimal channel per lead automatically</span>
+          </li>
+        </ul>
+
+        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal mt-6">
+          Your AI learns: Which channel works for which lead type, optimal timing, best messaging—<strong className="font-semibold">automatically</strong>.
+        </p>
+      </div>
+    ),
+    sequence: [
+      { time: '00:03s', action: 'SMS: "Hi Sarah, got your $45K request..."' },
+      { time: '00:45s', action: 'Lead responds via SMS' },
+      { time: '01:30s', action: 'AI asks qualifying questions (debt, credit)' },
+      { time: '02:15s', action: 'Voice call offered, lead accepts' },
+      { time: '03:00s', action: 'Credit pulled (682, $38K debt)' },
+      { time: '03:45s', action: 'Transferred to Michael (top closer for this profile)' },
+    ],
+  },
+  {
+    id: 'intelligent-routing',
+    title: 'Intelligent Routing',
     activeColor: 'bg-[#F5F0FF]',
     icon: <BsPersonCheck className="w-7 h-7" />,
-    description: 'Warm Transfer to Revenue Specialist',
-    mainTitle: 'Warm Transfer to Revenue Specialist',
+    description: 'Right Lead, Right Closer, Full Context',
+    mainTitle: 'Route to Your Best Closer, Every Time',
+    image: '/features/agent-desktop.png',
+    imagePlaceholder: 'Agent desktop screenshot with live transfer incoming',
+    cta: 'See Agent Desktop Demo →',
     content: (
       <div className="space-y-6 font-manrope">
         <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
-          When a lead is qualified and ready, AIVI executes a seamless warm transfer—providing your loan officer with complete context before they say hello.
+          Your leads aren&apos;t all the same. Why route them randomly?
         </p>
-
-        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">What Mike Sees (Before Answering):</h4>
-        <div className="bg-[#f8f8f8] rounded-2xl p-6 border border-[#e5e5e5]">
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Lead:</span>
-              <span className="text-[16px] font-semibold text-[#0a0a0a]">Sarah Johnson</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Score:</span>
-              <span className="text-[16px] font-semibold text-[#f84608]">87/100 (Hot)</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Opportunity:</span>
-              <span className="text-[16px] font-semibold text-[#0a0a0a]">Refinance, $170K equity</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Credit:</span>
-              <span className="text-[16px] font-semibold text-[#0a0a0a]">720-740</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Motivation:</span>
-              <span className="text-[16px] font-semibold text-[#0a0a0a]">Lower monthly payment</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] text-[#666666] font-medium">Summary:</span>
-              <span className="text-[16px] font-semibold text-[#0a0a0a]">Engaged, ready to discuss</span>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal mt-6">
-          <strong className="font-semibold">Mike&apos;s first words:</strong> &quot;Hi Sarah! I see you&apos;re looking to lower your monthly payment on your refinance—with your equity position, we have some great options. Let me pull up a few scenarios for you...&quot;
-        </p>
-
         <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
-          No awkward restarts. No repeated questions. Just a smooth, professional experience that converts.
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: 'continuous-optimization',
-    title: 'Continuous Optimization',
-    activeColor: 'bg-[#F0FFF4]',
-    icon: <BsGraphUp className="w-7 h-7" />,
-    description: 'Performance Intelligence',
-    mainTitle: 'Performance Intelligence',
-    content: (
-      <div className="space-y-6 font-manrope">
-        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
-          Every interaction feeds AIVI&apos;s learning engine. Real-time analytics reveal what&apos;s working and what needs adjustment—automatically.
+          AIVI learns which agents close which lead types best—then routes automatically. Your closers get fully qualified leads with complete context before they answer.
         </p>
 
-        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Automated Optimization:</h4>
+        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">Intelligent Routing Engine:</h4>
         <ul className="space-y-4">
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">A/B tests conversation approaches automatically</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Analyzes agent performance by lead type</span>
           </li>
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Identifies optimal contact times by lead segment</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Routes based on match probability (lead profile × agent strength)</span>
           </li>
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Refines qualification questions based on conversion data</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Load balances across available agents</span>
           </li>
           <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Adjusts channel preferences per lead behavior</span>
-          </li>
-          <li className="flex gap-4 items-start">
-            <div className="w-6 h-6 mt-1 flex-shrink-0 bg-gradient-to-br from-[#f84608] to-[#321ca3] rounded-full flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Surfaces coaching opportunities for human agents</span>
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Escalates high-value leads to top performers</span>
           </li>
         </ul>
-
-        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal mt-6">
-          <strong className="font-semibold">Result:</strong> Performance improves week over week without manual intervention—AIVI gets smarter with every conversation.
-        </p>
       </div>
     ),
+    agentDesktop: {
+      leadName: 'Sarah Johnson',
+      leadScore: '87/100 (HOT) 🔥',
+      credit: '682',
+      debt: '$38,000',
+      preApproved: true,
+      summary: 'Sarah is motivated to consolidate, mentioned she\'s stressed about multiple payments. Responded well to "one monthly payment" framing. No rate objections yet.',
+      talkTrack: 'Lead with: "Hi Sarah, I can get you to one payment of $487/month—$200 less than you\'re paying now."',
+      whyRouted: 'Michael closes 41% on 680-720 credit scores (23% above team average)',
+    },
+  },
+  {
+    id: 'learning-dashboard',
+    title: 'Learning Dashboard',
+    activeColor: 'bg-[#F0FFF4]',
+    icon: <BsGraphUp className="w-7 h-7" />,
+    description: 'Journey Mapping & Auto-Optimization',
+    mainTitle: 'Your AI Gets Smarter Every Day',
+    image: '/features/dashboard.png',
+    imagePlaceholder: 'Dashboard with real-time stats + journey map visualization',
+    cta: 'See Live Dashboard Demo →',
+    content: (
+      <div className="space-y-6 font-manrope">
+        <p className="text-[18px] leading-[1.8] text-[#1a1a1a] font-normal">
+          AIVI doesn&apos;t just run campaigns—it learns from every interaction and optimizes automatically. No manual tweaking required.
+        </p>
+
+        <h4 className="text-[20px] font-semibold text-[#0a0a0a] mt-8">What AIVI Learns Automatically:</h4>
+        <ul className="space-y-4">
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Which channel works best (SMS vs voice vs email) per lead type</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Optimal contact timing (morning vs evening, weekday vs weekend)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Best messaging approach (urgent vs friendly, short vs detailed)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Agent performance patterns (who closes what, and how)</span>
+          </li>
+          <li className="flex gap-4 items-start">
+            <CheckIcon />
+            <span className="text-[18px] leading-[1.6] text-[#1a1a1a] font-normal">Lead quality signals (which sources convert, which don&apos;t)</span>
+          </li>
+        </ul>
+      </div>
+    ),
+    dashboardStats: {
+      contactRate: { value: '65%', change: '+12pts', from: '53%' },
+      transferRate: { value: '58%', change: '+15pts', from: '43%' },
+      closeRate: { value: '13%', change: '+5pts', from: '8%' },
+      responseTime: { value: '3.2 seconds', change: 'down from 23min' },
+      leadsContacted: { value: '14,950/23,000', change: '65% contact' },
+      revenueLift: { value: '+$1.2M/mo', change: '78% growth' },
+    },
+    learnings: [
+      { icon: '📊', title: 'Channel Performance', insight: 'Spanish-speaking leads convert 34% better via SMS first (vs. voice call). Auto-routing adjusted.' },
+      { icon: '⏰', title: 'Timing Optimization', insight: 'Friday afternoon leads respond 2.3X better on Monday 9am (vs. Friday follow-up). Sequence updated.' },
+      { icon: '🎯', title: 'Agent Routing', insight: 'Michael closes 41% on rate objections. Jessica closes 38% on 680-720 scores. Auto-routing now matches lead type to agent strength.' },
+    ],
   },
 ];
 
@@ -647,7 +635,7 @@ export default function AIVIFeatureTabsV4() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Right Column - Premium Visual Card */}
+            {/* Right Column - Image + Visual Card */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={`visual-${activeIndex}`}
@@ -655,7 +643,7 @@ export default function AIVIFeatureTabsV4() {
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, scale: 0.96, filter: 'blur(8px)' }}
                 transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                className="relative mt-8 lg:mt-0"
+                className="relative mt-8 lg:mt-0 space-y-6"
               >
                 {/* Outer glow effect */}
                 <div
@@ -664,192 +652,165 @@ export default function AIVIFeatureTabsV4() {
                   aria-hidden="true"
                 />
 
-                {/* Main card with glass-morphism */}
-                <div className={`relative rounded-3xl overflow-hidden bg-gradient-to-br ${
+                {/* Image Placeholder Area */}
+                <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${
                   activeIndex === 0 ? 'from-[#FFF7F5] to-[#FFF0EB]' :
                   activeIndex === 1 ? 'from-[#F5F8FF] to-[#EBF2FF]' :
                   activeIndex === 2 ? 'from-[#FAF5FF] to-[#F3EBFF]' :
                   'from-[#F5FFF7] to-[#EBFFEF]'
-                } border border-white/60 shadow-2xl shadow-black/5`}>
-                  <div className="aspect-[16/10] p-7 md:p-9 flex items-center justify-center">
-                    <div className="w-full bg-white/90 backdrop-blur-md rounded-2xl p-7 lg:p-9 shadow-xl border border-white/80 space-y-6">
-                      {/* Step indicator */}
-                      <div className="flex items-center gap-5 mb-3">
-                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center text-white shadow-lg shadow-[#f84608]/20">
-                          {activeFeature.icon}
+                } border border-white/60 shadow-xl shadow-black/5`}>
+                  <div className="aspect-[16/9] flex items-center justify-center p-8">
+                    {/* Image placeholder - replace with actual image */}
+                    <div className="w-full h-full rounded-xl bg-white/80 backdrop-blur-sm border-2 border-dashed border-[#d1d5db] flex flex-col items-center justify-center gap-4">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#f84608]/20 to-[#321ca3]/20 flex items-center justify-center">
+                        {activeFeature.icon}
+                      </div>
+                      <div className="text-center px-4">
+                        <p className="text-[14px] font-semibold text-[#374151] mb-1">Add Image Here</p>
+                        <p className="text-[12px] text-[#6b7280]">{activeFeature.imagePlaceholder}</p>
+                        <p className="text-[11px] text-[#9ca3af] mt-2 font-mono">{activeFeature.image}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Feature-Specific Visual Card */}
+                <div className={`relative rounded-2xl overflow-hidden bg-gradient-to-br ${
+                  activeIndex === 0 ? 'from-[#FFF7F5] to-[#FFF0EB]' :
+                  activeIndex === 1 ? 'from-[#F5F8FF] to-[#EBF2FF]' :
+                  activeIndex === 2 ? 'from-[#FAF5FF] to-[#F3EBFF]' :
+                  'from-[#F5FFF7] to-[#EBFFEF]'
+                } border border-white/60 shadow-xl shadow-black/5`}>
+                  <div className="p-6 md:p-8">
+                    <div className="w-full bg-white/90 backdrop-blur-md rounded-xl p-5 lg:p-6 shadow-lg border border-white/80">
+                      {/* Visual representation based on section */}
+                      {activeIndex === 0 ? (
+                        /* Lead Sources Stats Table for Universal Lead Capture */
+                        <div className="space-y-4">
+                          <h4 className="text-[15px] font-semibold text-[#0a0a0a] flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                            Live Integration Status
+                          </h4>
+                          <div className="overflow-hidden rounded-lg border border-[#e5e5e5]">
+                            <table className="w-full text-[13px]">
+                              <thead className="bg-[#f8f8f8]">
+                                <tr>
+                                  <th className="text-left py-2 px-3 font-semibold text-[#374151]">Lead Source</th>
+                                  <th className="text-left py-2 px-3 font-semibold text-[#374151]">Capture Time</th>
+                                  <th className="text-left py-2 px-3 font-semibold text-[#374151]">Data Sync</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-[#e5e5e5]">
+                                <tr>
+                                  <td className="py-2.5 px-3 text-[#0a0a0a] font-medium">Facebook Ads</td>
+                                  <td className="py-2.5 px-3 text-[#f84608] font-semibold">&lt;1 second</td>
+                                  <td className="py-2.5 px-3 text-[#10b981]">Real-time</td>
+                                </tr>
+                                <tr>
+                                  <td className="py-2.5 px-3 text-[#0a0a0a] font-medium">Salesforce</td>
+                                  <td className="py-2.5 px-3 text-[#f84608] font-semibold">&lt;1 second</td>
+                                  <td className="py-2.5 px-3 text-[#10b981]">Bi-directional</td>
+                                </tr>
+                                <tr>
+                                  <td className="py-2.5 px-3 text-[#0a0a0a] font-medium">Custom API</td>
+                                  <td className="py-2.5 px-3 text-[#f84608] font-semibold">&lt;1 second</td>
+                                  <td className="py-2.5 px-3 text-[#10b981]">100% fields</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-[13px] font-semibold tracking-[2px] text-[#f84608] uppercase">Step {activeIndex + 1}</p>
-                          <p className="text-[22px] font-semibold text-[#0a0a0a]">{activeFeature.title}</p>
+                      ) : activeIndex === 1 ? (
+                        /* Campaign Sequence Timeline for AI Campaign Engine */
+                        <div className="space-y-4">
+                          <h4 className="text-[15px] font-semibold text-[#0a0a0a]">Live Sequence Example:</h4>
+                          <div className="bg-[#f8f8f8] rounded-lg p-4 border border-[#e5e5e5]">
+                            <p className="text-[11px] font-semibold text-[#6b7280] uppercase tracking-wider mb-3">Campaign: Debt Consolidation Leads</p>
+                            <div className="space-y-2">
+                              {[
+                                { time: '00:03s', action: 'SMS: "Hi Sarah, got your $45K request..."', type: 'sms' },
+                                { time: '00:45s', action: 'Lead responds via SMS', type: 'response' },
+                                { time: '01:30s', action: 'AI asks qualifying questions', type: 'ai' },
+                                { time: '02:15s', action: 'Voice call offered, lead accepts', type: 'voice' },
+                                { time: '03:00s', action: 'Credit pulled (682, $38K debt)', type: 'data' },
+                                { time: '03:45s', action: 'Transferred to Michael', type: 'transfer' },
+                              ].map((step, i) => (
+                                <div key={i} className="flex items-start gap-3">
+                                  <span className="text-[11px] font-mono text-[#f84608] font-semibold w-14 flex-shrink-0">{step.time}</span>
+                                  <span className="text-[12px] text-[#374151]">{step.action}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="mt-3 pt-3 border-t border-[#e5e5e5]">
+                              <p className="text-[12px] text-[#10b981] font-semibold">✓ Result: Qualified transfer in under 4 minutes</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Visual representation */}
-                      <div className="space-y-4">
-                        {activeIndex === 0 ? (
-                          /* Real Example visual for Instant Engagement */
-                          <div className="space-y-4">
-                            <h4 className="text-[16px] font-semibold text-[#0a0a0a]">Real Example:</h4>
-                            <p className="text-[14px] leading-[1.7] text-[#555555]">
-                              A lead submits their information at 2:47 PM. By 2:47:03 PM, they receive:
+                      ) : activeIndex === 2 ? (
+                        /* Agent Desktop Preview for Intelligent Routing */
+                        <div className="space-y-4">
+                          <h4 className="text-[15px] font-semibold text-[#0a0a0a] flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            INCOMING TRANSFER
+                          </h4>
+                          <div className="bg-[#f8f8f8] rounded-lg p-4 border border-[#e5e5e5] space-y-3">
+                            <div className="flex justify-between items-center pb-2 border-b border-[#e5e5e5]">
+                              <span className="text-[14px] font-semibold text-[#0a0a0a]">Sarah Johnson</span>
+                              <span className="text-[13px] font-bold text-[#f84608]">87/100 🔥</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-[12px]">
+                              <div><span className="text-[#6b7280]">Credit:</span> <span className="font-semibold text-[#0a0a0a]">682</span></div>
+                              <div><span className="text-[#6b7280]">Debt:</span> <span className="font-semibold text-[#0a0a0a]">$38,000</span></div>
+                            </div>
+                            <div className="bg-white rounded-lg p-3 border border-[#e5e5e5]">
+                              <p className="text-[11px] font-semibold text-[#6b7280] uppercase mb-1">AI Summary</p>
+                              <p className="text-[12px] text-[#374151] leading-relaxed">Sarah is motivated to consolidate. Responded well to &quot;one monthly payment&quot; framing.</p>
+                            </div>
+                            <div className="bg-gradient-to-r from-[#f84608]/10 to-[#321ca3]/10 rounded-lg p-3">
+                              <p className="text-[11px] font-semibold text-[#f84608] uppercase mb-1">Recommended Talk Track</p>
+                              <p className="text-[12px] text-[#374151] italic">&quot;Hi Sarah, I can get you to one payment of $487/month—$200 less than you&apos;re paying now.&quot;</p>
+                            </div>
+                            <p className="text-[11px] text-[#6b7280]">
+                              <strong className="text-[#0a0a0a]">Why Routed to You:</strong> Michael closes 41% on 680-720 credit scores (23% above team avg)
                             </p>
-
-                            {/* Chat bubble */}
-                            <div className="flex gap-3 items-start">
-                              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[11px] font-bold text-white">AI</span>
-                              </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-4 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[14px] leading-[1.7] text-[#374151]">
-                                  Hi Sarah, this is Alex from Premier Lending. I see you're looking at refinancing options—I can help you explore rates that could save you $400/month. Is now a good time for a quick chat?
-                                </p>
-                              </div>
-                            </div>
-
-                            <p className="text-[14px] leading-[1.7] text-[#555555]">
-                              The lead responds via text, and AIVI continues the conversation naturally—switching to phone when the lead shows buying signals.
-                            </p>
                           </div>
-                        ) : activeIndex === 1 ? (
-                          /* Conversation Flow visual for Intelligent Qualification */
-                          <div className="space-y-3">
-                            <h4 className="text-[16px] font-semibold text-[#0a0a0a]">The Conversation Flow:</h4>
-
-                            {/* AI Message 1 */}
-                            <div className="flex gap-2 items-start">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[10px] font-bold text-white">AI</span>
-                              </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-3 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[13px] leading-[1.6] text-[#374151]">
-                                  Great to connect, Sarah! To find the best rates for you, what's the approximate value of your current home?
-                                </p>
-                              </div>
+                        </div>
+                      ) : (
+                        /* Dashboard Stats + AI Learnings for Learning Dashboard */
+                        <div className="space-y-4">
+                          <h4 className="text-[15px] font-semibold text-[#0a0a0a]">Performance Dashboard (Last 30 Days)</h4>
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className="bg-[#f8f8f8] rounded-lg p-3 text-center border border-[#e5e5e5]">
+                              <p className="text-[20px] font-bold aivi-gradient-text">65%</p>
+                              <p className="text-[10px] text-[#6b7280] font-medium">Contact Rate</p>
+                              <p className="text-[9px] text-[#10b981]">+12pts</p>
                             </div>
-
-                            {/* User Response 1 */}
-                            <div className="flex gap-2 items-start justify-end">
-                              <div className="bg-gradient-to-r from-[#f84608] to-[#321ca3] rounded-2xl rounded-tr-md p-3 shadow-sm max-w-[60%]">
-                                <p className="text-[13px] leading-[1.6] text-white">Around $450,000</p>
-                              </div>
-                              <div className="w-8 h-8 rounded-full bg-[#e5e7eb] flex items-center justify-center flex-shrink-0">
-                                <span className="text-[10px] font-bold text-[#6b7280]">S</span>
-                              </div>
+                            <div className="bg-[#f8f8f8] rounded-lg p-3 text-center border border-[#e5e5e5]">
+                              <p className="text-[20px] font-bold aivi-gradient-text">58%</p>
+                              <p className="text-[10px] text-[#6b7280] font-medium">Transfer Rate</p>
+                              <p className="text-[9px] text-[#10b981]">+15pts</p>
                             </div>
-
-                            {/* AI Message 2 */}
-                            <div className="flex gap-2 items-start">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[10px] font-bold text-white">AI</span>
-                              </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-3 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[13px] leading-[1.6] text-[#374151]">
-                                  Perfect. And roughly how much do you still owe on your mortgage?
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* User Response 2 */}
-                            <div className="flex gap-2 items-start justify-end">
-                              <div className="bg-gradient-to-r from-[#f84608] to-[#321ca3] rounded-2xl rounded-tr-md p-3 shadow-sm max-w-[60%]">
-                                <p className="text-[13px] leading-[1.6] text-white">About $280,000</p>
-                              </div>
-                              <div className="w-8 h-8 rounded-full bg-[#e5e7eb] flex items-center justify-center flex-shrink-0">
-                                <span className="text-[10px] font-bold text-[#6b7280]">S</span>
-                              </div>
-                            </div>
-
-                            {/* AI Message 3 */}
-                            <div className="flex gap-2 items-start">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[10px] font-bold text-white">AI</span>
-                              </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-3 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[13px] leading-[1.6] text-[#374151]">
-                                  Excellent—with that equity position, you have some great options. Do you know approximately where your credit score falls?
-                                </p>
-                              </div>
+                            <div className="bg-[#f8f8f8] rounded-lg p-3 text-center border border-[#e5e5e5]">
+                              <p className="text-[20px] font-bold aivi-gradient-text">13%</p>
+                              <p className="text-[10px] text-[#6b7280] font-medium">Close Rate</p>
+                              <p className="text-[9px] text-[#10b981]">+5pts</p>
                             </div>
                           </div>
-                        ) : activeIndex === 2 ? (
-                          /* Transfer Moment visual for Strategic Human Handoff */
-                          <div className="space-y-3">
-                            <h4 className="text-[16px] font-semibold text-[#0a0a0a]">The Transfer Moment:</h4>
-
-                            {/* AI Message 1 */}
-                            <div className="flex gap-2 items-start">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[10px] font-bold text-white">AI</span>
+                          <div className="space-y-2">
+                            <p className="text-[11px] font-semibold text-[#6b7280] uppercase">What AIVI Learned This Month</p>
+                            {[
+                              { icon: '📊', insight: 'Spanish-speaking leads convert 34% better via SMS first' },
+                              { icon: '⏰', insight: 'Friday leads respond 2.3X better on Monday 9am' },
+                              { icon: '🎯', insight: 'Auto-routing now matches lead type to agent strength' },
+                            ].map((item, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-[#f8f8f8] rounded-lg p-2.5 border border-[#e5e5e5]">
+                                <span className="text-[14px]">{item.icon}</span>
+                                <p className="text-[11px] text-[#374151]">{item.insight}</p>
                               </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-3 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[12px] leading-[1.6] text-[#374151]">
-                                  Sarah, based on what you've shared, I think you're a great candidate for our preferred rates. I'd love to connect you with Mike, one of our senior loan officers who specializes in exactly this type of refinance. He can walk you through specific numbers. Can I connect you right now?
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* User Response */}
-                            <div className="flex gap-2 items-start justify-end">
-                              <div className="bg-gradient-to-r from-[#f84608] to-[#321ca3] rounded-2xl rounded-tr-md p-3 shadow-sm max-w-[60%]">
-                                <p className="text-[12px] leading-[1.6] text-white">Yes, that would be great!</p>
-                              </div>
-                              <div className="w-8 h-8 rounded-full bg-[#e5e7eb] flex items-center justify-center flex-shrink-0">
-                                <span className="text-[10px] font-bold text-[#6b7280]">S</span>
-                              </div>
-                            </div>
-
-                            {/* AI Message 2 */}
-                            <div className="flex gap-2 items-start">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f84608] to-[#321ca3] flex items-center justify-center flex-shrink-0 shadow-md">
-                                <span className="text-[10px] font-bold text-white">AI</span>
-                              </div>
-                              <div className="flex-1 bg-[#f8f8f8] rounded-2xl rounded-tl-md p-3 shadow-sm border border-[#e8e8e8]">
-                                <p className="text-[12px] leading-[1.6] text-[#374151]">
-                                  Perfect. Mike will be with you in just a moment. He'll have all the details we discussed ready to go.
-                                </p>
-                              </div>
-                            </div>
+                            ))}
                           </div>
-                        ) : (
-                          /* Live Dashboard Insights for Continuous Optimization */
-                          <div className="space-y-3">
-                            <h4 className="text-[16px] font-semibold text-[#0a0a0a]">Live Dashboard Insights:</h4>
-
-                            {/* 2x2 Grid of Stats */}
-                            <div className="grid grid-cols-2 gap-3">
-                              <div className="bg-[#f8f8f8] rounded-xl p-4 text-center border border-[#e8e8e8]">
-                                <p className="text-[28px] font-bold text-[#9b2c5a]">94%</p>
-                                <p className="text-[12px] text-[#6b7280] font-medium">Contact Rate</p>
-                              </div>
-                              <div className="bg-[#f8f8f8] rounded-xl p-4 text-center border border-[#e8e8e8]">
-                                <p className="text-[28px] font-bold text-[#6b7280]">2.3s</p>
-                                <p className="text-[12px] text-[#6b7280] font-medium">Avg Response Time</p>
-                              </div>
-                              <div className="bg-[#f8f8f8] rounded-xl p-4 text-center border border-[#e8e8e8]">
-                                <p className="text-[28px] font-bold text-[#9b2c5a]">67%</p>
-                                <p className="text-[12px] text-[#6b7280] font-medium">Qualification Rate</p>
-                              </div>
-                              <div className="bg-[#f8f8f8] rounded-xl p-4 text-center border border-[#e8e8e8]">
-                                <p className="text-[28px] font-bold text-[#6b7280]">43%</p>
-                                <p className="text-[12px] text-[#6b7280] font-medium">Transfer Acceptance</p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Premium stat cards */}
-                      <div className="grid grid-cols-2 gap-5 mt-3">
-                        {[
-                          activeIndex === 0 ? ['3 sec', 'Response'] : activeIndex === 1 ? ['90 sec', 'Qualification'] : activeIndex === 2 ? ['100%', 'Context Transfer'] : ['24/7', 'Learning'],
-                          activeIndex === 0 ? ['Multi', 'Channel'] : activeIndex === 1 ? ['Natural', 'Conversation'] : activeIndex === 2 ? ['Warm', 'Handoff'] : ['Auto', 'Optimize'],
-                        ].map((item, i) => (
-                          <div key={i} className="bg-white rounded-xl p-5 text-center border border-[#f0f0f0] shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
-                            <p className="text-[28px] lg:text-[32px] font-bold aivi-gradient-text">{item[0]}</p>
-                            <p className="text-[13px] text-[#6b7280] font-semibold uppercase tracking-wider mt-1">{item[1]}</p>
-                          </div>
-                        ))}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
