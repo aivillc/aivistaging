@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import ChatBot from "@/components/ChatBot";
@@ -39,6 +40,7 @@ export default function RootLayout({
             <ChatBot />
           </ChatBotProvider>
         </DemoPopupProvider>
+        <Analytics />
       </body>
     </html>
   );
