@@ -5,6 +5,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ChatBot from "@/components/ChatBot";
 import { ChatBotProvider } from "@/components/ChatBotContext";
 import { DemoPopupProvider } from "@/components/aiviv3/DemoPopupContext";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
             {children}
             <ScrollToTop />
             <ChatBot />
+            <Analytics />
           </ChatBotProvider>
         </DemoPopupProvider>
       </body>
