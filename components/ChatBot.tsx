@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { CHAT_CONFIG, generateMessageId } from '@/lib/chatConfig';
 import { getSessionData, updateSessionData, clearSessionData, extractInfoFromMessage, type SessionData } from '@/lib/sessionData';
 import { getGlobalSessionId, clearGlobalSession } from '@/lib/globalSession';
@@ -32,6 +33,7 @@ interface ChatState {
 export default function ChatBot() {
   // Get context if available (for external control)
   const chatBotContext = useChatBotSafe();
+  const pathname = usePathname();
 
   // Helper to get cached state (parse once, reuse)
   const getCachedState = (): ChatState | null => {
@@ -690,6 +692,9 @@ export default function ChatBot() {
 
   // Check if floating button should be hidden (when Option A is selected)
   const shouldHideFloatingButton = chatBotContext?.hideFloatingButton ?? false;
+
+  // Suppressed on the cobrowse test fixture so the AIVI widget owns the bottom-right corner.
+  if (pathname?.startsWith('/demo/voice-demo')) return null;
 
   return (
     <>
