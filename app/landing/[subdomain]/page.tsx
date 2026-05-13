@@ -8,17 +8,35 @@ interface Props {
 }
 
 async function getLandingConfig(subdomain: string): Promise<LandingPageConfig | null> {
-  const supabase = getSupabaseServer();
+  console.log(`[landing] Loading config for subdomain: ${subdomain}`);
+  console.log(`[landing] SUPABASE_URL: ${process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'MISSING'}`);
+  console.log(`[landing] SERVICE_KEY: ${process.env.SUPABASE_SERVICE_ROLE_KEY ? 'SET' : 'MISSING'}`);
 
-  const { data, error } = await supabase
-    .from('landing_pages')
-    .select('*')
-    .eq('subdomain', subdomain)
-    .eq('status', 'active')
-    .single();
+  try {
+    const supabase = getSupabaseServer();
 
-  if (error || !data) return null;
-  return data as LandingPageConfig;
+    const { data, error } = await supabase
+      .from('landing_pages')
+      .select('*')
+      .eq('subdomain', subdomain)
+      .eq('status', 'active')
+      .single();
+
+    if (error) {
+      console.error(`[landing] Supabase error for ${subdomain}:`, error.message, error.code);
+      return null;
+    }
+    if (!data) {
+      console.log(`[landing] No data found for subdomain: ${subdomain}`);
+      return null;
+    }
+
+    console.log(`[landing] Found config for ${subdomain}: ${data.company_name}`);
+    return data as LandingPageConfig;
+  } catch (err) {
+    console.error(`[landing] Exception loading config for ${subdomain}:`, err);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
