@@ -64,3 +64,4 @@ export const config = {
     '/((?!_next|api|static|favicon\\.ico|widget|robots\\.txt|sitemap\\.xml).*)',
   ],
 };
+// deploy 1778663339
