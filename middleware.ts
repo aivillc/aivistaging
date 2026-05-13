@@ -49,13 +49,21 @@ export function middleware(request: NextRequest) {
   }
 
   if (!subdomain || RESERVED_SUBDOMAINS.has(subdomain)) {
-    return NextResponse.next();
+    const res = NextResponse.next();
+    res.headers.set('x-mw-host', hostname);
+    res.headers.set('x-mw-subdomain', subdomain || 'none');
+    res.headers.set('x-mw-action', 'passthrough');
+    return res;
   }
 
   // Rewrite to the dynamic landing page route
   const url = request.nextUrl.clone();
   url.pathname = `/landing/${subdomain}${url.pathname === '/' ? '' : url.pathname}`;
-  return NextResponse.rewrite(url);
+  const res = NextResponse.rewrite(url);
+  res.headers.set('x-mw-host', hostname);
+  res.headers.set('x-mw-subdomain', subdomain);
+  res.headers.set('x-mw-action', `rewrite-to-landing-${subdomain}`);
+  return res;
 }
 
 export const config = {
