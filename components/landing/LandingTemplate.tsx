@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { LandingPageConfig } from '@/lib/supabase';
 import BrandedNav from './BrandedNav';
 import BrandedHero from './BrandedHero';
@@ -10,12 +11,26 @@ import BrandedFAQ from './BrandedFAQ';
 import BrandedFooter from './BrandedFooter';
 import TCPAConsentForm from './TCPAConsentForm';
 import LandingChatWidget from './LandingChatWidget';
+import { useChatBotSafe } from '@/components/ChatBotContext';
 
 interface Props {
   config: LandingPageConfig;
 }
 
 export default function LandingTemplate({ config }: Props) {
+  // Hide the root AIVI ChatBot on landing pages — we use the prospect's
+  // own chat widget via LandingChatWidget instead
+  const chatBotContext = useChatBotSafe();
+  useEffect(() => {
+    if (chatBotContext) {
+      chatBotContext.setHideFloatingButton(true);
+    }
+    return () => {
+      if (chatBotContext) {
+        chatBotContext.setHideFloatingButton(false);
+      }
+    };
+  }, [chatBotContext]);
   const brandStyles = {
     '--brand-primary': config.primary_color,
     '--brand-secondary': config.secondary_color,
