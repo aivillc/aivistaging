@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    // ESLint config uses eslint-config-next/core-web-vitals which fails
-    // on Vercel builds. Skip during build — lint locally instead.
-    ignoreDuringBuilds: true,
+  async rewrites() {
+    return [
+      { source: "/gml", destination: "/gml/index.html" },
+      { source: "/gml/", destination: "/gml/index.html" },
+    ];
   },
 };
 
